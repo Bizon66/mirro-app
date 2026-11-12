@@ -324,3 +324,6 @@
   [data-theme="dark"] .bar { background: var(--line); }
   /* with a pet the twin's scene uses the full screen width (no side margins), so the pet corner has room */
   #avatarWrap.wide { margin-left: -12px; margin-right: -12px; border-radius: 0; border-left: 0; border-right: 0; }
+  /* app version at the bottom of Profile; 5 quick taps toggle the hidden test mode */
+  .appVer { text-align: center; font-size: 12px; margin: 14px 0 4px; user-select: none; -webkit-user-select: none; }
+  .testBanner { background: #FFF4C4; color: #1B2A4A; border-radius: 12px; padding: 8px 10px; font-size: 13px; font-weight: 700; margin: 8px 0; }

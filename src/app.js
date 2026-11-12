@@ -300,6 +300,9 @@ Object.assign(T_ADD.en, { themeTitle: '🎨 Background colour', thLight: 'Light'
 Object.assign(T_ADD.uk, { petSayDog: 'Гав!', petSayCat: 'Мур-р…', petSayParrot: 'Привіт!', petTapHint: '👆 Натисніть на улюбленця, і він щось зробить. Порожня мисочка — натисніть, щоб нагодувати (10 ⭐). Будиночок кличе його назовні або відправляє додому. Уночі й коли сумує, улюбленець спить.' });
 Object.assign(T_ADD.cs, { petSayDog: 'Haf!', petSayCat: 'Mňau…', petSayParrot: 'Ahoj!', petTapHint: '👆 Klepněte na mazlíčka a něco udělá. Prázdná miska — klepněte a nakrmíte ho (10 ⭐). Domeček ho zavolá ven nebo pošle domů. V noci a když je smutný, mazlíček spí.' });
 Object.assign(T_ADD.en, { petSayDog: 'Woof!', petSayCat: 'Purr…', petSayParrot: 'Hello!', petTapHint: '👆 Tap your pet and it does something. Empty bowl? Tap it to feed (10 ⭐). The house calls your pet out or sends it home. At night and when it’s sad, your pet sleeps.' });
+Object.assign(T_ADD.uk, { testOn: '🧪 Режим тестування увімкнено: усі речі й улюбленці відкриті безкоштовно', testOff: 'Режим тестування вимкнено', testBanner: '🧪 Режим тестування: усе відкрито безкоштовно, бали не витрачаються. Вимкнути — 5 натискань на версію внизу Профілю.' });
+Object.assign(T_ADD.cs, { testOn: '🧪 Testovací režim zapnut: všechny věci a mazlíčci jsou zdarma', testOff: 'Testovací režim vypnut', testBanner: '🧪 Testovací režim: vše odemčeno zdarma, body se neutrácejí. Vypnutí — 5 klepnutí na verzi dole v Profilu.' });
+Object.assign(T_ADD.en, { testOn: '🧪 Test mode on: all items and pets are unlocked for free', testOff: 'Test mode off', testBanner: '🧪 Test mode: everything is unlocked for free, no points are spent. To turn it off, tap the version at the bottom of Profile 5 times.' });
 for (const l of ['uk', 'cs', 'en']) Object.assign(T[l], T_ADD[l]);
 if (!AI_ON) {
   Object.assign(T.uk, { lblBtn: '🏷 Етикетка вручну', lblManual: 'Введіть цифри з етикетки:', fridgeLocal: 'ℹ️ Рецепти з вбудованого списку під ваші продукти.' });
@@ -2438,15 +2441,17 @@ function closeShop() { AV_TRY = null; $('shop').classList.add('hidden'); if (AV_
 function renderShop() {
   const st = shopState(), ps = pointsSummary(), lv = levelOf(ps.earned);
   $('shopBal').textContent = t('balanceW', { n: ps.bal });
+  const test = !!D.testMode;
   $('shopCats').innerHTML = SLOTS.map(([sl, key]) => `<button data-sc="${sl}" class="${sl === shopCat ? 'on' : ''}">${t(key)}</button>`).join('');
   $('shopGrid').innerHTML = SHOP.filter(i => i.slot === shopCat).map(i => {
-    const own = st.owned.includes(i.id), on = st.eq[i.slot] === i.id, locked = i.lvl && lv.L < i.lvl;
+    const own = test || st.owned.includes(i.id), on = st.eq[i.slot] === i.id, locked = i.lvl && lv.L < i.lvl;
     let btn;
     if (own) btn = `<button class="btn ${on ? 'ghost' : ''}" data-eq="${i.id}">${on ? t('unequip') : t('equip')}</button>`;
     else if (locked) btn = `<button class="btn ghost" disabled>${t('lockedLvl', { n: i.lvl })}</button>`;
     else btn = `<button class="btn${ps.bal < i.price ? ' ghost' : ''}" data-buy="${i.id}">${t('buy')} · ${i.price} ⭐</button>`;
     return `<div class="sitem${shopSel === i.id ? ' sel' : ''}${on ? ' on' : ''}" data-try="${i.id}"><div class="sic">${i.ic}</div><b>${esc(i.n[LI()])}</b>${btn}</div>`;
   }).join('');
+  if (test) $('shopGrid').insertAdjacentHTML('afterbegin', `<p class="testBanner" style="grid-column:1/-1">${t('testBanner')}</p>`);
   AV_TARGET = $('shopPrev');
   if (AV_STATE) drawAvatar(AV_STATE.w, AV_STATE.tone);
   AV_TARGET = null;
@@ -2648,8 +2653,8 @@ function renderPet() {
   $('petName').addEventListener('change', e => { pd.name = e.target.value.trim().slice(0, 20); save(); });
   $('petFeed').addEventListener('click', () => feedPet(id));
   $('petTreat').addEventListener('click', () => {
-    if (pointsSummary().bal < PET_TREAT) return toast(t('notEnough', { n: PET_TREAT - pointsSummary().bal }));
-    pd.treat = td; if (pd.fed !== td) { pd.fed = td; pd.feeds++; } D.petSpent = petSpent() + PET_TREAT; save(); toast(t('treatToast')); PET_HEART = 2.5; renderRewards();
+    if (!D.testMode && pointsSummary().bal < PET_TREAT) return toast(t('notEnough', { n: PET_TREAT - pointsSummary().bal }));
+    pd.treat = td; if (pd.fed !== td) { pd.fed = td; pd.feeds++; } if (!D.testMode) D.petSpent = petSpent() + PET_TREAT; save(); toast(t('treatToast')); PET_HEART = 2.5; renderRewards();
   });
 }
 let PET_HEART = 0;
@@ -2893,8 +2898,8 @@ function drawPetScene(id, d, time, pass) {
 function feedPet(id) {
   const pd = petData(id), td = todayStr();
   if (pd.fed === td) { toast(t('fedToday')); return false; }
-  if (pointsSummary().bal < PET_FOOD) { toast(t('notEnough', { n: PET_FOOD - pointsSummary().bal })); return false; }
-  pd.fed = td; pd.feeds++; D.petSpent = petSpent() + PET_FOOD; save(); toast(t('fedToast')); renderRewards();
+  if (!D.testMode && pointsSummary().bal < PET_FOOD) { toast(t('notEnough', { n: PET_FOOD - pointsSummary().bal })); return false; }
+  pd.fed = td; pd.feeds++; if (!D.testMode) D.petSpent = petSpent() + PET_FOOD; save(); toast(t('fedToast')); renderRewards();
   return true;
 }
 // tap handling on the main canvas; returns true when the tap hit the pet, its house or its bowl
@@ -3822,6 +3827,18 @@ if (window.AppNative) AppNative.onBack(() => {
   if (open) { const x = open.querySelector('.sheetHead button[id$="Close"], #bClose'); if (x) x.click(); else open.classList.add('hidden'); return; }
   if (curTab !== 'tabMe' && P()) return showTab('tabMe');
   AppNative.exit();
+});
+// hidden test mode (D.testMode, optional): 5 quick taps on the version line; shop items free, feeding free.
+// Turning it off takes back what was only worn for testing (items that were never bought).
+$('appVer').textContent = 'Mirro ' + (CFG.version || '');
+let verTaps = [];
+$('appVer').addEventListener('click', () => {
+  const now = Date.now(); verTaps = verTaps.filter(x => now - x < 2500).concat(now);
+  if (verTaps.length < 5) return;
+  verTaps = []; if (CFG.features && CFG.features.testTools === false && !D.testMode) return;
+  D.testMode = !D.testMode;
+  if (!D.testMode) { const st = shopState(); for (const sl in st.eq) if (!st.owned.includes(st.eq[sl])) delete st.eq[sl]; delete D.testMode; }
+  save(); dirty(); toast(D.testMode ? t('testOn') : t('testOff'));
 });
 applyLang(); fillStatic();
 showTab(P() ? 'tabMe' : 'tabProfile');
