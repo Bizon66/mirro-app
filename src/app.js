@@ -1410,20 +1410,33 @@ function applyTheme() {
   const cs = document.querySelector('meta[name="color-scheme"]'); if (cs) cs.content = css.a === 'dark' ? 'dark' : 'light';
   renderThemePal();
 }
+// The palette is built once and afterwards only updated in place. Rebuilding it would replace the colour <input>,
+// and iPhone closes its colour picker as soon as that element disappears (it fires "change" while the slider moves).
 function renderThemePal() {
   const box = $('themePal'); if (!box) return;
   const cur = THEME_PRESETS.some(p => p[0] === D.theme) || D.theme === 'custom' ? D.theme : 'light';
-  box.innerHTML = THEME_PRESETS.map(([id, c, key]) => `<button class="sw${cur === id ? ' on' : ''}" data-th="${id}" style="background:${c}" title="${esc(t(key))}" aria-label="${esc(t(key))}"></button>`).join('') +
-    `<label class="sw swCustom${cur === 'custom' ? ' on' : ''}" title="${esc(t('thCustom'))}" aria-label="${esc(t('thCustom'))}"${cur === 'custom' ? ` style="background:${themeBg()}"` : ''}>🌈<input type="color" id="themeColor" value="${themeBg()}"></label>`;
+  if (!box.dataset.built || box.dataset.lang !== LANG) {
+    box.innerHTML = THEME_PRESETS.map(([id, c, key]) => `<button class="sw" data-th="${id}" style="background:${c}" title="${esc(t(key))}" aria-label="${esc(t(key))}"></button>`).join('') +
+      `<label class="sw swCustom" title="${esc(t('thCustom'))}" aria-label="${esc(t('thCustom'))}"><span>🌈</span><input type="color" id="themeColor" value="${themeBg()}"></label>`;
+    box.dataset.built = '1'; box.dataset.lang = LANG;
+  }
+  box.querySelectorAll('[data-th]').forEach(b => b.classList.toggle('on', b.dataset.th === cur));
+  const lab = box.querySelector('.swCustom'), inp = $('themeColor');
+  lab.classList.toggle('on', cur === 'custom');
+  lab.style.background = cur === 'custom' ? themeBg() : '';
+  if (inp && document.activeElement !== inp && inp.value.toLowerCase() !== themeBg().toLowerCase()) inp.value = themeBg();
   const name = cur === 'custom' ? t('thCustom') : t((THEME_PRESETS.find(p => p[0] === cur) || THEME_PRESETS[0])[2]);
   $('themeName').textContent = t('thNow', { n: name });
 }
 function setTheme(id, bg) { D.theme = id; if (bg) D.themeBg = bg; D.themeCss = themeCss(); applyTheme(); }
+let themeSaveT = 0;
+const saveThemeSoon = () => { clearTimeout(themeSaveT); themeSaveT = setTimeout(save, 400); };
 $('themePal').addEventListener('click', e => { const b = e.target.closest('[data-th]'); if (!b) return; setTheme(b.dataset.th); save(); });
-// live preview while dragging the colour picker; saved when the picker closes
-$('themePal').addEventListener('input', e => { if (e.target.id !== 'themeColor') return; D.theme = 'custom'; D.themeBg = e.target.value; D.themeCss = themeCss();
-  const css = D.themeCss, root = document.documentElement; THEME_VARS.forEach(k => root.style.removeProperty(k)); root.dataset.theme = css.a; for (const k in css.v) root.style.setProperty(k, css.v[k]); });
-$('themePal').addEventListener('change', e => { if (e.target.id !== 'themeColor') return; setTheme('custom', e.target.value); save(); });
+// live preview while the picker is open; both events only repaint, they never rebuild the palette
+['input', 'change'].forEach(ev => $('themePal').addEventListener(ev, e => {
+  if (e.target.id !== 'themeColor') return;
+  setTheme('custom', e.target.value); saveThemeSoon();
+}));
 function render() {
   applyTheme();
   $('firstRun').style.display = P() ? 'none' : 'block';
