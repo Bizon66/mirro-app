@@ -322,3 +322,5 @@
   #toast { bottom: calc(86px + env(safe-area-inset-bottom)); }
   [data-theme="dark"] #avWeight b { color: #1B2A4A; }
   [data-theme="dark"] .bar { background: var(--line); }
+  /* with a pet the twin's scene uses the full screen width (no side margins), so the pet corner has room */
+  #avatarWrap.wide { margin-left: -12px; margin-right: -12px; border-radius: 0; border-left: 0; border-right: 0; }

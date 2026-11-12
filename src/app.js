@@ -989,8 +989,10 @@ function startAvatar(w, tone) {
 document.addEventListener('visibilitychange', () => { if (!document.hidden && curTab === 'tabMe' && AV_STATE) startAvatar(AV_STATE.w, AV_STATE.tone); });
 function drawAvatar(w, tone) {
   const TGT = AV_TARGET || cv; ctx = TGT.getContext('2d');
-  const [CW, CH] = sizeCanvas(TGT);
   const EQ = equipNow();
+  // with a pet the scene card spans the full screen width (set before measuring the canvas)
+  if (!AV_TARGET) { const wrap = $('avatarWrap'); if (wrap) wrap.classList.toggle('wide', !!EQ.pet); }
+  const [CW, CH] = sizeCanvas(TGT);
   if (!CW || !CH) return;
   const p = P(), H = p.height, male = p.sex === 'm';
   const bmi = w / Math.pow(H / 100, 2);
@@ -1034,7 +1036,7 @@ function drawAvatar(w, tone) {
   if (EQ.pet && EQ.pet !== 'pet_parrot' && PET_LAYOUT[EQ.pet]) {
     const footOut = legC + 0.8 + (ankW + 3.2) * 1.02, twinHalf = bodyOut0 + armW * 2 + 3, w = PET_LAYOUT[EQ.pet].w;
     const fitCx = CW - 6 - L(footOut + PET_GAP + w);
-    cx = Math.max(46 + L(twinHalf), Math.min(cx, fitCx));
+    cx = Math.max(38 + L(twinHalf), Math.min(cx, fitCx));
     // a very wide twin on a narrow phone: give up some of the gap (down to two sneakers) before the corner gets tiny
     petGap = clamp((CW - 6 - cx - L(footOut) - L(w * 0.9)) / px, PET_GAP_MIN, PET_GAP);
   }
@@ -2666,12 +2668,12 @@ let PET_HEART = 0;
 let PET_RT = { act: null, t0: 0, home: null, homeUntil: 0, pop: -9 };
 let PET_HIT = null;   // tap areas on the main canvas: { house, pet, bowl } as [x0, y0, x1, y1]
 const PET_ACT = { pet_dog: ['bark', 2.2], pet_cat: ['purr', 2.4], pet_rabbit: ['hop', 1.6], pet_hamster: ['wheel', 6], pet_turtle: ['tuck', 2.4], pet_parrot: ['talk', 2.4] };
-// layout of each corner in cm, measured from the outer edge of the twin's leg going right: the bowl and the pet's
-// spot first, the house / pond on the right (a little behind the spot, so they overlap with depth); total width
+// layout of each corner in cm from where the corner starts (after the free floor next to the twin), going right:
+// bowl, the pet's spot, the house / pond on the right — each with its own room, nothing piled up; total width
 const PET_LAYOUT = {
-  pet_dog: { bowl: 3, spot: 20, house: 44, w: 58 }, pet_cat: { bowl: 3, spot: 20, house: 44, w: 58 },
-  pet_rabbit: { bowl: 4, spot: 17, house: 46, w: 60 }, pet_hamster: { bowl: 3, spot: 18, wheel: 36, house: 50, w: 62 },
-  pet_turtle: { bowl: 2, spot: 16, house: 38, w: 58 }
+  pet_dog: { bowl: 4, spot: 26, house: 58, w: 72 }, pet_cat: { bowl: 4, spot: 26, house: 58, w: 72 },
+  pet_rabbit: { bowl: 4, spot: 24, house: 60, w: 74 }, pet_hamster: { bowl: 4, spot: 20, wheel: 45, house: 70, w: 80 },
+  pet_turtle: { bowl: 4, spot: 22, house: 50, w: 71 }
 };
 // free floor between the twin's sneaker and the pet corner: about three sneakers (a sneaker is ~13 cm wide)
 const PET_GAP = 39, PET_GAP_MIN = 26;
