@@ -2389,32 +2389,6 @@ function drawMedal(cx, Y, L, neckW) {
   x.beginPath(); x.arc(cx, Y(0.728), L(3.4), 0, Math.PI * 2); x.fill(); x.stroke();
   x.fillStyle = '#B8860B'; x.font = 'bold ' + Math.round(L(3.6)) + 'px system-ui'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('★', cx, Y(0.728) + 0.5); x.textBaseline = 'alphabetic';
 }
-function drawPet(id, px0, G, L, time) {
-  const x = ctx, s = L(1), wag = Math.sin(time * 9) * 0.5;
-  x.save(); x.translate(px0, G); x.scale(s, s);
-  if (id === 'pet_dog') {
-    const c = '#B07A4F', d = '#8A5A35';
-    x.strokeStyle = d; x.lineWidth = 3; x.lineCap = 'round'; x.beginPath(); x.moveTo(12, -12); x.quadraticCurveTo(22, -20 + wag * 6, 20 + wag * 4, -30); x.stroke();
-    x.fillStyle = c; x.beginPath(); x.ellipse(4, -12, 14, 11, 0, 0, Math.PI * 2); x.fill();
-    x.fillRect(-8, -10, 5, 10); x.fillRect(8, -8, 5, 8);
-    x.beginPath(); x.arc(-8, -26, 9, 0, Math.PI * 2); x.fill();
-    x.fillStyle = d; x.beginPath(); x.ellipse(-14, -26, 3.5, 7, 0.3, 0, Math.PI * 2); x.ellipse(-2, -27, 3.5, 7, -0.3, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#E8C9A5'; x.beginPath(); x.ellipse(-9, -21, 5, 3.5, 0, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#222'; x.beginPath(); x.arc(-11, -28, 1.3, 0, Math.PI * 2); x.arc(-5, -28, 1.3, 0, Math.PI * 2); x.arc(-9, -22.5, 1.6, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#E5484D'; x.beginPath(); x.ellipse(-9, -18.5, 1.6, 2.2, 0, 0, Math.PI * 2); x.fill();
-  } else {
-    const c = '#8A8F98', d = '#5F646C';
-    x.strokeStyle = c; x.lineWidth = 3.2; x.lineCap = 'round'; x.beginPath(); x.moveTo(12, -6); x.quadraticCurveTo(26, -10, 22 + wag * 3, -26); x.stroke();
-    x.fillStyle = c; x.beginPath(); x.ellipse(4, -11, 12, 11, 0, 0, Math.PI * 2); x.fill();
-    x.beginPath(); x.arc(-6, -26, 8.5, 0, Math.PI * 2); x.fill();
-    x.beginPath(); x.moveTo(-13, -29); x.lineTo(-12, -38); x.lineTo(-7, -32); x.fill(); x.beginPath(); x.moveTo(-5, -32); x.lineTo(0, -38); x.lineTo(1, -29); x.fill();
-    x.fillStyle = '#9BE08A'; x.beginPath(); x.ellipse(-9, -27, 1.6, 2.2, 0, 0, Math.PI * 2); x.ellipse(-3, -27, 1.6, 2.2, 0, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#F0A5B0'; x.beginPath(); x.arc(-6, -23, 1.2, 0, Math.PI * 2); x.fill();
-    x.strokeStyle = d; x.lineWidth = 0.8; x.beginPath(); x.moveTo(-10, -22); x.lineTo(-16, -23); x.moveTo(-2, -22); x.lineTo(4, -23); x.stroke();
-  }
-  x.restore();
-}
-
 // ---- UI: points card, quests, shop ----
 function renderRewards() {
   const ps = pointsSummary(), lv = levelOf(ps.earned), td = todayStr();
@@ -2664,50 +2638,173 @@ function renderPet() {
   });
 }
 let PET_HEART = 0;
+// ---- pets v3: one consistent, softly shaded style (all six); facing left towards the twin, ground at y = 0, ~40 units tall ----
 function drawPetV2(id, px0, G, L, time) {
-  const x = ctx, mood = petMood(id), st = petStage(id), s = L(1) * PET_SCALE[st], sad = mood === 'sad';
-  const wag = sad ? 0 : Math.sin(time * (mood === 'happy' ? 9 : 4)) * 0.5;
+  const x = ctx, mood = petMood(id), st = petStage(id), s = L(1) * PET_SCALE[st], sad = mood === 'sad', happy = mood === 'happy';
+  const wag = sad ? 0 : Math.sin(time * (happy ? 9 : 4));
+  const TAU = Math.PI * 2;
   x.save(); x.translate(px0, G); x.scale(s, s);
-  if (sad) x.scale(1.08, 0.86);
-  const eye = (ex, ey2, r) => { if (sad) { x.strokeStyle = '#222'; x.lineWidth = 1.2; x.beginPath(); x.arc(ex, ey2, r, 0.2, Math.PI - 0.2); x.stroke(); } else { x.fillStyle = '#222'; x.beginPath(); x.arc(ex, ey2, r, 0, Math.PI * 2); x.fill(); x.fillStyle = '#fff'; x.beginPath(); x.arc(ex + r * 0.35, ey2 - r * 0.35, r * 0.35, 0, Math.PI * 2); x.fill(); } };
-  if (id === 'pet_dog' || id === 'pet_cat') { x.restore(); drawPet(id, px0, G, L, sad ? 0 : time); x.save(); x.translate(px0, G); x.scale(s, s); }
-  else if (id === 'pet_rabbit') {
-    const c = '#EDEAE6', d = '#C9C2BA';
-    x.fillStyle = c; x.beginPath(); x.ellipse(4, -11, 13, 11, 0, 0, Math.PI * 2); x.fill();
-    x.beginPath(); x.arc(15, -10, 4, 0, Math.PI * 2); x.fill();
-    x.beginPath(); x.arc(-7, -24, 8.5, 0, Math.PI * 2); x.fill();
-    [[-10, -0.15], [-4, 0.15]].forEach(([ex2, r]) => { x.fillStyle = c; x.beginPath(); x.ellipse(ex2, -40 + (sad ? 8 : 0), 3.2, 10, r + (sad ? 1.2 * Math.sign(r) : wag * 0.1), 0, Math.PI * 2); x.fill(); x.fillStyle = '#F2B8C0'; x.beginPath(); x.ellipse(ex2, -40 + (sad ? 8 : 0), 1.5, 7, r + (sad ? 1.2 * Math.sign(r) : 0), 0, Math.PI * 2); x.fill(); });
-    eye(-10, -25, 1.5); eye(-4, -25, 1.5);
-    x.fillStyle = '#E58A9A'; x.beginPath(); x.arc(-7, -20.5, 1.3, 0, Math.PI * 2); x.fill();
-    x.fillStyle = d; x.beginPath(); x.ellipse(-3, -1, 5, 2.5, 0, 0, Math.PI * 2); x.ellipse(10, -1, 5, 2.5, 0, 0, Math.PI * 2); x.fill();
+  // soft ground shadow (drawn before the sad "squash" so it stays flat)
+  x.fillStyle = 'rgba(27,42,74,.16)'; x.beginPath(); x.ellipse(2, 0.6, id === 'pet_parrot' ? 15 : 17, 2.6, 0, 0, TAU); x.fill();
+  if (sad) x.scale(1.06, 0.9);
+  // helpers
+  const shade = (cx, cy, r, light, dark) => { const g = x.createRadialGradient(cx - r * 0.4, cy - r * 0.5, r * 0.15, cx, cy, r * 1.15); g.addColorStop(0, light); g.addColorStop(1, dark); return g; };
+  const ell = (cx, cy, rx, ry, rot, fill, line) => { x.beginPath(); x.ellipse(cx, cy, rx, ry, rot || 0, 0, TAU); x.fillStyle = fill; x.fill(); if (line) { x.strokeStyle = line; x.lineWidth = 0.8; x.stroke(); } };
+  const blob = (fill, line) => { x.fillStyle = fill; x.fill(); if (line) { x.strokeStyle = line; x.lineWidth = 0.8; x.lineJoin = 'round'; x.stroke(); } };
+  const leg = (lx, top, w, fill, line, paw) => { x.beginPath(); x.roundRect(lx, top, w, -top, w / 2); blob(fill, line); if (paw) ell(lx + w / 2 - 0.3, -0.9, w * 0.62, 1.3, 0, paw); };
+  // glossy eye; sad → calm closed lid
+  const eye = (ex, ey, r, iris) => {
+    if (sad) { x.strokeStyle = '#2B2F3A'; x.lineWidth = 0.9; x.lineCap = 'round'; x.beginPath(); x.arc(ex, ey - r * 0.2, r, 0.25, Math.PI - 0.25); x.stroke(); return; }
+    ell(ex, ey, r, r * 1.12, 0, iris || '#1E2230');
+    if (iris) ell(ex, ey, r * 0.32, r * 0.95, 0, '#14161C');
+    ell(ex - r * 0.35, ey - r * 0.42, r * 0.36, r * 0.36, 0, '#fff');
+    ell(ex + r * 0.3, ey + r * 0.35, r * 0.15, r * 0.15, 0, 'rgba(255,255,255,.8)');
+  };
+  const blush = (bx, by, r) => ell(bx, by, r, r * 0.62, 0, 'rgba(255,120,130,.32)');
+  const smile = (mx, my, w) => { if (sad) return; x.strokeStyle = 'rgba(40,30,30,.75)'; x.lineWidth = 0.7; x.lineCap = 'round'; x.beginPath(); x.arc(mx, my, w, 0.25, Math.PI - 0.25); x.stroke(); };
+
+  if (id === 'pet_dog') {
+    const base = '#D9A066', dark = '#A8713F', line = 'rgba(90,55,25,.45)', cream = '#F6E3C6';
+    // tail
+    x.lineCap = 'round'; x.strokeStyle = dark; x.lineWidth = 3.4; x.beginPath(); x.moveTo(13, -8); x.quadraticCurveTo(21, -12, 19 + wag * 3.5, -23 + Math.abs(wag)); x.stroke();
+    x.strokeStyle = base; x.lineWidth = 2; x.stroke();
+    // haunch + far leg
+    leg(-1.2, -10.5, 3.6, dark, line);
+    ell(9, -7.5, 8, 7.5, 0, shade(9, -7.5, 8, base, dark), line);
+    ell(11.5, -1.2, 4.2, 1.6, 0, dark);
+    // body (sitting, leaning forward)
+    x.beginPath(); x.moveTo(-8, -9); x.bezierCurveTo(-9, -19, -4, -23, 3, -20); x.bezierCurveTo(12, -17, 15, -9, 12, -3); x.bezierCurveTo(6, 0, -6, 0, -8, -9); x.closePath();
+    blob(shade(1, -12, 12, base, dark), line);
+    ell(-4.5, -12.5, 3.8, 6, -0.15, cream);
+    // near front leg
+    leg(-7.6, -12, 4, shade(-6, -6, 6, base, dark), line, cream);
+    // head
+    ell(-8.5, -26, 8.2, 7.6, 0, shade(-8.5, -26, 8.2, '#E8B77F', base), line);
+    ell(-14.2, -23.6, 5, 3.6, -0.1, cream, line);                 // muzzle
+    ell(-18.4, -24.6, 1.9, 1.5, 0, '#2B2524'); ell(-18.9, -25.1, 0.6, 0.45, 0, 'rgba(255,255,255,.7)');   // nose
+    if (happy) ell(-15, -20.6, 1.4, 1.9, 0, '#E86A7A');            // tongue
+    smile(-15.5, -22.6, 1.6);
+    eye(-11, -27.6, 1.55);
+    // floppy ear
+    x.beginPath(); x.moveTo(-6, -32); x.bezierCurveTo(-1, -33, 1, -27 + wag * 0.4, -1.5, -21.5); x.bezierCurveTo(-3.5, -20, -6, -24, -6.5, -28); x.closePath();
+    blob(shade(-3, -27, 6, '#B47D4A', '#8E5A30'), line);
+    blush(-10.5, -23.6, 1.6);
+  } else if (id === 'pet_cat') {
+    const base = '#9AA4B2', dark = '#6C7684', line = 'rgba(45,52,64,.45)', light = '#E3E7EE';
+    // tail curling up behind
+    x.lineCap = 'round'; x.strokeStyle = dark; x.lineWidth = 3.2; x.beginPath(); x.moveTo(12, -3); x.bezierCurveTo(22, -3, 22, -14, 18 + wag * 2.5, -22); x.stroke();
+    x.strokeStyle = base; x.lineWidth = 1.9; x.stroke();
+    leg(-0.6, -10, 3.4, dark, line);
+    // body (pear, sitting)
+    x.beginPath(); x.moveTo(-6, -15); x.bezierCurveTo(-8, -6, -6, 0, 4, 0); x.bezierCurveTo(14, 0, 15, -8, 11, -14); x.bezierCurveTo(7, -20, -3, -21, -6, -15); x.closePath();
+    blob(shade(3, -10, 12, base, dark), line);
+    ell(-2.6, -10.5, 3.6, 5.5, 0, light);
+    // stripes on the back
+    x.strokeStyle = 'rgba(70,78,92,.45)'; x.lineWidth = 1; x.lineCap = 'round';
+    [[6, -16, 9, -12], [9, -13, 12, -9], [11, -9, 13, -5]].forEach(([a, b2, c, d]) => { x.beginPath(); x.moveTo(a, b2); x.lineTo(c, d); x.stroke(); });
+    leg(-5.6, -10.5, 3.6, shade(-4, -5, 5, base, dark), line, light);
+    // head + ears (shifted down so the head rests on the body)
+    x.save(); x.translate(0.5, 3.5);
+    [[-12.2, -31, -14, -38.5, -8, -34], [-5, -34.5, -1.8, -38.5, 0.2, -31]].forEach(([a, b2, c, d, e, f]) => {
+      x.beginPath(); x.moveTo(a, b2); x.quadraticCurveTo(c, d, c, d); x.lineTo(e, f); x.closePath(); blob(base, line);
+      x.beginPath(); x.moveTo(a + (e - a) * 0.25, b2 + (f - b2) * 0.25 - 0.3); x.lineTo(c + (e - c) * 0.12, d + 1.8); x.lineTo(e - (e - a) * 0.25, f - (f - b2) * 0.25 - 0.3); x.closePath(); x.fillStyle = '#F3B7C2'; x.fill();
+    });
+    ell(-6.4, -27, 8.6, 7.4, 0, shade(-6.4, -27, 8.6, '#B5BEC9', base), line);
+    ell(-6.4, -24, 4.6, 2.9, 0, light);                            // muzzle
+    x.strokeStyle = 'rgba(70,78,92,.45)'; x.lineWidth = 0.9; [-8, -5].forEach(sx => { x.beginPath(); x.moveTo(sx, -34); x.lineTo(sx + 0.6, -31.5); x.stroke(); });
+    eye(-9.6, -27.8, 1.75, '#9BD06A'); eye(-3.4, -27.8, 1.75, '#9BD06A');
+    x.beginPath(); x.moveTo(-7.4, -25.3); x.lineTo(-5.4, -25.3); x.lineTo(-6.4, -24.2); x.closePath(); x.fillStyle = '#E58A9A'; x.fill();
+    if (!sad) { x.strokeStyle = 'rgba(40,30,30,.7)'; x.lineWidth = 0.6; x.beginPath(); x.arc(-7.2, -23.6, 0.8, 0.1, Math.PI - 0.3); x.arc(-5.6, -23.6, 0.8, 0.3, Math.PI - 0.1); x.stroke(); }
+    x.strokeStyle = 'rgba(255,255,255,.85)'; x.lineWidth = 0.45;
+    [[-10.5, -24.6, -17, -25.6], [-10.5, -23.8, -17, -22.8], [-2.3, -24.6, 4, -25.6], [-2.3, -23.8, 4, -22.8]].forEach(([a, b2, c, d]) => { x.beginPath(); x.moveTo(a, b2); x.lineTo(c, d); x.stroke(); });
+    blush(-11.6, -24.6, 1.4); blush(-1.2, -24.6, 1.4);
+    x.restore();
+  } else if (id === 'pet_rabbit') {
+    const base = '#F6F2EC', dark = '#D9CFC2', line = 'rgba(120,100,80,.38)', pink = '#F2B5BF';
+    ell(15, -9.5, 3.6, 3.4, 0, shade(15, -9.5, 3.6, '#fff', dark), line);          // tail
+    ell(4, -9.5, 12, 9.5, 0, shade(4, -10, 12, base, dark), line);                  // body
+    ell(9, -6, 6.8, 6, 0, shade(9, -6, 6.8, base, dark), line);                     // haunch
+    ell(3.5, -1.2, 6.2, 1.9, 0, dark, line);                                        // big foot
+    ell(-6.2, -1.6, 2.8, 1.8, 0, base, line);                                       // front paw
+    // ears (upright & wiggling when happy, folded back when sad)
+    [[-9.6, -29, -0.12], [-4.6, -30, 0.18]].forEach(([ex2, ey2, r]) => {
+      const rot = sad ? r + 1.25 * Math.sign(r || 1) : r + wag * 0.08;
+      x.save(); x.translate(ex2, ey2); x.rotate(rot);
+      ell(0, -7.5, 3, 8.5, 0, shade(0, -7, 8, '#fff', dark), line); ell(0, -7, 1.5, 6.2, 0, pink);
+      x.restore();
+    });
+    ell(-7.4, -21.5, 7.4, 7, 0, shade(-7.4, -22, 7.4, '#fff', dark), line);       // head
+    ell(-9.6, -18.8, 4.6, 3.4, 0, base);                                            // cheek
+    eye(-10, -23, 1.7);
+    ell(-14, -19.9, 1.1, 0.85, 0, '#E07F90');                                       // nose
+    smile(-13.5, -18.6, 1.1);
+    blush(-9.5, -19.5, 1.6);
   } else if (id === 'pet_hamster') {
-    const c = '#E8A15A';
-    x.fillStyle = c; x.beginPath(); x.ellipse(0, -10, 13, 10.5, 0, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#FFF1DE'; x.beginPath(); x.ellipse(-2, -7, 8, 6.5, 0, 0, Math.PI * 2); x.fill();
-    x.fillStyle = c; x.beginPath(); x.arc(-8, -19, 3, 0, Math.PI * 2); x.arc(6, -19, 3, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#F2B8C0'; x.beginPath(); x.arc(-8, -19, 1.5, 0, Math.PI * 2); x.arc(6, -19, 1.5, 0, Math.PI * 2); x.fill();
-    eye(-5, -13, 1.4); eye(3, -13, 1.4);
-    x.fillStyle = '#E58A9A'; x.beginPath(); x.arc(-1, -10, 1.1, 0, Math.PI * 2); x.fill();
-    x.fillStyle = 'rgba(230,110,110,.35)'; x.beginPath(); x.arc(-9, -9, 2, 0, Math.PI * 2); x.arc(7, -9, 2, 0, Math.PI * 2); x.fill();
+    const base = '#EBA85F', dark = '#C27C3A', line = 'rgba(110,65,25,.45)', cream = '#FFF1DE';
+    ell(-6.5, -1.4, 3, 1.6, 0, '#F1B6A8', line); ell(7.5, -1.4, 3, 1.6, 0, '#F1B6A8', line);   // feet
+    ell(0.5, -10.5, 13, 10.5, 0, shade(0.5, -11, 13, '#F5BE7E', dark), line);                 // body
+    ell(-0.5, -7.2, 8.4, 6.8, 0, cream);                                                       // belly
+    [[-8.5, -19.5], [7.5, -19.5]].forEach(([ex2, ey2]) => { ell(ex2, ey2, 3.4, 3.2, 0, shade(ex2, ey2, 3.4, base, dark), line); ell(ex2, ey2 + 0.2, 1.8, 1.7, 0, '#F2B6C0'); });
+    eye(-5, -13.5, 1.6); eye(3.2, -13.5, 1.6);
+    ell(-0.9, -11, 1, 0.75, 0, '#D9707F');
+    smile(-0.9, -10.2, 1);
+    blush(-8.6, -10.2, 2); blush(6.8, -10.2, 2);
+    // tiny front paws
+    ell(-3, -5.6, 1.7, 1.3, 0, '#F1B6A8', line); ell(1.2, -5.6, 1.7, 1.3, 0, '#F1B6A8', line);
   } else if (id === 'pet_parrot') {
-    const c = '#2EAD5B';
-    x.fillStyle = '#7A5A3A'; x.fillRect(-14, -2, 30, 2.5);
-    x.fillStyle = c; x.beginPath(); x.ellipse(0, -14, 8, 12, 0.1, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#1F7E41'; x.beginPath(); x.ellipse(4, -12, 5, 9, 0.35 + wag * 0.15, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#E5484D'; x.beginPath(); x.moveTo(2, -4); x.lineTo(8, 8); x.lineTo(-1, 6); x.fill();
-    x.fillStyle = c; x.beginPath(); x.arc(-2, -27, 7, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#FFD84D'; x.beginPath(); x.moveTo(-9, -28); x.quadraticCurveTo(-13, -25, -9, -21); x.lineTo(-7, -25); x.fill();
-    x.fillStyle = '#fff'; x.beginPath(); x.arc(-3, -29, 2.4, 0, Math.PI * 2); x.fill(); eye(-3.3, -29, 1.2);
+    const base = '#3CBF66', dark = '#1E8445', line = 'rgba(15,70,35,.45)';
+    // perch
+    x.beginPath(); x.roundRect(-15, -2.2, 31, 3, 1.5); blob(shade(0, -1, 16, '#9C7350', '#6E4C30'), 'rgba(60,35,15,.45)');
+    // tail feathers
+    [[4, -4, 9, 7, '#2F6FE0'], [1.5, -4, 5.5, 8, '#E5484D']].forEach(([tx, ty, ex2, ey2, col]) => {
+      x.beginPath(); x.moveTo(tx - 1.6, ty); x.quadraticCurveTo(ex2 - 1, ey2 - 6, ex2, ey2); x.quadraticCurveTo(ex2 + 1.5, ey2 - 7, tx + 2.2, ty); x.closePath(); blob(col, 'rgba(0,0,0,.25)');
+    });
+    // body
+    x.beginPath(); x.moveTo(-3, -24); x.bezierCurveTo(-11, -18, -8, -4, 0, -3); x.bezierCurveTo(7, -3, 9, -14, 4, -22); x.closePath();
+    blob(shade(-1, -14, 11, '#5AD883', base), line);
+    // wing with layered feathers
+    x.save(); x.translate(3, -14); x.rotate(0.28 + wag * 0.06);
+    ell(0, 0, 4.6, 8.6, 0, shade(0, -2, 8, base, dark), line);
+    ell(0.6, 5.2, 3, 3.4, 0, '#2F6FE0'); ell(0, 2, 3.4, 3, 0, dark);
+    x.restore();
+    // feet gripping the perch
+    ell(-2.5, -2.2, 1.8, 1.2, 0, '#8A8F98'); ell(1.5, -2.2, 1.8, 1.2, 0, '#8A8F98');
+    // head
+    ell(-3, -26.5, 6.8, 6.6, 0, shade(-3, -27, 6.8, '#5AD883', base), line);
+    ell(-6.6, -24.6, 2.6, 2.1, 0, '#FFD84D');                                       // cheek patch
+    ell(-4.3, -28.3, 2.6, 2.6, 0, '#fff', 'rgba(0,0,0,.18)');                       // eye ring
+    eye(-4.5, -28.3, 1.35);
+    // hooked beak
+    x.beginPath(); x.moveTo(-8.6, -29.5); x.bezierCurveTo(-13.5, -29.5, -14, -24.5, -11.6, -22.6); x.bezierCurveTo(-11.4, -25, -10.2, -26, -8.4, -25.6); x.closePath(); blob('#F4C542', 'rgba(120,80,0,.5)');
+    x.beginPath(); x.moveTo(-8.6, -25.4); x.quadraticCurveTo(-10.6, -24.6, -10.4, -23); x.lineTo(-8, -24); x.closePath(); blob('#C9962A');
   } else if (id === 'pet_turtle') {
-    x.fillStyle = '#9BCB7A'; x.beginPath(); x.arc(-14, -7, 5, 0, Math.PI * 2); x.fill();
-    x.fillRect(-9, -4, 4, 4); x.fillRect(6, -4, 4, 4);
-    x.fillStyle = '#3F8F5A'; x.beginPath(); x.ellipse(0, -8, 12, 8, 0, Math.PI, Math.PI * 2); x.fill(); x.fillRect(-12, -8, 24, 3);
-    x.strokeStyle = '#2E6B42'; x.lineWidth = 1; x.beginPath(); x.moveTo(-6, -14); x.lineTo(-3, -8); x.lineTo(3, -8); x.lineTo(6, -14); x.moveTo(0, -16); x.lineTo(-3, -8); x.stroke();
-    eye(-15.5, -8, 1.1);
+    const skin = '#A9D38C', skinD = '#78AD5E', line = 'rgba(40,80,40,.45)';
+    // legs + tail
+    x.beginPath(); x.moveTo(13, -4); x.lineTo(17, -2.5); x.lineTo(13, -2); x.closePath(); blob(skinD, line);
+    [[-9.5, skinD], [8, skinD], [-5, skin], [4, skin]].forEach(([lx, col]) => { x.beginPath(); x.roundRect(lx, -5, 4.2, 5, 1.8); blob(col, line); });
+    // neck + head (stretching out when happy, tucked when sad)
+    const out = sad ? 4 : happy ? 0 : 1.5;
+    x.beginPath(); x.moveTo(-9, -8); x.quadraticCurveTo(-14 + out, -9, -15 + out, -12); x.lineTo(-12 + out, -14.5); x.quadraticCurveTo(-9, -11, -7, -11); x.closePath(); blob(shade(-12, -11, 5, skin, skinD), line);
+    ell(-17 + out, -13, 5, 4.2, -0.15, shade(-17 + out, -13.5, 5, '#BFE2A6', skin), line);
+    eye(-18.2 + out, -14.2, 1.35);
+    smile(-19.6 + out, -12.1, 1.2);
+    blush(-16.2 + out, -12, 1.3);
+    // shell: rim band, dome, scutes
+    x.beginPath(); x.roundRect(-12.5, -6.2, 26, 3, 1.5); blob('#D8C27A', 'rgba(110,90,30,.45)');
+    x.beginPath(); x.moveTo(-12, -5.5); x.bezierCurveTo(-11, -20, 13, -20, 13.5, -5.5); x.closePath();
+    blob(shade(0, -12, 13, '#64B57E', '#2E6E45'), 'rgba(20,60,35,.55)');
+    x.save(); x.clip();
+    x.strokeStyle = 'rgba(200,235,190,.55)'; x.lineWidth = 0.9; x.lineJoin = 'round';
+    x.beginPath(); x.moveTo(-3, -13.5); x.lineTo(4, -13.5); x.lineTo(6, -9.5); x.lineTo(4, -5.5); x.lineTo(-3, -5.5); x.lineTo(-5, -9.5); x.closePath(); x.stroke();
+    [[-3, -13.5, -6, -18], [4, -13.5, 7, -18], [-5, -9.5, -12, -10], [6, -9.5, 14, -10]].forEach(([a, b2, c, d]) => { x.beginPath(); x.moveTo(a, b2); x.lineTo(c, d); x.stroke(); });
+    x.restore();
   }
-  if (sad) { x.fillStyle = '#7D8794'; x.font = 'bold 9px system-ui'; x.fillText('z', 12, -30); x.font = 'bold 7px system-ui'; x.fillText('z', 18, -36); }
-  if (PET_HEART > 0) { x.globalAlpha = Math.min(1, PET_HEART); x.font = '12px system-ui'; x.textAlign = 'center'; x.fillText('❤️', 0, -40 - (2.5 - PET_HEART) * 8); x.globalAlpha = 1; }
-  else if (petData(id).treat === todayStr() && !sad) { x.font = '8px system-ui'; x.textAlign = 'center'; x.fillText('❤️', 8, -38 + Math.sin(time * 3) * 2); }
+  x.restore();
+  // sleep "z z" and hearts are drawn unsquashed, above the pet
+  x.save(); x.translate(px0, G); x.scale(s, s);
+  if (sad) { x.fillStyle = '#7D8794'; x.textAlign = 'center'; x.font = 'bold 8px system-ui'; x.fillText('z', 12, -32); x.font = 'bold 6px system-ui'; x.fillText('z', 17, -38); }
+  if (PET_HEART > 0) { x.globalAlpha = Math.min(1, PET_HEART); x.font = '11px system-ui'; x.textAlign = 'center'; x.fillText('❤️', 0, -42 - (2.5 - PET_HEART) * 8); x.globalAlpha = 1; }
+  else if (petData(id).treat === todayStr() && !sad) { x.font = '7px system-ui'; x.textAlign = 'center'; x.fillText('❤️', 9, -40 + Math.sin(time * 3) * 2); }
   x.restore();
 }
 
