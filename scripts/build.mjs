@@ -46,6 +46,7 @@ async function buildApp() {
   writeFileSync(join(OUT, 'app.css'), read('app.css').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\n\s*/g, '\n'));
   writeFileSync(join(OUT, 'index.html'), read('index.html'));
   writeFileSync(join(OUT, 'manifest.webmanifest'), read('manifest.webmanifest'));
+  writeFileSync(join(OUT, 'robots.txt'), read('robots.txt')); // test phase: keep the web version out of search engines
   for (const f of readdirSync(join(SRC, 'icons'))) copyFileSync(join(SRC, 'icons', f), join(OUT, 'icons', f));
   buildFonts(OUT);
 
