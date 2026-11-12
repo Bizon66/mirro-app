@@ -294,6 +294,9 @@ Object.assign(T_ADD.en, { coachTitle: '🤖 AI coach', coachSub: 'Ask about exer
   q1: 'How do I squat correctly?', q2: 'What should I eat after a workout?', q3: 'How much protein do I need?', q4: 'How do I lose belly fat?', q5: 'Make me a weekly workout plan' });
 Object.assign(T_ADD.en, { noPtsLate: 'no points (logged late)', lateNote: 'ℹ️ This is a past day: entries are saved and count toward your weight, but they earn no points.', ptsRules: 'At most 100 ⭐ per day, so you can rise at most one level a day. Points only come from entries made the same or the next day — nothing is awarded for back-filling.', eyesL: 'Eye colour', shirtStyle: 'Top', pantsL: 'Bottoms', ssTshirt: 'T-shirt', ssTank: 'Tank top', ssPolo: 'Polo', ssLong: 'Long sleeve', ssHoodie: 'Hoodie', ssJersey: 'Sports jersey',
   ptShorts: 'Shorts', ptJoggers: 'Joggers', ptJeans: 'Jeans', hsSide: 'Side part', hsCurly: 'Curly', hsAfro: 'Afro', hsPony: 'Ponytail', hsBun: 'Bun', hsMohawk: 'Mohawk', shirt: 'Clothes colour' });
+Object.assign(T_ADD.uk, { themeTitle: '🎨 Оформлення', thLight: 'Світле', thBlue: 'Блакитне', thDark: 'Темне' });
+Object.assign(T_ADD.cs, { themeTitle: '🎨 Vzhled aplikace', thLight: 'Světlý', thBlue: 'Modrý', thDark: 'Tmavý' });
+Object.assign(T_ADD.en, { themeTitle: '🎨 Appearance', thLight: 'Light', thBlue: 'Blue', thDark: 'Dark' });
 for (const l of ['uk', 'cs', 'en']) Object.assign(T[l], T_ADD[l]);
 if (!AI_ON) {
   Object.assign(T.uk, { lblBtn: '🏷 Етикетка вручну', lblManual: 'Введіть цифри з етикетки:', fridgeLocal: 'ℹ️ Рецепти з вбудованого списку під ваші продукти.' });
@@ -1382,7 +1385,19 @@ function showTab(id) {
 document.querySelectorAll('nav button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.t)));
 $('lang').addEventListener('change', e => { LANG = e.target.value; D.lang = LANG; save(); applyLang(); fillStatic(); render(); });
 
+// app colour theme — D.theme: 'light' (default, also when missing) | 'blue' | 'dark'
+const THEMES = ['light', 'blue', 'dark'];
+function applyTheme() {
+  const th = THEMES.includes(D.theme) ? D.theme : 'light', root = document.documentElement;
+  if (th === 'light') delete root.dataset.theme; else root.dataset.theme = th;
+  const bg = getComputedStyle(root).getPropertyValue('--bg').trim();
+  const mt = document.querySelector('meta[name="theme-color"]'); if (mt && bg) mt.content = bg;
+  const cs = document.querySelector('meta[name="color-scheme"]'); if (cs) cs.content = th === 'dark' ? 'dark' : 'light';
+  document.querySelectorAll('#themeSeg button').forEach(b => b.classList.toggle('on', b.dataset.th === th));
+}
+$('themeSeg').addEventListener('click', e => { const b = e.target.closest('[data-th]'); if (!b) return; D.theme = b.dataset.th; save(); applyTheme(); });
 function render() {
+  applyTheme();
   $('firstRun').style.display = P() ? 'none' : 'block';
   if (!P()) { renderProfile(); return; }
   if (curTab === 'tabMe') renderMe();

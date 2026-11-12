@@ -110,6 +110,7 @@
 
   // ---- boot: restore from the mirror if it is newer, then start the app ----
   function start() {
+    try { var th = (JSON.parse(window.AppStore.boot || '{}') || {}).theme; if (th === 'blue' || th === 'dark') document.documentElement.setAttribute('data-theme', th); } catch (e) {}
     var s = document.createElement('script'); s.src = 'app.js'; document.body.appendChild(s);
   }
   var guard = new Promise(function (res) { setTimeout(function () { res(null); }, 2500); }); // never block start for long

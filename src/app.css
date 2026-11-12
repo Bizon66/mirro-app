@@ -292,3 +292,26 @@
   /* phone app: keep content clear of the status bar / notch */
   header { padding-top: max(10px, env(safe-area-inset-top)); }
   .sheet .sheetBox { padding-bottom: max(28px, env(safe-area-inset-bottom)); }
+
+  /* ---- app themes: <html data-theme="blue|dark">; no attribute = the original light look ---- */
+  :root[data-theme="blue"] { --bg: #CFE6FA; --line: #BBD5EC; }
+  :root[data-theme="dark"] { color-scheme: dark; --bg: #0F151C; --card: #1A232E; --ink: #E7EDF4; --mute: #9AA8B8; --line: #2B3644; --solid: #34465E; }
+  /* in the light themes these use the dark ink colour as a background; in dark they get their own solid tone */
+  [data-theme="dark"] .btn:not(.ghost):not(.danger), [data-theme="dark"] .seg button.on, [data-theme="dark"] nav, [data-theme="dark"] #formTag,
+  [data-theme="dark"] #toast, [data-theme="dark"] .coachCard, [data-theme="dark"] .msg.u { background: var(--solid); color: #fff; }
+  [data-theme="dark"] .btn.danger { background: rgba(229, 72, 77, .16); }
+  [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea, [data-theme="dark"] .chip, [data-theme="dark"] .daynav button,
+  [data-theme="dark"] .glass, [data-theme="dark"] .sheetBox, [data-theme="dark"] .runov, [data-theme="dark"] #petName, [data-theme="dark"] .micBtn,
+  [data-theme="dark"] header select { background: var(--card); color: var(--ink); }
+  [data-theme="dark"] .glass.on { background: rgba(74, 155, 232, .35); }
+  [data-theme="dark"] .ach.on { background: rgba(255, 216, 77, .14); }
+  [data-theme="dark"] .sitem.on { background: rgba(31, 157, 107, .2); }
+  [data-theme="dark"] .qlSave { background: rgba(255, 216, 77, .12); }
+  [data-theme="dark"] .achCat { border-top-color: var(--line); }
+  /* the twin's scene and the charts are pictures: they keep their light background and dark labels */
+  [data-theme="dark"] #avWeight, [data-theme="dark"] #avHint, [data-theme="dark"] #avPts { color: #1B2A4A; }
+  [data-theme="dark"] #avPts { background: #fff; }
+  [data-theme="dark"] canvas#chart, [data-theme="dark"] #clientBody canvas { background: #fff; border-radius: 12px; }
+  .themeSeg { margin-top: 4px; }
+  [data-theme="dark"] #avWeight b { color: #1B2A4A; }
+  [data-theme="dark"] .bar { background: var(--line); }
