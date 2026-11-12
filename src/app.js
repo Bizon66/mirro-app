@@ -1004,20 +1004,12 @@ function drawAvatar(w, tone) {
   ctx.clearRect(0, 0, CW, CH);
   const G = CH - 16;
   const px = (CH - 44) / 205;          // pixels per cm: same scale for everyone, so height is comparable
-  const cx = CW / 2 + 12;
+  let cx = CW / 2 + 12, petGap = PET_GAP;   // cx may move left below, to make room for the pet corner
   const Y = f => G - f * H * px;
   const XX = cm => cx + cm * px;
   const L = cm => cm * px;
   if (EQ.bg) drawBg(EQ.bg, CW, CH, G);
 
-  ctx.fillStyle = 'rgba(0,0,0,.08)'; ctx.beginPath(); ctx.ellipse(cx, G + 2, L(hip / 2.6), 7, 0, 0, Math.PI * 2); ctx.fill();
-  // height ruler
-  ctx.strokeStyle = '#b9c1cc'; ctx.lineWidth = 1; ctx.fillStyle = '#8a929c'; ctx.font = '10px system-ui'; ctx.textAlign = 'left';
-  ctx.beginPath(); ctx.moveTo(20, G); ctx.lineTo(20, G - 200 * px); ctx.stroke();
-  for (let c = 0; c <= 200; c += 50) { ctx.beginPath(); ctx.moveTo(16, G - c * px); ctx.lineTo(24, G - c * px); ctx.stroke(); if (c && c < 200) ctx.fillText(c, 26, G - c * px + 3); }
-  ctx.strokeStyle = 'rgba(47,111,224,.45)'; ctx.setLineDash([4, 4]);
-  ctx.beginPath(); ctx.moveTo(16, Y(1)); ctx.lineTo(cx - L(14), Y(1)); ctx.stroke(); ctx.setLineDash([]);
-  ctx.fillStyle = '#2f6fe0'; ctx.font = 'bold 11px system-ui'; ctx.fillText(H + ' ' + t('cm'), 26, Y(1) - 4);
 
   const skin = p.skin, skinD = shade(skin, 0.86);
   const SS = p.shirtStyle || 'tshirt', PT = p.pants || 'shorts', longPants = PT !== 'shorts', pantsC = PANTS_COL[PT] || PANTS_COL.shorts;
@@ -1037,12 +1029,29 @@ function drawAvatar(w, tone) {
   const neckW = (male ? 6 : 5) + (bmi - 22) * 0.18 + tone * 0.015;
   const armW = armG / 3.1 / 2;
   const bodyOut0 = Math.max(chW, waW, beW, hipW * 0.96);
+  // with a pet corner on the right, the twin steps left (never past the height ruler), so that about three
+  // sneakers of free floor stay between its foot and the corner; on wide screens it moves only as far as needed
+  if (EQ.pet && EQ.pet !== 'pet_parrot' && PET_LAYOUT[EQ.pet]) {
+    const footOut = legC + 0.8 + (ankW + 3.2) * 1.02, twinHalf = bodyOut0 + armW * 2 + 3, w = PET_LAYOUT[EQ.pet].w;
+    const fitCx = CW - 6 - L(footOut + PET_GAP + w);
+    cx = Math.max(46 + L(twinHalf), Math.min(cx, fitCx));
+    // a very wide twin on a narrow phone: give up some of the gap (down to two sneakers) before the corner gets tiny
+    petGap = clamp((CW - 6 - cx - L(footOut) - L(w * 0.9)) / px, PET_GAP_MIN, PET_GAP);
+  }
+  ctx.fillStyle = 'rgba(0,0,0,.08)'; ctx.beginPath(); ctx.ellipse(cx, G + 2, L(hip / 2.6), 7, 0, 0, Math.PI * 2); ctx.fill();
+  // height ruler
+  ctx.strokeStyle = '#b9c1cc'; ctx.lineWidth = 1; ctx.fillStyle = '#8a929c'; ctx.font = '10px system-ui'; ctx.textAlign = 'left';
+  ctx.beginPath(); ctx.moveTo(20, G); ctx.lineTo(20, G - 200 * px); ctx.stroke();
+  for (let c = 0; c <= 200; c += 50) { ctx.beginPath(); ctx.moveTo(16, G - c * px); ctx.lineTo(24, G - c * px); ctx.stroke(); if (c && c < 200) ctx.fillText(c, 26, G - c * px + 3); }
+  ctx.strokeStyle = 'rgba(47,111,224,.45)'; ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(16, Y(1)); ctx.lineTo(cx - L(14), Y(1)); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = '#2f6fe0'; ctx.font = 'bold 11px system-ui'; ctx.fillText(H + ' ' + t('cm'), 26, Y(1) - 4);
   const headCY = Y(0.93) - br * 0.7, headRy = L(H * 0.066), headRx = headRy * 0.8 + L(fat * 1.4);
 
   drawHairBack(p.hairStyle, p.hair, cx, headCY, headRx, headRy);
 
   // the pet's house / pond / wheel stand a little behind the twin's legs (drawn before the body)
-  if (EQ.pet) drawPetScene(EQ.pet, { cx, G, L, Y, hipW, armW, shW, H, CW, legC, calfW }, AV_T, 'back');
+  if (EQ.pet) drawPetScene(EQ.pet, { cx, G, L, Y, hipW, armW, shW, H, CW, legC, calfW, ankW, gap: petGap }, AV_T, 'back');
   // legs
   [-1, 1].forEach(sd => {
     const inner = Math.max(0.4, legC - thW);
@@ -1235,7 +1244,7 @@ function drawAvatar(w, tone) {
     ctx.beginPath(); ctx.arc(cx - headRx * 0.38, ey, headRx * 0.26, 0, Math.PI * 2); ctx.moveTo(cx + headRx * 0.64, ey); ctx.arc(cx + headRx * 0.38, ey, headRx * 0.26, 0, Math.PI * 2);
     ctx.moveTo(cx - headRx * 0.12, ey); ctx.lineTo(cx + headRx * 0.12, ey); ctx.stroke();
   }
-  if (EQ.pet) drawPetScene(EQ.pet, { cx, G, L, Y, hipW, armW, shW, H, CW, legC, calfW }, AV_T, 'front');
+  if (EQ.pet) drawPetScene(EQ.pet, { cx, G, L, Y, hipW, armW, shW, H, CW, legC, calfW, ankW, gap: petGap }, AV_T, 'front');
   ctx = cv.getContext('2d');
 }
 
@@ -2661,9 +2670,11 @@ const PET_ACT = { pet_dog: ['bark', 2.2], pet_cat: ['purr', 2.4], pet_rabbit: ['
 // spot first, the house / pond on the right (a little behind the spot, so they overlap with depth); total width
 const PET_LAYOUT = {
   pet_dog: { bowl: 3, spot: 20, house: 44, w: 58 }, pet_cat: { bowl: 3, spot: 20, house: 44, w: 58 },
-  pet_rabbit: { bowl: 4, spot: 17, house: 46, w: 60 }, pet_hamster: { wheel: 6, spot: 24, bowl: 35, house: 50, w: 60 },
+  pet_rabbit: { bowl: 4, spot: 17, house: 46, w: 60 }, pet_hamster: { bowl: 3, spot: 18, wheel: 36, house: 50, w: 62 },
   pet_turtle: { bowl: 2, spot: 16, house: 38, w: 58 }
 };
+// free floor between the twin's sneaker and the pet corner: about three sneakers (a sneaker is ~13 cm wide)
+const PET_GAP = 39, PET_GAP_MIN = 26;
 // small animals are drawn a bit smaller in their corner so they fit next to the house / pond
 const PET_K = { pet_hamster: 0.8, pet_turtle: 0.72 };
 function petAsleepAuto(id) { const h = new Date().getHours(); return petMood(id) === 'sad' || h >= 22 || h < 7; }
@@ -2832,7 +2843,7 @@ function drawPetScene(id, d, time, pass) {
   } else {
     // the corner stands on the ground to the RIGHT of the twin (only the parrot needs the left: shoulder height);
     // the house starts behind the leg; the corner grows when there is room (wide screens, the shop preview)
-    const lay = PET_LAYOUT[id], x0 = cx + L0(d.legC + d.calfW * 0.3), avail = (d.CW || cx * 2) - L0(2) - 4 - x0;
+    const lay = PET_LAYOUT[id], x0 = cx + L0(d.legC + 0.8 + (d.ankW + 3.2) * 1.02 + (d.gap || PET_GAP)), avail = (d.CW || cx * 2) - L0(2) - 4 - x0;
     const k = clamp(avail / L0(lay.w), 0.6, 1.45), L = cm => L0(cm) * k, at = cm => x0 + L(cm);
     const pk = PET_K[id] || 1;
     if (pass === 'back') {
