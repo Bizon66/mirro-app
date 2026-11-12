@@ -35,7 +35,7 @@ jobs:
         with: { node-version: 22, cache: npm }
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 21 }
-      - uses: android-actions/setup-android@v3
+      # the Android SDK is preinstalled on GitHub's Ubuntu runners (ANDROID_HOME); Gradle fetches missing platforms
       - run: npm ci
       - run: npm run android
       - name: Debug APK (install on a test phone)
