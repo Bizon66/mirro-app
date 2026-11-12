@@ -1230,7 +1230,12 @@ function drawAvatar(w, tone) {
     ctx.beginPath(); ctx.arc(cx - headRx * 0.38, ey, headRx * 0.26, 0, Math.PI * 2); ctx.moveTo(cx + headRx * 0.64, ey); ctx.arc(cx + headRx * 0.38, ey, headRx * 0.26, 0, Math.PI * 2);
     ctx.moveTo(cx - headRx * 0.12, ey); ctx.lineTo(cx + headRx * 0.12, ey); ctx.stroke();
   }
-  if (EQ.pet) drawPetV2(EQ.pet, cx + L(Math.max(hipW, 14) + 26), G, L, AV_T);
+  if (EQ.pet === 'pet_parrot') {
+    // the parrot sits on a stand at the twin's shoulder height, on the LEFT: the right side is where the arm waves
+    // and where the weight badge covers the top of the scene; it stays clear of the height ruler
+    const sx = Math.max(cx - L(Math.max(hipW, 14) + armW * 2 + 17), 24 + L(13)), top = Y(0.81);
+    drawParrotStand(sx, G, top, L); drawPetV2(EQ.pet, sx, top, L, AV_T, true);
+  } else if (EQ.pet) drawPetV2(EQ.pet, cx + L(Math.max(hipW, 14) + 26), G, L, AV_T);
   ctx = cv.getContext('2d');
 }
 
@@ -2639,13 +2644,32 @@ function renderPet() {
 }
 let PET_HEART = 0;
 // ---- pets v3: one consistent, softly shaded style (all six); facing left towards the twin, ground at y = 0, ~40 units tall ----
-function drawPetV2(id, px0, G, L, time) {
+// wooden parrot stand: weighted base on the ground, pole, perch bar at `top`, a small seed cup
+function drawParrotStand(sx, G, top, L) {
+  const x = ctx, wood = (y0, y1) => { const g = x.createLinearGradient(sx - L(1), 0, sx + L(1), 0); g.addColorStop(0, '#8C6440'); g.addColorStop(1, '#5E3F25'); return g; };
+  x.save();
+  x.fillStyle = 'rgba(27,42,74,.16)'; x.beginPath(); x.ellipse(sx, G + 1, L(11), L(1.6), 0, 0, Math.PI * 2); x.fill();
+  // base feet
+  x.fillStyle = '#6E4C30'; x.beginPath(); x.roundRect(sx - L(8), G - L(2.2), L(16), L(2.2), L(1.1)); x.fill();
+  // pole
+  x.fillStyle = wood(); x.beginPath(); x.roundRect(sx - L(1.1), top, L(2.2), G - top - L(1.5), L(1)); x.fill();
+  // perch bar with a darker underside
+  const pg = x.createLinearGradient(0, top - L(1.2), 0, top + L(1.6)); pg.addColorStop(0, '#A57A52'); pg.addColorStop(1, '#6E4C30');
+  x.fillStyle = pg; x.beginPath(); x.roundRect(sx - L(11), top - L(0.6), L(22), L(2.2), L(1.1)); x.fill();
+  x.strokeStyle = 'rgba(60,35,15,.45)'; x.lineWidth = 1; x.stroke();
+  // seed cup hanging on the right end
+  x.fillStyle = '#C9CED6'; x.beginPath(); x.moveTo(sx + L(5.5), top + L(1.6)); x.lineTo(sx + L(10.5), top + L(1.6)); x.lineTo(sx + L(9.7), top + L(4.6)); x.lineTo(sx + L(6.3), top + L(4.6)); x.closePath(); x.fill();
+  x.fillStyle = '#E2B04A'; x.beginPath(); x.ellipse(sx + L(8), top + L(1.7), L(2.4), L(0.75), 0, 0, Math.PI * 2); x.fill();
+  x.restore();
+}
+function drawPetV2(id, px0, G, L, time, onStand) {
   const x = ctx, mood = petMood(id), st = petStage(id), s = L(1) * PET_SCALE[st], sad = mood === 'sad', happy = mood === 'happy';
   const wag = sad ? 0 : Math.sin(time * (happy ? 9 : 4));
   const TAU = Math.PI * 2;
   x.save(); x.translate(px0, G); x.scale(s, s);
   // soft ground shadow (drawn before the sad "squash" so it stays flat)
-  x.fillStyle = 'rgba(27,42,74,.16)'; x.beginPath(); x.ellipse(2, 0.6, id === 'pet_parrot' ? 15 : 17, 2.6, 0, 0, TAU); x.fill();
+  if (!onStand) { x.fillStyle = 'rgba(27,42,74,.16)'; x.beginPath(); x.ellipse(2, 0.6, id === 'pet_parrot' ? 15 : 17, 2.6, 0, 0, TAU); x.fill(); }
+  if (onStand) x.scale(-1, 1);   // on the left stand it faces right, towards the twin
   if (sad) x.scale(1.06, 0.9);
   // helpers
   const shade = (cx, cy, r, light, dark) => { const g = x.createRadialGradient(cx - r * 0.4, cy - r * 0.5, r * 0.15, cx, cy, r * 1.15); g.addColorStop(0, light); g.addColorStop(1, dark); return g; };
@@ -2753,8 +2777,8 @@ function drawPetV2(id, px0, G, L, time) {
     ell(-3, -5.6, 1.7, 1.3, 0, '#F1B6A8', line); ell(1.2, -5.6, 1.7, 1.3, 0, '#F1B6A8', line);
   } else if (id === 'pet_parrot') {
     const base = '#3CBF66', dark = '#1E8445', line = 'rgba(15,70,35,.45)';
-    // perch
-    x.beginPath(); x.roundRect(-15, -2.2, 31, 3, 1.5); blob(shade(0, -1, 16, '#9C7350', '#6E4C30'), 'rgba(60,35,15,.45)');
+    // own little perch (only when not sitting on the stand)
+    if (!onStand) { x.beginPath(); x.roundRect(-15, -2.2, 31, 3, 1.5); blob(shade(0, -1, 16, '#9C7350', '#6E4C30'), 'rgba(60,35,15,.45)'); }
     // tail feathers
     [[4, -4, 9, 7, '#2F6FE0'], [1.5, -4, 5.5, 8, '#E5484D']].forEach(([tx, ty, ex2, ey2, col]) => {
       x.beginPath(); x.moveTo(tx - 1.6, ty); x.quadraticCurveTo(ex2 - 1, ey2 - 6, ex2, ey2); x.quadraticCurveTo(ex2 + 1.5, ey2 - 7, tx + 2.2, ty); x.closePath(); blob(col, 'rgba(0,0,0,.25)');
