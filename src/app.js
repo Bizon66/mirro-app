@@ -1037,7 +1037,7 @@ function drawAvatar(w, tone) {
     const footOut = legC + 0.8 + (ankW + 3.2) * 1.02, twinHalf = bodyOut0 + armW * 2 + 3, w = PET_LAYOUT[EQ.pet].w;
     const fitCx = CW - 6 - L(footOut + PET_GAP + w);
     cx = Math.max(38 + L(twinHalf), Math.min(cx, fitCx));
-    // a very wide twin on a narrow phone: give up some of the gap (down to two sneakers) before the corner gets tiny
+    // a very wide twin on a narrow phone: give up some of the gap before the corner gets tiny
     petGap = clamp((CW - 6 - cx - L(footOut) - L(w * 0.9)) / px, PET_GAP_MIN, PET_GAP);
   }
   ctx.fillStyle = 'rgba(0,0,0,.08)'; ctx.beginPath(); ctx.ellipse(cx, G + 2, L(hip / 2.6), 7, 0, 0, Math.PI * 2); ctx.fill();
@@ -2675,8 +2675,9 @@ const PET_LAYOUT = {
   pet_rabbit: { bowl: 4, spot: 24, house: 60, w: 74 }, pet_hamster: { bowl: 4, spot: 20, wheel: 45, house: 70, w: 80 },
   pet_turtle: { bowl: 4, spot: 22, house: 50, w: 71 }
 };
-// free floor between the twin's sneaker and the pet corner: about three sneakers (a sneaker is ~13 cm wide)
-const PET_GAP = 39, PET_GAP_MIN = 26;
+// free floor between the twin's sneaker and the bowl: about one sneaker (a sneaker is ~13 cm wide); with the bowl and
+// the layout below the pet itself ends up about three sneakers from the twin's foot
+const PET_GAP = 13, PET_GAP_MIN = 8;
 // small animals are drawn a bit smaller in their corner so they fit next to the house / pond
 const PET_K = { pet_hamster: 0.8, pet_turtle: 0.72 };
 function petAsleepAuto(id) { const h = new Date().getHours(); return petMood(id) === 'sad' || h >= 22 || h < 7; }
