@@ -8,7 +8,7 @@
     "build": "node scripts/build.mjs",
     "build:artifact": "node scripts/build.mjs --artifact",
     "serve": "node scripts/serve.mjs",
-    "test": "node scripts/build.mjs && node tests/smoke.mjs",
+    "test": "node scripts/build.mjs && node tests/smoke.mjs && node tests/foods.mjs",
     "android": "node scripts/build.mjs && npx cap sync android",
     "ios": "node scripts/build.mjs && npx cap sync ios"
   },

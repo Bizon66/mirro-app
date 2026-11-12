@@ -493,7 +493,229 @@ const FOOD_DB = [
   ['veg_soup', 'Суп овочевий', 'Zeleninová polévka', 'Vegetable soup', 40, 1.5, 1.5, 5, 350], ['sandwich', 'Бутерброд', 'Chlebíček / sendvič', 'Sandwich', 250, 10, 11, 27, 150],
   ['porridge', 'Каша з маслом', 'Kaše s máslem', 'Porridge with butter', 130, 3.5, 4, 20, 250], ['mashed', 'Картопляне пюре', 'Bramborová kaše', 'Mashed potatoes', 105, 2, 4, 15, 250]
 ];
-const FDB = FOOD_DB.map(r => ({ id: r[0], n: [r[1], r[2], r[3]], k: r[4], p: r[5], f: r[6], c: r[7], por: r[8] }));
+// ---- more foods (v2): typical values per 100 g / 100 ml — [id, uk, cs, en, kcal, protein, fat, carbs, typical portion g]
+// Averages from common nutrition tables (USDA, Czech/Ukrainian product labels); packaged products vary by brand.
+FOOD_DB.push(
+  // bread & bakery
+  ['toast', 'Хліб тостовий', 'Toustový chléb', 'Toast bread', 265, 8.5, 3.5, 49, 25],
+  ['wholegrain', 'Хліб цільнозерновий', 'Celozrnný chléb', 'Wholegrain bread', 247, 10, 3.4, 41, 35],
+  ['baguette', 'Батон / багет', 'Veka / bageta', 'Baguette / white loaf', 270, 8.5, 2.5, 52, 30],
+  ['lavash', 'Лаваш / тортилья', 'Tortilla / placka', 'Flatbread / tortilla', 300, 8, 6, 52, 60],
+  ['crispbread', 'Хлібці', 'Křehký chléb', 'Crispbread', 370, 10, 3, 72, 10],
+  ['crackers', 'Крекер', 'Krekry', 'Crackers', 440, 9, 15, 68, 30],
+  ['croissant', 'Круасан', 'Croissant', 'Croissant', 406, 8, 21, 45, 60],
+  ['bun_sweet', 'Булочка солодка', 'Buchta', 'Sweet bun', 330, 7, 9, 54, 80],
+  ['donut', 'Пончик', 'Kobliha', 'Doughnut', 400, 6, 22, 45, 70],
+  ['kolac', 'Пиріжок солодкий', 'Koláč', 'Sweet pastry (koláč)', 330, 7, 12, 50, 70],
+  ['pie_savory', 'Пиріжок з капустою / картоплею', 'Plněná taštička', 'Savory pie (cabbage / potato)', 250, 6, 10, 34, 80],
+  ['langos', 'Лангош', 'Langoš', 'Langos (fried flatbread)', 330, 7, 15, 42, 200],
+  // spreads
+  ['spread', 'Намазка', 'Pomazánka', 'Sandwich spread', 250, 7, 21, 6, 20],
+  ['pate', 'Паштет', 'Paštika', 'Pâté', 300, 12, 27, 3, 30],
+  ['hummus', 'Хумус', 'Hummus', 'Hummus', 170, 8, 10, 14, 30],
+  ['cream_cheese', 'Вершковий сир', 'Žervé / Lučina', 'Cream cheese', 250, 6, 23, 4, 30],
+  ['butter_spread', 'Масляна намазка', 'Pomazánkové máslo', 'Butter spread', 230, 6, 21, 4, 20],
+  ['margarine', 'Маргарин', 'Margarín', 'Margarine', 530, 0.2, 59, 0.5, 10],
+  ['jam', 'Варення / джем', 'Džem / marmeláda', 'Jam', 250, 0.4, 0.1, 62, 20],
+  ['choc_spread', 'Шоколадна паста', 'Čokoládová pomazánka', 'Chocolate spread', 540, 6, 31, 57, 20],
+  ['processed_cheese', 'Сир плавлений', 'Tavený sýr', 'Processed cheese', 280, 13, 23, 5, 30],
+  // dairy
+  ['milk_low', 'Молоко 1,5%', 'Mléko polotučné 1,5%', 'Milk 1.5%', 46, 3.3, 1.5, 4.8, 250],
+  ['milk_full', 'Молоко 3,5%', 'Mléko plnotučné 3,5%', 'Whole milk 3.5%', 64, 3.3, 3.5, 4.8, 250],
+  ['cream', 'Вершки 10%', 'Smetana do kávy 10%', 'Cream 10%', 118, 3, 10, 4, 20],
+  ['feta', 'Бринза / фета', 'Balkánský sýr / feta', 'Feta / brynza', 260, 15, 21, 1, 50],
+  ['parmesan', 'Пармезан', 'Parmazán', 'Parmesan', 392, 36, 26, 3, 10],
+  ['cottage_fat', 'Сир кисломолочний 9%', 'Tvaroh tučný', 'Cottage cheese 9%', 159, 16.7, 9, 2, 150],
+  ['cottage_low', 'Сир кисломолочний знежирений', 'Tvaroh netučný', 'Fat-free cottage cheese', 75, 13, 0.5, 4, 150],
+  ['yogurt_fruit', 'Йогурт фруктовий', 'Ovocný jogurt', 'Fruit yogurt', 95, 3.5, 2.5, 15, 150],
+  ['curd_bar', 'Сирок глазурований', 'Tvarohová tyčinka v čokoládě', 'Glazed curd bar', 410, 8, 26, 36, 45],
+  // meat & fish
+  ['turkey', 'Індичка (філе)', 'Krůtí prsa', 'Turkey breast', 135, 29, 2, 0, 150],
+  ['duck', 'Качка', 'Kachna', 'Duck', 337, 19, 28, 0, 200],
+  ['liver', 'Печінка куряча', 'Kuřecí játra', 'Chicken liver', 165, 24, 6.5, 1, 120],
+  ['wings', 'Курячі крильця', 'Kuřecí křídla', 'Chicken wings', 255, 24, 17, 0, 200],
+  ['chicken_roast', 'Курка запечена', 'Pečené kuře', 'Roast chicken', 215, 25, 13, 0, 200],
+  ['bologna', 'Ковбаса варена', 'Šunkový salám', 'Bologna sausage', 260, 12, 23, 2, 50],
+  ['spekacky', 'Сардельки', 'Špekáčky', 'Frankfurters', 300, 12, 27, 2, 100],
+  ['smoked_sausage', 'Ковбаса копчена', 'Klobása', 'Smoked sausage', 400, 16, 37, 1, 80],
+  ['herring', 'Оселедець', 'Sleď', 'Herring', 217, 17, 16, 0, 80],
+  ['mackerel', 'Скумбрія', 'Makrela', 'Mackerel', 205, 19, 14, 0, 150],
+  ['shrimp', 'Креветки', 'Krevety', 'Shrimp', 99, 24, 0.3, 0.2, 100],
+  ['crab_sticks', 'Крабові палички', 'Krabí tyčinky', 'Crab sticks', 95, 7, 1, 15, 50],
+  ['sprats', 'Шпроти', 'Šproty v oleji', 'Sprats in oil', 360, 17, 32, 0.4, 60],
+  ['fish_fried', 'Риба смажена', 'Smažená ryba', 'Fried fish', 230, 18, 13, 9, 150],
+  // grains & cereals
+  ['bulgur', 'Булгур варений', 'Bulgur vařený', 'Bulgur, cooked', 83, 3, 0.2, 18.6, 200],
+  ['couscous', 'Кускус варений', 'Kuskus vařený', 'Couscous, cooked', 112, 3.8, 0.2, 23, 200],
+  ['millet', 'Пшоно варене', 'Jáhly vařené', 'Millet, cooked', 119, 3.5, 1, 23.7, 200],
+  ['barley', 'Перловка варена', 'Kroupy vařené', 'Pearl barley, cooked', 123, 2.3, 0.4, 28, 200],
+  ['quinoa', 'Кіноа варена', 'Quinoa vařená', 'Quinoa, cooked', 120, 4.4, 1.9, 21, 200],
+  ['semolina', 'Манна каша', 'Krupicová kaše', 'Semolina porridge', 98, 3, 3, 15, 250],
+  ['muesli', 'Мюслі', 'Müsli', 'Muesli', 370, 10, 6, 66, 50],
+  ['granola', 'Гранола', 'Křupavé müsli', 'Granola', 450, 9, 18, 62, 50],
+  ['cornflakes', 'Кукурудзяні пластівці', 'Kukuřičné lupínky', 'Cornflakes', 375, 7, 1, 84, 40],
+  ['noodles_instant', 'Локшина швидкого приготування', 'Instantní nudle', 'Instant noodles', 450, 9, 18, 62, 70],
+  // vegetables & legumes
+  ['beet', 'Буряк варений', 'Červená řepa', 'Beetroot, cooked', 44, 1.7, 0.2, 10, 100],
+  ['zucchini', 'Кабачок', 'Cuketa', 'Zucchini', 17, 1.2, 0.3, 3.1, 150],
+  ['eggplant', 'Баклажан', 'Lilek', 'Eggplant', 25, 1, 0.2, 6, 150],
+  ['cauliflower', 'Цвітна капуста', 'Květák', 'Cauliflower', 25, 1.9, 0.3, 5, 150],
+  ['spinach', 'Шпинат', 'Špenát', 'Spinach', 23, 2.9, 0.4, 3.6, 100],
+  ['peas', 'Горошок зелений', 'Hrášek', 'Green peas', 81, 5.4, 0.4, 14, 100],
+  ['pumpkin', 'Гарбуз', 'Dýně', 'Pumpkin', 26, 1, 0.1, 6.5, 150],
+  ['garlic', 'Часник', 'Česnek', 'Garlic', 149, 6.4, 0.5, 33, 5],
+  ['avocado', 'Авокадо', 'Avokádo', 'Avocado', 160, 2, 15, 9, 100],
+  ['radish', 'Редиска', 'Ředkvičky', 'Radish', 16, 0.7, 0.1, 3.4, 50],
+  ['sauerkraut', 'Квашена капуста', 'Kysané zelí', 'Sauerkraut', 19, 0.9, 0.1, 4.3, 150],
+  ['pickles', 'Огірки солоні', 'Kyselé okurky', 'Pickles', 12, 0.5, 0.2, 2.3, 60],
+  ['olives', 'Оливки', 'Olivy', 'Olives', 145, 1, 15, 4, 30],
+  ['lentils', 'Сочевиця варена', 'Čočka vařená', 'Lentils, cooked', 116, 9, 0.4, 20, 200],
+  ['chickpeas', 'Нут варений', 'Cizrna vařená', 'Chickpeas, cooked', 164, 8.9, 2.6, 27, 150],
+  // fruit & berries
+  ['pear', 'Груша', 'Hruška', 'Pear', 57, 0.4, 0.1, 15, 170],
+  ['plum', 'Слива', 'Švestka', 'Plum', 46, 0.7, 0.3, 11, 150],
+  ['peach', 'Персик', 'Broskev', 'Peach', 39, 0.9, 0.3, 10, 150],
+  ['apricot', 'Абрикос', 'Meruňka', 'Apricot', 48, 1.4, 0.4, 11, 150],
+  ['kiwi', 'Ківі', 'Kiwi', 'Kiwi', 61, 1.1, 0.5, 15, 75],
+  ['mandarin', 'Мандарин', 'Mandarinka', 'Mandarin', 53, 0.8, 0.3, 13, 80],
+  ['watermelon', 'Кавун', 'Meloun vodní', 'Watermelon', 30, 0.6, 0.2, 7.6, 300],
+  ['melon', 'Диня', 'Meloun cukrový', 'Melon', 34, 0.8, 0.2, 8, 300],
+  ['sour_cherry', 'Вишня', 'Višně', 'Sour cherries', 50, 1, 0.3, 12, 150],
+  ['cherry', 'Черешня', 'Třešně', 'Sweet cherries', 63, 1.1, 0.2, 16, 150],
+  ['raspberry', 'Малина', 'Maliny', 'Raspberries', 52, 1.2, 0.7, 12, 125],
+  ['blueberry', 'Чорниця / лохина', 'Borůvky', 'Blueberries', 57, 0.7, 0.3, 14, 125],
+  ['lemon', 'Лимон', 'Citron', 'Lemon', 29, 1.1, 0.3, 9, 60],
+  ['grapefruit', 'Грейпфрут', 'Grapefruit', 'Grapefruit', 42, 0.8, 0.1, 11, 250],
+  ['pineapple', 'Ананас', 'Ananas', 'Pineapple', 50, 0.5, 0.1, 13, 150],
+  ['mango', 'Манго', 'Mango', 'Mango', 60, 0.8, 0.4, 15, 200],
+  ['persimmon', 'Хурма', 'Kaki', 'Persimmon', 70, 0.6, 0.2, 18.6, 170],
+  ['pomegranate', 'Гранат', 'Granátové jablko', 'Pomegranate', 83, 1.7, 1.2, 19, 150],
+  ['raisins', 'Родзинки', 'Rozinky', 'Raisins', 299, 3.1, 0.5, 79, 30],
+  ['dried_apricots', 'Курага', 'Sušené meruňky', 'Dried apricots', 241, 3.4, 0.5, 63, 30],
+  ['dates', 'Фініки', 'Datle', 'Dates', 282, 2.5, 0.4, 75, 30],
+  // nuts & seeds
+  ['almonds', 'Мигдаль', 'Mandle', 'Almonds', 579, 21, 50, 22, 30],
+  ['hazelnuts', 'Фундук', 'Lískové ořechy', 'Hazelnuts', 628, 15, 61, 17, 30],
+  ['cashew', 'Кешʼю', 'Kešu', 'Cashews', 553, 18, 44, 30, 30],
+  ['peanuts', 'Арахіс', 'Arašídy', 'Peanuts', 567, 26, 49, 16, 30],
+  ['sunflower_seeds', 'Насіння соняшника', 'Slunečnicová semínka', 'Sunflower seeds', 584, 21, 51, 20, 30],
+  ['pumpkin_seeds', 'Гарбузове насіння', 'Dýňová semínka', 'Pumpkin seeds', 559, 30, 49, 11, 30],
+  // sweets & snacks
+  ['cake', 'Торт', 'Dort', 'Cake', 370, 5, 20, 43, 120],
+  ['pastry', 'Тістечко', 'Zákusek', 'Pastry', 380, 5, 21, 43, 80],
+  ['wafers', 'Вафлі', 'Oplatky', 'Wafers', 520, 6, 28, 62, 30],
+  ['candy', 'Цукерки шоколадні', 'Bonbony', 'Chocolate candies', 520, 5, 29, 60, 15],
+  ['zefir', 'Зефір', 'Pěnové cukroví', 'Marshmallow (zefir)', 326, 0.8, 0, 80, 30],
+  ['halva', 'Халва', 'Chalva', 'Halva', 520, 12, 30, 54, 30],
+  ['gummies', 'Мармелад', 'Želé bonbony', 'Gummy sweets', 320, 0.1, 0.1, 79, 30],
+  ['choc_bar', 'Шоколадний батончик', 'Čokoládová tyčinka', 'Chocolate bar', 490, 7, 24, 60, 50],
+  ['protein_bar', 'Протеїновий батончик', 'Proteinová tyčinka', 'Protein bar', 360, 30, 12, 35, 50],
+  ['popcorn', 'Попкорн', 'Popcorn', 'Popcorn', 480, 8, 25, 56, 50],
+  // drinks (per 100 ml)
+  ['tea', 'Чай без цукру', 'Čaj neslazený', 'Tea, unsweetened', 1, 0, 0, 0.2, 250],
+  ['tea_sugar', 'Чай з цукром', 'Čaj s cukrem', 'Tea with sugar', 8, 0, 0, 2, 250],
+  ['coffee_black', 'Кава чорна', 'Černá káva', 'Black coffee', 2, 0.1, 0, 0, 150],
+  ['cappuccino', 'Капучино', 'Cappuccino', 'Cappuccino', 40, 2, 2, 3.5, 200],
+  ['latte', 'Лате', 'Latté', 'Latte', 50, 2.8, 2.5, 4, 300],
+  ['cocoa', 'Какао з молоком', 'Kakao s mlékem', 'Hot cocoa', 80, 3.5, 3, 10, 250],
+  ['compote', 'Компот', 'Kompot', 'Fruit compote', 50, 0.2, 0, 12, 250],
+  ['kvass', 'Квас', 'Kvas', 'Kvass', 27, 0.2, 0, 5.5, 500],
+  ['juice_apple', 'Сік яблучний', 'Jablečný džus', 'Apple juice', 46, 0.1, 0.1, 11, 250],
+  ['lemonade', 'Лимонад', 'Limonáda', 'Lemonade (soda)', 40, 0, 0, 10, 330],
+  ['kofola', 'Кофола', 'Kofola', 'Kofola', 26, 0, 0, 6.4, 500],
+  ['energy', 'Енергетик', 'Energetický nápoj', 'Energy drink', 45, 0, 0, 11, 250],
+  ['smoothie', 'Смузі', 'Smoothie', 'Smoothie', 60, 1, 0.5, 13, 300],
+  ['milkshake', 'Молочний коктейль', 'Mléčný koktejl', 'Milkshake', 110, 3.5, 3.5, 17, 300],
+  ['vodka', 'Горілка', 'Vodka / slivovice', 'Vodka', 231, 0, 0, 0, 50],
+  ['cider', 'Сидр', 'Cider', 'Cider', 50, 0, 0, 5, 500],
+  // ready dishes
+  ['pea_soup', 'Суп гороховий', 'Hrachová polévka', 'Pea soup', 66, 4, 1.5, 9.5, 350],
+  ['solyanka', 'Солянка', 'Soljanka', 'Solyanka', 70, 4, 4.5, 3, 350],
+  ['okroshka', 'Окрошка', 'Okroška', 'Okroshka', 60, 3, 3, 5, 350],
+  ['fish_soup', 'Юшка рибна', 'Rybí polévka', 'Fish soup', 45, 4, 1.5, 3.5, 350],
+  ['potato_soup', 'Суп картопляний', 'Bramboračka', 'Potato soup', 55, 1.5, 2, 8, 350],
+  ['garlic_soup', 'Часниковий суп', 'Česnečka', 'Garlic soup', 50, 2, 2.5, 6, 350],
+  ['buckwheat_meat', 'Гречка з мʼясом', 'Pohanka s masem', 'Buckwheat with meat', 150, 9, 6, 15, 300],
+  ['pasta_mince', 'Макарони по-флотськи', 'Těstoviny s mletým masem', 'Pasta with minced meat', 195, 9, 8, 21, 300],
+  ['chicken_rice', 'Курка з рисом', 'Kuře s rýží', 'Chicken with rice', 150, 11, 4, 17, 350],
+  ['stew', 'Рагу з мʼясом', 'Dušené maso se zeleninou', 'Meat and vegetable stew', 120, 9, 6, 7, 300],
+  ['fried_eggs', 'Яєчня', 'Smažená vejce', 'Fried eggs', 196, 13.6, 15, 0.8, 110],
+  ['oladky', 'Оладки', 'Lívance', 'Fritters (oladky)', 230, 6, 9, 31, 150],
+  ['nalysnyky', 'Налисники з сиром', 'Palačinky s tvarohem', 'Crêpes with cottage cheese', 190, 9, 8, 21, 200],
+  ['casserole', 'Сирна запіканка', 'Tvarohový nákyp', 'Cottage cheese bake', 170, 12, 6, 17, 200],
+  ['lasagna', 'Лазанья', 'Lasagne', 'Lasagna', 150, 8, 7, 14, 300],
+  ['sushi', 'Суші / роли', 'Sushi', 'Sushi rolls', 150, 5, 3, 25, 200],
+  ['hotdog', 'Хот-дог', 'Párek v rohlíku', 'Hot dog', 260, 9, 14, 25, 130],
+  ['nuggets', 'Нагетси', 'Kuřecí nugety', 'Chicken nuggets', 290, 15, 18, 17, 150],
+  ['fried_cheese', 'Смажений сир', 'Smažený sýr', 'Fried cheese', 330, 17, 22, 15, 150],
+  ['vepro_knedlo', 'Свинина з кнедликами й капустою', 'Vepřo knedlo zelo', 'Pork, dumplings and sauerkraut', 160, 8, 7, 16, 450],
+  ['fruit_dumplings', 'Кнедлики з фруктами', 'Ovocné knedlíky', 'Fruit dumplings', 200, 5, 4, 36, 300],
+  ['potato_baked', 'Картопля печена', 'Pečené brambory', 'Baked potatoes', 120, 2.5, 3.5, 20, 250],
+  ['caesar', 'Салат Цезар', 'Caesar salát', 'Caesar salad', 150, 8, 10, 6, 250],
+  ['greek_salad', 'Грецький салат', 'Řecký salát', 'Greek salad', 105, 3.5, 9, 4, 250],
+  ['vinegret', 'Вінегрет', 'Vinegret (řepový salát)', 'Beet salad (vinegret)', 90, 1.5, 6, 8, 200],
+  ['shuba', 'Оселедець під шубою', 'Sleď pod kožichem', 'Herring under a fur coat', 190, 6, 15, 8, 200],
+  ['cheese_toast', 'Тост з сиром', 'Toast se sýrem', 'Cheese toast', 300, 12, 14, 30, 120]
+);
+// extra words people use for the same food (any language); searched together with the names
+const FOOD_ALIAS = {
+  rye: ['чорний хліб', 'бородинськ', 'černý chléb', 'brown bread', 'dark bread', 'rye bread'],
+  bread: ['білий хліб', 'пшеничний хліб', 'bílý chléb', 'white bread'],
+  roll: ['rohlík', 'houska'],
+  spread: ['мазанка', 'намазан', 'pomazánk'],
+  choc_spread: ['нутела', 'нутелла', 'nutella'],
+  cream_cheese: ['філадельфія', 'philadelphia', 'lučina', 'creme bonjour'],
+  cottage: ['творог', 'тварог', 'tvaroh', 'cottage'],
+  cottage_fat: ['творог', 'tvaroh'],
+  sausage: ['сосиска', 'párek', 'párky'],
+  salo: ['шпик', 'špek'],
+  cola: ['пепсі', 'pepsi', 'coca'],
+  coffee_black: ['еспресо', 'американо', 'espresso', 'americano', 'кава'],
+  coffee_milk: ['кава з вершками', 'flat white'],
+  kebab: ['шаурма', 'шаверма', 'gyros', 'гірос', 'durum'],
+  sushi: ['ролл', 'роли', 'maki', 'суші'],
+  choc_bar: ['снікерс', 'марс', 'твікс', 'баунті', 'кіткат', 'snickers', 'mars', 'twix', 'bounty', 'kitkat'],
+  wafers: ['tatranka', 'horalky', 'вафля'],
+  cake: ['наполеон', 'медовик', 'чізкейк', 'cheesecake', 'dortík'],
+  pastry: ['еклер', 'eclair', 'větrník', 'kremrole'],
+  candy: ['цукерка', 'bonbon', 'praline'],
+  fried_eggs: ['глазунья', 'volské oko', 'míchaná vejce', 'scrambled'],
+  oatmeal_milk: ['вівсяна каша', 'ovesná kaše', 'porridge'],
+  buckwheat: ['гречана каша', 'pohanka'],
+  potato: ['картоплі', 'brambory'],
+  mashed: ['пюре', 'kaše bramborová'],
+  hotdog: ['hot dog', 'хотдог'],
+  vodka: ['slivovice', 'самогон', 'коньяк', 'віскі', 'whisky', 'rum', 'ром'],
+  beer: ['пиво', 'pivo', 'ležák'],
+  juice: ['сік', 'džus', 'juice'],
+  sandwich: ['сендвіч', 'chlebíček', 'toast sandwich'],
+  pizza: ['піцца'],
+  lavash: ['піта', 'pita', 'wrap'],
+  liver: ['печінка', 'játra'],
+  herring: ['оселедець', 'селедка'],
+  mackerel: ['скумбрія'],
+  shrimp: ['креветка'],
+  avocado: ['гуакамоле', 'guacamole'],
+  dates: ['фінік'],
+  sunflower_seeds: ['насіння', 'семечки', 'семки', 'slunečnice'],
+  blueberry: ['лохина', 'чорниця', 'borůvka'],
+  strawberry: ['суниця', 'клубника', 'jahody'],
+  mandarin: ['мандаринка', 'клементин', 'klementinka'],
+  watermelon: ['кавун'],
+  noodles_instant: ['мівіна', 'доширак', 'роллтон', 'ramen', 'рамен'],
+  energy: ['ред булл', 'red bull', 'монстр', 'monster', 'big shock'],
+  protein_bar: ['протеїнов', 'protein'],
+  greek: ['грецький йогурт', 'skyr', 'скір'],
+  mayo: ['майонез', 'majonéza'],
+  oil: ['соняшникова олія', 'оливкова олія', 'olej'],
+  potato_fried: ['смажена картопля', 'картопля смажена'],
+  pelmeni: ['пельмешки'],
+  varenyky: ['вареник'],
+  syrnyky: ['сирник'],
+  pancakes: ['млинець', 'palačinka'],
+  borscht: ['борщик']
+};
+const FDB = FOOD_DB.map(r => ({ id: r[0], n: [r[1], r[2], r[3]], k: r[4], p: r[5], f: r[6], c: r[7], por: r[8], al: FOOD_ALIAS[r[0]] || [] }));
 const fdb = id => FDB.find(x => x.id === id);
 const fold = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/['’ʼ]/g, '');
 function searchFoods(q) {
@@ -502,7 +724,7 @@ function searchFoods(q) {
   return FDB.map(f => {
     const names = f.n.map(fold);
     const own = names[LI()];
-    const score = own.startsWith(k) ? 3 : own.includes(k) ? 2 : names.some(n => n.includes(k)) ? 1 : 0;
+    const score = own.startsWith(k) ? 3 : own.includes(k) ? 2 : names.some(n => n.includes(k)) || (f.al || []).some(a => fold(a).includes(k)) ? 1 : 0;
     return { f, score };
   }).filter(x => x.score).sort((a, b) => b.score - a.score).slice(0, 15).map(x => x.f);
 }
@@ -2450,6 +2672,9 @@ const QTITLE = { m: 'qMeat', c: 'qCook', o: 'qOil', s: 'qSize' };
 // typical weight of one piece / slice / spoon for counted items
 const PIECE = { egg: 55, varenyky: 40, pelmeni: 12, syrnyky: 60, pancakes: 50, cutlet: 120, banana: 120, apple: 180, orange: 200,
   sausage: 50, roll: 60, bread: 30, rye: 35, deruny: 70, holubtsi: 150, burger: 220, pizza: 110, sandwich: 150, biscuits: 12, tomato: 120, cucumber: 120, schnitzel: 150 };
+Object.assign(PIECE, { toast: 25, wholegrain: 35, baguette: 30, crispbread: 10, crackers: 6, croissant: 60, bun_sweet: 80, donut: 70, kolac: 70, pie_savory: 80,
+  pear: 170, plum: 40, peach: 150, apricot: 40, kiwi: 75, mandarin: 80, lemon: 60, persimmon: 170, avocado: 150, dates: 8, radish: 15, garlic: 5, olives: 4,
+  candy: 12, choc_bar: 50, protein_bar: 50, curd_bar: 45, hotdog: 130, nuggets: 18, sushi: 25, wings: 50, oladky: 50, nalysnyky: 100, spekacky: 100, fried_cheese: 150 });
 const NUMW = { 'один': 1, 'одна': 1, 'одне': 1, 'два': 2, 'дві': 2, 'три': 3, 'чотири': 4, "п'ять": 5, 'пять': 5, 'шість': 6, 'пів': 0.5, 'півтори': 1.5,
   'jeden': 1, 'jedna': 1, 'jedno': 1, 'dva': 2, 'dve': 2, 'tri': 3, 'ctyri': 4, 'pet': 5, 'pul': 0.5, 'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5, 'half': 0.5, 'a': 1 };
 const UNIT_RX = [
@@ -2460,14 +2685,43 @@ const UNIT_RX = [
 ];
 const stemsOf = w => { const out = [w]; for (let i = 1; i <= 3; i++) if (w.length - i >= (w.length <= 5 ? 3 : 4)) out.push(w.slice(0, w.length - i)); return out; };
 const stemW = w => w.length > 5 ? w.slice(0, w.length - 1) : w;
+// words that never identify a food on their own
+const QL_STOP = new Set(['з', 'зі', 'із', 'та', 'і', 'й', 'на', 'в', 'у', 'до', 'по', 'для', 'без', 'трохи', 'ще', 's', 'se', 'a', 'na', 'v', 've', 'do', 'bez', 'with', 'and', 'of', 'the', 'some', 'little', 'bit']);
+const startsName = k => FDB.find(f => fold(f.n[LI()]).startsWith(k)) || FDB.find(f => f.n.some(n => fold(n).startsWith(k)));
 function findFood(q) {
   const k = fold(q).replace(/[^\p{L}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
   if (!k) return null;
   const own = (D.dishes || []).find(d => { const n = fold(d.n); return n.includes(k) || k.includes(n) || n.includes(stemW(k)); });
   if (own) return { dish: own };
-  const tries = [k, ...k.split(' ').filter(w => w.length > 2).flatMap(stemsOf)];
-  for (const q2 of tries) { const r = searchFoods(q2); if (r.length) return { food: r[0] }; }
-  return null;
+  // the whole phrase is the start of a food name («кава з молоком», «вареники з картоплею»)
+  const whole = startsName(k); if (whole) return { food: whole };
+  const words = k.split(' ').filter(w => w.length > 2 && !QL_STOP.has(w));
+  if (!words.length) return null;
+  let best = null;
+  for (const f of FDB) {
+    const names = f.n.map(fold), hay = names.concat((f.al || []).map(fold)).join(' | ');
+    const toks = hay.split(/[\s|/(),]+/);
+    let hits = 0, last = -1, strength = 0;
+    words.forEach((w, i) => {
+      const st = stemsOf(w).find(x => hay.includes(x)); if (!st) return;
+      hits++; last = i;
+      // the food's own name starting with the word counts most (масло → «Масло вершкове», not «Каша з маслом»);
+      // then a whole-word match (хліб → «Хліб білий», not «Хлібці»); stem length only breaks ties
+      strength += (names[LI()].startsWith(st) ? 3 : names.some(n => n.startsWith(st)) ? 2.5 : 0) + (toks.includes(st) || toks.includes(w) ? 2 : 0) + st.length / 10;
+    });
+    if (!hits) continue;
+    const c = { f, hits, last, strength };
+    if (!best || c.hits > best.hits || (c.hits === best.hits && (c.last > best.last || (c.last === best.last && c.strength > best.strength)))) best = c;   // full tie: the earlier, more basic food wins
+  }
+  return best ? { food: best.f } : null;
+}
+// "хліб з маслом" → two foods; "вареники з картоплею" stays one dish because the whole phrase is a food name
+function splitWith(raw) {
+  const m = raw.match(/^(.*\S)\s+(?:з|зі|із|with|s|se)\s+(\S.*)$/i);
+  if (!m) return null;
+  const whole = parseItem(raw).q; if (whole && startsName(whole)) return null;
+  const a = parseItem(m[1]), b = parseItem(m[2]);
+  return findFood(a.q || m[1]) && findFood(b.q || m[2]) ? [m[1], m[2]] : null;
 }
 function parseItem(raw) {
   let words = fold(raw).replace(/(\d)([^\d\s.,])/g, '$1 $2').split(/\s+/).filter(Boolean), qty = null, unit = null;
@@ -2517,7 +2771,8 @@ async function qlParse() {
   LBL = null;
   const parts = text.split(/\s*(?:,|;|\+|\n|\s+і\s+|\s+та\s+|\s+й\s+|\s+а також\s+|\s+and\s+|\s+a\s+|\s+plus\s+)\s*/i).filter(p => p && p.trim().length > 1);
   QL = []; const unknown = [];
-  for (const raw of parts.slice(0, 8)) {
+  const items = parts.flatMap(p => splitWith(p) || [p]);
+  for (const raw of items.slice(0, 10)) {
     const it = parseItem(raw), m = findFood(it.q || raw);
     if (m && m.dish) {
       const d0 = m.dish, por = d0.g || 300;
