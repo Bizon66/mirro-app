@@ -379,7 +379,7 @@ const netMet = a => Math.max(0, a.met - 1);
 // one-time fix for activities saved before: gross MET → net MET
 // every record gets a stable uid: needed later to merge entries from two phones (sync in 1.2)
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-const DATA_VERSION = 2;
+const DATA_VERSION = 3;
 function migrate() {
   let changed = false;
   if (!D.metNet && D.days) {
@@ -390,8 +390,13 @@ function migrate() {
   if ((D.v || 1) < DATA_VERSION) {
     for (const k in D.days || {}) { const d = D.days[k]; (d.foods || []).forEach(f => { if (!f.uid) f.uid = uid(); }); (d.acts || []).forEach(a => { if (!a.uid) a.uid = uid(); }); }
     (D.meas || []).forEach(m => { if (!m.uid) m.uid = uid(); });
-    D.v = DATA_VERSION; changed = true;
   }
+  if ((D.v || 1) < 3 && D.shop) {
+    // v3: the gold medal left the shop — take it off; points are counted from owned items, so its price comes back
+    D.shop.owned = (D.shop.owned || []).filter(id => id !== 'medal');
+    if (D.shop.eq && D.shop.eq.acc === 'medal') delete D.shop.eq.acc;
+  }
+  if ((D.v || 1) < DATA_VERSION) { D.v = DATA_VERSION; changed = true; }
   return changed;
 }
 if (migrate()) { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) {} }
@@ -1215,7 +1220,6 @@ function drawAvatar(w, tone) {
   } else {
     ctx.fillStyle = shirtD; ctx.beginPath(); ctx.ellipse(cx, Y(0.842), L(neckW + 1.2), L(1.6), 0, 0, Math.PI); ctx.fill();
   }
-  if (EQ.acc === 'medal') drawMedal(cx, Y, L, neckW);
 
   // head
   ctx.fillStyle = skin;
@@ -2298,7 +2302,6 @@ const SHOP = [
   { id: 'shoes_black', slot: 'shoes', price: 100, ic: '👟', col: '#2b2f3a', n: ['Кросівки чорні', 'Tenisky černé', 'Black sneakers'] },
   { id: 'headphones', slot: 'acc', price: 240, ic: '🎧', n: ['Навушники', 'Sluchátka', 'Headphones'] },
   { id: 'watch', slot: 'acc', price: 200, ic: '⌚', n: ['Фітнес-браслет', 'Fitness náramek', 'Fitness tracker'] },
-  { id: 'medal', slot: 'acc', price: 400, lvl: 5, ic: '🏅', n: ['Золота медаль', 'Zlatá medaile', 'Gold medal'] },
   { id: 'bg_park', slot: 'bg', price: 240, ic: '🌳', n: ['Парк', 'Park', 'Park'] },
   { id: 'bg_gym', slot: 'bg', price: 300, ic: '🏋️', n: ['Спортзал', 'Posilovna', 'Gym'] },
   { id: 'bg_beach', slot: 'bg', price: 360, ic: '🏖️', n: ['Пляж', 'Pláž', 'Beach'] },
@@ -2399,15 +2402,6 @@ function drawWatch(wx, wy, aw) {
   const x = ctx;
   x.fillStyle = '#2B2F3A'; x.fillRect(wx - aw * 0.95, wy - aw * 0.25, aw * 1.9, aw * 0.9);
   x.fillStyle = '#3EE08A'; x.fillRect(wx - aw * 0.45, wy - aw * 0.12, aw * 0.9, aw * 0.6);
-}
-function drawMedal(cx, Y, L, neckW) {
-  const x = ctx;
-  x.lineWidth = L(1.6); x.lineCap = 'round';
-  x.strokeStyle = '#2F6FE0'; x.beginPath(); x.moveTo(cx - L(neckW), Y(0.845)); x.lineTo(cx, Y(0.745)); x.stroke();
-  x.strokeStyle = '#D6453A'; x.beginPath(); x.moveTo(cx + L(neckW), Y(0.845)); x.lineTo(cx, Y(0.745)); x.stroke();
-  x.fillStyle = '#F5C542'; x.strokeStyle = '#B8860B'; x.lineWidth = 1.5;
-  x.beginPath(); x.arc(cx, Y(0.728), L(3.4), 0, Math.PI * 2); x.fill(); x.stroke();
-  x.fillStyle = '#B8860B'; x.font = 'bold ' + Math.round(L(3.6)) + 'px system-ui'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('★', cx, Y(0.728) + 0.5); x.textBaseline = 'alphabetic';
 }
 // ---- UI: points card, quests, shop ----
 function renderRewards() {
@@ -2666,8 +2660,9 @@ let PET_HEART = 0;
 // Pets sleep at night (22:00–7:00) and when sad: in their house; the turtle in its pond; the parrot on its perch.
 // Runtime state only: nothing new is stored in D.
 let PET_RT = { act: null, t0: 0, home: null, homeUntil: 0, pop: -9 };
-let PET_HIT = null;   // tap areas on the main canvas: { house, pet, bowl } as [x0, y0, x1, y1]
+let PET_HIT = null, PET_WHEEL = null, PET_TAPS = [], PET_FLY_DIM = false;   // tap areas on the main canvas: { house, pet, bowl } as [x0, y0, x1, y1]
 const PET_ACT = { pet_dog: ['bark', 2.2], pet_cat: ['purr', 2.4], pet_rabbit: ['hop', 1.6], pet_hamster: ['wheel', 6], pet_turtle: ['tuck', 2.4], pet_parrot: ['talk', 2.4] };
+const ACT_DUR = { bark: 2.2, purr: 2.4, hop: 1.6, wheel: 6, tuck: 2.4, talk: 2.4, fly: 5 };
 // layout of each corner in cm from where the corner starts (after the free floor next to the twin), going right:
 // bowl, the pet's spot, the house / pond on the right — each with its own room, nothing piled up; total width
 const PET_LAYOUT = {
@@ -2806,7 +2801,7 @@ function drawBowl(id, bx, G, L, full) {
   x.beginPath(); x.moveTo(-4.8, -2.6); x.lineTo(4.8, -2.6); x.lineTo(3.8, 0); x.lineTo(-3.8, 0); x.closePath(); petPath(x, col[0], 'rgba(0,0,0,.25)');
   x.beginPath(); x.ellipse(0, -2.6, 4.8, 1.2, 0, 0, Math.PI * 2); petPath(x, col[1]);
   if (full) {
-    const food = { pet_rabbit: '#F08A3C', pet_hamster: '#E2B04A', pet_turtle: '#8CCF5E' }[id] || '#9A6B42';
+    const food = { pet_rabbit: '#F08A3C', pet_hamster: '#E2B04A', pet_turtle: '#8CCF5E', pet_parrot: '#E2B04A' }[id] || '#9A6B42';
     x.fillStyle = food; x.beginPath(); x.ellipse(0, -3, 4.2, 1.6, 0, Math.PI, Math.PI * 2); x.fill();
     x.fillStyle = 'rgba(255,255,255,.35)'; [[-1.8, -3.6], [0.6, -3.9], [2.2, -3.3]].forEach(([a, b2]) => { x.beginPath(); x.arc(a, b2, 0.5, 0, 7); x.fill(); });
   } else { x.beginPath(); x.ellipse(0, -2.5, 3.9, 0.8, 0, 0, Math.PI * 2); petPath(x, 'rgba(0,0,0,.35)'); }
@@ -2825,22 +2820,42 @@ function petBubble(bx, by, text, L) {
 }
 // the whole pet corner; called from drawAvatar with the twin's measurements
 function drawPetScene(id, d, time, pass) {
-  const { cx, G, Y, hipW, armW, H } = d, L0 = d.L, main = !AV_TARGET;
+  const { cx, G, Y, hipW, armW, shW, H } = d, L0 = d.L, main = !AV_TARGET;
   const inside = petInside(id), asleep = petAsleepAuto(id) && inside;
-  const act = !inside && PET_RT.act && time - PET_RT.t0 < PET_ACT[id][1] ? PET_ACT[id][0] : null;
+  const an = PET_RT.actName || PET_ACT[id][0];
+  const act = !inside && PET_RT.act === id && time - PET_RT.t0 < (ACT_DUR[an] || 2) ? an : null;
   const sc = PET_SCALE[petStage(id)], fed = petData(id).fed === todayStr();
   const pop = clamp((time - PET_RT.pop) / 0.35, 0, 1), popS = 0.55 + 0.45 * (1 - (1 - pop) ** 3);
   const hit = {};
   if (id === 'pet_parrot') {
     if (pass === 'back') return;
-    // no house: it sleeps right on its perch; its seed cup on the stand is the bowl
+    // no house: it sleeps right on its perch; its food bowl hangs from the perch
     const sx = Math.max(cx - L0(Math.max(hipW, 14) + armW * 2 + 17), 24 + L0(13)), top = Y(0.81);
-    hit.bowl = drawParrotStand(sx, G, top, L0, fed);
-    ctx.save(); ctx.translate(sx, top); ctx.scale(popS, popS); ctx.translate(-sx, -top);
-    drawPetV2(id, sx, top, L0, time * (act ? 1.8 : 1), { stand: true, excited: !!act, sleep: inside });
-    ctx.restore();
-    if (act) petBubble(sx + L0(4), top - L0(34) * sc, t('petSayParrot'), L0);
-    hit.pet = [sx - L0(13), top - L0(36) * sc, sx + L0(13), top + L0(2)];
+    drawParrotStand(sx, G, top, L0);
+    // the bowl: a bracket from the perch end and a proper, colourful bowl (easy to see and to tap)
+    const bx = sx + L0(9), by = top + L0(15), LB = cm => L0(cm) * 1.7;   // the bowl is drawn 1.7x bigger
+    ctx.strokeStyle = '#6E4C30'; ctx.lineWidth = Math.max(1.5, L0(0.7)); ctx.beginPath(); ctx.moveTo(bx, top + L0(1.4)); ctx.lineTo(bx, by - LB(2.4)); ctx.stroke();
+    drawBowl(id, bx, by, LB, fed);
+    hit.bowl = [bx - L0(12), top + L0(2), bx + L0(12), by + L0(4)];
+    // the weight badge fades while the parrot flies over the top of the scene (like when the twin waves)
+    if (main) { const flying = act === 'fly', wb = $('avWeight'); if (wb && flying !== PET_FLY_DIM) { PET_FLY_DIM = flying; wb.classList.toggle('dim', flying); } }
+    if (act === 'fly') {
+      // three quick taps: a lap around the twin and back to the perch, wings flapping
+      const u = clamp((time - PET_RT.t0) / ACT_DUR.fly, 0, 1), ccy = Y(0.58);
+      const rx = L0(Math.max(hipW, shW) + armW * 2 + 16), ry = L0(H * 0.42);
+      const a0 = Math.atan2((top - ccy) / ry, (sx - cx) / rx), a = a0 + u * Math.PI * 2;
+      const ex = cx + Math.cos(a) * rx, ey = ccy + Math.sin(a) * ry;
+      const ease = v => v * v * (3 - 2 * v), w = ease(Math.min(u / 0.12, 1)) * ease(Math.min((1 - u) / 0.12, 1));
+      const fx = sx + (ex - sx) * w, fy = top + (ey - top) * w + Math.sin(time * 10) * L0(1.5) * w;
+      const dir = -Math.sin(a);   // moving right when > 0 (the drawing faces left by default)
+      drawPetV2(id, fx, fy, L0, time * 2.5, { stand: dir > 0, excited: true, fly: true });
+    } else {
+      ctx.save(); ctx.translate(sx, top); ctx.scale(popS, popS); ctx.translate(-sx, -top);
+      drawPetV2(id, sx, top, L0, time * (act ? 1.8 : 1), { stand: true, excited: !!act, sleep: inside, perch: true });
+      ctx.restore();
+      if (act) petBubble(sx + L0(4), top - L0(34) * sc, t('petSayParrot'), L0);
+    }
+    hit.pet = [sx - L0(13), top - L0(36) * sc, sx + L0(13), top + L0(1)];
     hit.house = hit.pet;   // tapping a sleeping parrot wakes it
   } else {
     // the corner stands on the ground to the RIGHT of the twin (only the parrot needs the left: shoulder height);
@@ -2862,7 +2877,7 @@ function drawPetScene(id, d, time, pass) {
           if (asleep) { const z = petUnits(at(lay.house), G, L); sleepZ(z, -door[0] + 4, door[1] - 14, time); z.restore(); }
         }
       }
-      if (lay.wheel) drawWheel(at(lay.wheel), G, L, time, act === 'wheel');
+      if (lay.wheel) { drawWheel(at(lay.wheel), G, L, time, act === 'wheel'); if (main) PET_WHEEL = [at(lay.wheel) - L(15), G - L(30), at(lay.wheel) + L(15), G + L(1)]; }
       if (inside && id === 'pet_turtle') {
         // in the pond: only the top of the shell and the eyes above the water
         const tx = at(lay.house) + L(2), ty = G + L(6.5), wl = G - L(1.4);   // wl = water line
@@ -2873,7 +2888,7 @@ function drawPetScene(id, d, time, pass) {
         const x = petUnits(tx, G, L); if (asleep) sleepZ(x, 6, -12, time); x.restore();
       }
       const hw = id === 'pet_turtle' ? 20 : 15;
-      if (main) PET_HIT = { house: [at(lay.house) - L(hw), G - L(id === 'pet_turtle' ? 10 : 27), at(lay.house) + L(hw), G + L(2)] };
+      if (main) PET_HIT = { house: [at(lay.house) - L(hw), G - L(id === 'pet_turtle' ? 10 : 27), at(lay.house) + L(hw), G + L(2)], wheel: lay.wheel ? PET_WHEEL : null };
       return;
     }
     const lift = drawPetSpot(id, at(lay.spot), G, L, true);
@@ -2910,14 +2925,24 @@ function petTap(tx, ty) {
   const inside = petInside(id);
   // the areas overlap a little (pet next to its house and bowl): the one whose centre is closest wins
   const near = r => Math.hypot(tx - (r[0] + r[2]) / 2, ty - (r[1] + r[3]) / 2);
-  const cand = [['bowl', PET_HIT.bowl], ['pet', inside ? null : PET_HIT.pet], ['house', PET_HIT.house]].filter(([, r]) => inR(r));
+  const cand = [['bowl', PET_HIT.bowl], ['pet', inside ? null : PET_HIT.pet], ['house', PET_HIT.house], ['wheel', PET_HIT.wheel]].filter(([, r]) => inR(r));
   if (!cand.length) return false;
   const what = cand.sort((a, b) => near(a[1]) - near(b[1]))[0][0];
   if (what === 'bowl') {
     if (feedPet(id)) { PET_HEART = 2.5; if (inside) { PET_RT.home = 'out'; PET_RT.homeUntil = Date.now() + 10 * 60 * 1000; PET_RT.pop = AV_T; } }
     redraw(); return true;
   }
+  if (what === 'wheel') {   // the hamster's wheel: it comes out (if needed) and runs
+    if (inside) { PET_RT.home = 'out'; PET_RT.homeUntil = Date.now() + 10 * 60 * 1000; }
+    PET_RT.act = id; PET_RT.actName = 'wheel'; PET_RT.t0 = AV_T;
+    if (REDUCED && AV_STATE) { redraw(); setTimeout(() => { PET_RT.act = null; redraw(); }, 2200); }
+    return true;
+  }
   if (what === 'pet') {
+    if (PET_RT.act === id && PET_RT.actName === 'fly' && AV_T - PET_RT.t0 < ACT_DUR.fly) return true;   // let it finish the lap
+    const now = Date.now(); PET_TAPS = PET_TAPS.filter(x => now - x < 2500).concat(now);
+    PET_RT.actName = id === 'pet_parrot' && PET_TAPS.length >= 3 && !REDUCED ? 'fly' : PET_ACT[id][0];
+    if (PET_RT.actName === 'fly') PET_TAPS = [];
     PET_RT.act = id; PET_RT.t0 = AV_T;
     if (REDUCED && AV_STATE) { redraw(); setTimeout(() => { PET_RT.act = null; redraw(); }, 2200); }
     return true;
@@ -2931,7 +2956,7 @@ function petTap(tx, ty) {
 }
 
 // wooden parrot stand: weighted base on the ground, pole, perch bar at `top`, a small seed cup
-function drawParrotStand(sx, G, top, L, full) {
+function drawParrotStand(sx, G, top, L) {
   const x = ctx, wood = (y0, y1) => { const g = x.createLinearGradient(sx - L(1), 0, sx + L(1), 0); g.addColorStop(0, '#8C6440'); g.addColorStop(1, '#5E3F25'); return g; };
   x.save();
   x.fillStyle = 'rgba(27,42,74,.16)'; x.beginPath(); x.ellipse(sx, G + 1, L(11), L(1.6), 0, 0, Math.PI * 2); x.fill();
@@ -2943,12 +2968,7 @@ function drawParrotStand(sx, G, top, L, full) {
   const pg = x.createLinearGradient(0, top - L(1.2), 0, top + L(1.6)); pg.addColorStop(0, '#A57A52'); pg.addColorStop(1, '#6E4C30');
   x.fillStyle = pg; x.beginPath(); x.roundRect(sx - L(11), top - L(0.6), L(22), L(2.2), L(1.1)); x.fill();
   x.strokeStyle = 'rgba(60,35,15,.45)'; x.lineWidth = 1; x.stroke();
-  // seed cup hanging on the right end
-  x.fillStyle = '#C9CED6'; x.beginPath(); x.moveTo(sx + L(5.5), top + L(1.6)); x.lineTo(sx + L(10.5), top + L(1.6)); x.lineTo(sx + L(9.7), top + L(4.6)); x.lineTo(sx + L(6.3), top + L(4.6)); x.closePath(); x.fill();
-  if (full) { x.fillStyle = '#E2B04A'; x.beginPath(); x.ellipse(sx + L(8), top + L(1.7), L(2.4), L(0.75), 0, 0, Math.PI * 2); x.fill(); x.beginPath(); x.ellipse(sx + L(8), top + L(1.4), L(1.8), L(1), 0, Math.PI, Math.PI * 2); x.fill(); }
-  else { x.fillStyle = '#7D8794'; x.beginPath(); x.ellipse(sx + L(8), top + L(1.7), L(2.3), L(0.6), 0, 0, Math.PI * 2); x.fill(); }
   x.restore();
-  return [sx + L(3), top - L(3), sx + L(13), top + L(7)];   // tap area of the seed cup
 }
 function drawPetV2(id, px0, G, L, time, o) {
   o = o || {}; const onStand = !!o.stand;
@@ -2958,7 +2978,7 @@ function drawPetV2(id, px0, G, L, time, o) {
   const TAU = Math.PI * 2;
   x.save(); x.translate(px0, G); x.scale(s, s);
   // soft ground shadow (drawn before the sad "squash" so it stays flat)
-  if (!onStand && !o.noShadow) { x.fillStyle = 'rgba(27,42,74,.16)'; x.beginPath(); x.ellipse(2, 0.6, id === 'pet_parrot' ? 15 : 17, 2.6, 0, 0, TAU); x.fill(); }
+  if (!onStand && !o.noShadow && !o.fly) { x.fillStyle = 'rgba(27,42,74,.16)'; x.beginPath(); x.ellipse(2, 0.6, id === 'pet_parrot' ? 15 : 17, 2.6, 0, 0, TAU); x.fill(); }
   if (onStand) x.scale(-1, 1);   // on the left stand it faces right, towards the twin
   if (squash) x.scale(1.06, 0.9);
   // helpers
@@ -3068,7 +3088,7 @@ function drawPetV2(id, px0, G, L, time, o) {
   } else if (id === 'pet_parrot') {
     const base = '#3CBF66', dark = '#1E8445', line = 'rgba(15,70,35,.45)';
     // own little perch (only when not sitting on the stand)
-    if (!onStand) { x.beginPath(); x.roundRect(-15, -2.2, 31, 3, 1.5); blob(shade(0, -1, 16, '#9C7350', '#6E4C30'), 'rgba(60,35,15,.45)'); }
+    if (!onStand && !o.fly) { x.beginPath(); x.roundRect(-15, -2.2, 31, 3, 1.5); blob(shade(0, -1, 16, '#9C7350', '#6E4C30'), 'rgba(60,35,15,.45)'); }
     // tail feathers
     [[4, -4, 9, 7, '#2F6FE0'], [1.5, -4, 5.5, 8, '#E5484D']].forEach(([tx, ty, ex2, ey2, col]) => {
       x.beginPath(); x.moveTo(tx - 1.6, ty); x.quadraticCurveTo(ex2 - 1, ey2 - 6, ex2, ey2); x.quadraticCurveTo(ex2 + 1.5, ey2 - 7, tx + 2.2, ty); x.closePath(); blob(col, 'rgba(0,0,0,.25)');
@@ -3077,12 +3097,12 @@ function drawPetV2(id, px0, G, L, time, o) {
     x.beginPath(); x.moveTo(-3, -24); x.bezierCurveTo(-11, -18, -8, -4, 0, -3); x.bezierCurveTo(7, -3, 9, -14, 4, -22); x.closePath();
     blob(shade(-1, -14, 11, '#5AD883', base), line);
     // wing with layered feathers
-    x.save(); x.translate(3, -14); x.rotate(0.28 + wag * 0.06);
+    x.save(); x.translate(3, -14); x.rotate(o.fly ? -1.1 + wag * 0.9 : 0.28 + wag * 0.06);
     ell(0, 0, 4.6, 8.6, 0, shade(0, -2, 8, base, dark), line);
     ell(0.6, 5.2, 3, 3.4, 0, '#2F6FE0'); ell(0, 2, 3.4, 3, 0, dark);
     x.restore();
-    // feet gripping the perch
-    ell(-2.5, -2.2, 1.8, 1.2, 0, '#8A8F98'); ell(1.5, -2.2, 1.8, 1.2, 0, '#8A8F98');
+    // feet gripping the perch (tucked in while flying)
+    if (!o.fly) { ell(-2.5, -2.2, 1.8, 1.2, 0, '#8A8F98'); ell(1.5, -2.2, 1.8, 1.2, 0, '#8A8F98'); }
     // head
     ell(-3, -26.5, 6.8, 6.6, 0, shade(-3, -27, 6.8, '#5AD883', base), line);
     ell(-6.6, -24.6, 2.6, 2.1, 0, '#FFD84D');                                       // cheek patch

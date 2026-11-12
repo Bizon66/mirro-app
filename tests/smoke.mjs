@@ -42,7 +42,7 @@ try {
     const today = await p.evaluate(() => todayStr());
     check('food logged', foodsOn(d, today).length === 2);
     check('records carry a uid', d.days[today].foods.every(f => f.uid));
-    check('data version set', d.v === 2);
+    check('data version set', d.v === 3);
     await p.click('nav button[data-t=tabTips]');
     check('AI coach hidden in v1.0', !(await p.isVisible('.coachCard')));
     await p.click('nav button[data-t=tabToday]'); await p.click('#lblBtn');
