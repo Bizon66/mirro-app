@@ -297,9 +297,9 @@ Object.assign(T_ADD.en, { noPtsLate: 'no points (logged late)', lateNote: 'ℹ�
 Object.assign(T_ADD.uk, { themeTitle: '🎨 Колір тла', thLight: 'Світле', thBlue: 'Блакитне', thMint: 'Мʼятне', thLavender: 'Лавандове', thPeach: 'Персикове', thPink: 'Рожеве', thSand: 'Пісочне', thGray: 'Сіре', thDark: 'Темне', thBlack: 'Чорне', thCustom: 'Свій колір', thNow: 'Зараз: {n}. Натисніть 🌈, щоб вибрати будь-який відтінок.' });
 Object.assign(T_ADD.cs, { themeTitle: '🎨 Barva pozadí', thLight: 'Světlá', thBlue: 'Modrá', thMint: 'Mátová', thLavender: 'Levandulová', thPeach: 'Broskvová', thPink: 'Růžová', thSand: 'Písková', thGray: 'Šedá', thDark: 'Tmavá', thBlack: 'Černá', thCustom: 'Vlastní barva', thNow: 'Teď: {n}. Klepněte na 🌈 a vyberte jakýkoli odstín.' });
 Object.assign(T_ADD.en, { themeTitle: '🎨 Background colour', thLight: 'Light', thBlue: 'Blue', thMint: 'Mint', thLavender: 'Lavender', thPeach: 'Peach', thPink: 'Pink', thSand: 'Sand', thGray: 'Grey', thDark: 'Dark', thBlack: 'Black', thCustom: 'Your colour', thNow: 'Now: {n}. Tap 🌈 to pick any shade.' });
-Object.assign(T_ADD.uk, { petSayDog: 'Гав!', petSayCat: 'Мур-р…', petSayParrot: 'Привіт!', petTapHint: '👆 Натисніть на улюбленця, і він щось зробить. Натисніть на будиночок, щоб покликати його або відправити додому. Уночі й коли сумує, він спить у будиночку.' });
-Object.assign(T_ADD.cs, { petSayDog: 'Haf!', petSayCat: 'Mňau…', petSayParrot: 'Ahoj!', petTapHint: '👆 Klepněte na mazlíčka a něco udělá. Klepnutím na domeček ho zavoláte ven nebo pošlete domů. V noci a když je smutný, spí v domečku.' });
-Object.assign(T_ADD.en, { petSayDog: 'Woof!', petSayCat: 'Purr…', petSayParrot: 'Hello!', petTapHint: '👆 Tap your pet and it does something. Tap its house to call it out or send it home. At night and when it’s sad, it sleeps in its house.' });
+Object.assign(T_ADD.uk, { petSayDog: 'Гав!', petSayCat: 'Мур-р…', petSayParrot: 'Привіт!', petTapHint: '👆 Натисніть на улюбленця, і він щось зробить. Порожня мисочка — натисніть, щоб нагодувати (10 ⭐). Будиночок кличе його назовні або відправляє додому. Уночі й коли сумує, улюбленець спить.' });
+Object.assign(T_ADD.cs, { petSayDog: 'Haf!', petSayCat: 'Mňau…', petSayParrot: 'Ahoj!', petTapHint: '👆 Klepněte na mazlíčka a něco udělá. Prázdná miska — klepněte a nakrmíte ho (10 ⭐). Domeček ho zavolá ven nebo pošle domů. V noci a když je smutný, mazlíček spí.' });
+Object.assign(T_ADD.en, { petSayDog: 'Woof!', petSayCat: 'Purr…', petSayParrot: 'Hello!', petTapHint: '👆 Tap your pet and it does something. Empty bowl? Tap it to feed (10 ⭐). The house calls your pet out or sends it home. At night and when it’s sad, your pet sleeps.' });
 for (const l of ['uk', 'cs', 'en']) Object.assign(T[l], T_ADD[l]);
 if (!AI_ON) {
   Object.assign(T.uk, { lblBtn: '🏷 Етикетка вручну', lblManual: 'Введіть цифри з етикетки:', fridgeLocal: 'ℹ️ Рецепти з вбудованого списку під ваші продукти.' });
@@ -2638,10 +2638,7 @@ function renderPet() {
     <div class="grid2"><button class="btn" id="petFeed"${pd.fed === td ? ' disabled' : ''}>${pd.fed === td ? t('fedToday') : t('feedBtn', { n: PET_FOOD })}</button>
       <button class="btn ghost" id="petTreat"${pd.treat === td ? ' disabled' : ''}>${pd.treat === td ? t('treatToday') : t('treatBtn', { n: PET_TREAT })}</button></div>`;
   $('petName').addEventListener('change', e => { pd.name = e.target.value.trim().slice(0, 20); save(); });
-  $('petFeed').addEventListener('click', () => {
-    if (pointsSummary().bal < PET_FOOD) return toast(t('notEnough', { n: PET_FOOD - pointsSummary().bal }));
-    pd.fed = td; pd.feeds++; D.petSpent = petSpent() + PET_FOOD; save(); toast(t('fedToast')); renderRewards();
-  });
+  $('petFeed').addEventListener('click', () => feedPet(id));
   $('petTreat').addEventListener('click', () => {
     if (pointsSummary().bal < PET_TREAT) return toast(t('notEnough', { n: PET_TREAT - pointsSummary().bal }));
     pd.treat = td; if (pd.fed !== td) { pd.fed = td; pd.feeds++; } D.petSpent = petSpent() + PET_TREAT; save(); toast(t('treatToast')); PET_HEART = 2.5; renderRewards();
@@ -2649,13 +2646,23 @@ function renderPet() {
 }
 let PET_HEART = 0;
 // ---- pets v3: one consistent, softly shaded style (all six); facing left towards the twin, ground at y = 0, ~40 units tall ----
-// ================= pet scene: each pet has its own spot (right of the twin) and a house (left) =================
-// Tap the pet → it does its thing (hamster runs in the wheel, rabbit hops, dog barks…). Tap the house → the pet
-// comes out (or goes in). Pets sleep in their house when sad (not fed for 2+ days) and at night (22:00–7:00).
-// All of this is runtime state only: nothing new is stored in D.
+// ================= pet corner: house (or pond) right next to the pet's spot, plus a food bowl =================
+// Everything sits together on the LEFT of the twin (the right is where the arm waves and the weight badge is).
+// Tap the pet → it does its thing. Tap its house / the pond → it comes out or goes in (10 min).
+// Tap the bowl → feed it for PET_FOOD ⭐ (same as the button in the pet card); a full bowl means "fed today".
+// Pets sleep at night (22:00–7:00) and when sad: in their house; the turtle in its pond; the parrot on its perch.
+// Runtime state only: nothing new is stored in D.
 let PET_RT = { act: null, t0: 0, home: null, homeUntil: 0, pop: -9 };
-let PET_HIT = null;   // tap areas on the main canvas: { house: [x0, y0, x1, y1], pet: [x0, y0, x1, y1] }
+let PET_HIT = null;   // tap areas on the main canvas: { house, pet, bowl } as [x0, y0, x1, y1]
 const PET_ACT = { pet_dog: ['bark', 2.2], pet_cat: ['purr', 2.4], pet_rabbit: ['hop', 1.6], pet_hamster: ['wheel', 6], pet_turtle: ['tuck', 2.4], pet_parrot: ['talk', 2.4] };
+// layout of each corner in cm from its left edge: house/pond centre, where the pet sits, bowl, total width
+const PET_LAYOUT = {
+  pet_dog: { house: 12, spot: 44, bowl: 57, w: 62 }, pet_cat: { house: 12, spot: 44, bowl: 57, w: 62 },
+  pet_rabbit: { house: 14, spot: 40, bowl: 52, w: 58 }, pet_hamster: { house: 9, spot: 27, bowl: 18.5, wheel: 50, w: 65 },
+  pet_turtle: { house: 19, spot: 37, bowl: 49, w: 54 }
+};
+// small animals are drawn a bit smaller in their corner so they fit next to the house / pond
+const PET_K = { pet_hamster: 0.8, pet_turtle: 0.72 };
 function petAsleepAuto(id) { const h = new Date().getHours(); return petMood(id) === 'sad' || h >= 22 || h < 7; }
 function petInside(id) {
   if (PET_RT.home && Date.now() < PET_RT.homeUntil) return PET_RT.home === 'in';
@@ -2665,7 +2672,7 @@ function petInside(id) {
 function petUnits(ox, G, L) { const x = ctx; x.save(); x.translate(ox, G); x.scale(L(1), L(1)); return x; }
 const pGrad = (x, cx, cy, r, a, b) => { const g = x.createRadialGradient(cx - r * 0.4, cy - r * 0.5, r * 0.1, cx, cy, r * 1.2); g.addColorStop(0, a); g.addColorStop(1, b); return g; };
 function petPath(x, fill, line, lw) { x.fillStyle = fill; x.fill(); if (line) { x.strokeStyle = line; x.lineWidth = lw || 0.7; x.lineJoin = 'round'; x.stroke(); } }
-// eyes peeking out of a doorway: open & blinking (sent home) or closed + z z (asleep)
+// eyes peeking out of a doorway: open & blinking (sent home) or closed (asleep)
 function peekEyes(x, ex, ey, gap, asleep, time) {
   if (asleep) {
     x.strokeStyle = 'rgba(255,255,255,.85)'; x.lineWidth = 0.6; x.lineCap = 'round';
@@ -2684,7 +2691,7 @@ function sleepZ(x, zx, zy, time) {
   x.globalAlpha = 1 - f * 0.6; x.font = 'bold 4px system-ui'; x.fillText('z', zx, zy - f * 3);
   x.font = 'bold 3px system-ui'; x.fillText('z', zx + 3, zy - 4 - f * 3); x.globalAlpha = 1;
 }
-// ---- houses (left of the twin), ~24 cm wide; door faces the twin; returns the doorway point for peeking eyes
+// ---- houses; the door faces the pet's spot (to the right); returns the doorway point
 function drawPetHouse(id, hx, G, L) {
   const x = petUnits(hx, G, L);
   let door = [0, -5];
@@ -2701,7 +2708,7 @@ function drawPetHouse(id, hx, G, L) {
     x.beginPath(); x.ellipse(0, -0.2, 13, 2.2, 0, 0, Math.PI * 2); petPath(x, '#4F858C');
     x.beginPath(); x.arc(0, -6.5, 5.6, 0, Math.PI * 2); petPath(x, '#263A3D', 'rgba(255,255,255,.35)');
     door = [0, -6.5];
-  } else if (id === 'pet_rabbit') { // earthen burrow mound with grass on top
+  } else if (id === 'pet_rabbit') { // earthen burrow mound with grass on top, entrance towards the spot
     x.beginPath(); x.ellipse(0, 0, 14, 12, 0, Math.PI, Math.PI * 2); x.closePath(); petPath(x, pGrad(x, -2, -6, 14, '#B08A60', '#7A5A3A'), 'rgba(60,40,20,.5)');
     x.fillStyle = 'rgba(70,45,25,.35)'; [[-7, -4, 1.3], [-3, -8, 1], [-9, -8, 0.8]].forEach(([a, b2, r]) => { x.beginPath(); x.arc(a, b2, r, 0, 7); x.fill(); });
     x.strokeStyle = '#5DA34A'; x.lineWidth = 0.9; x.lineCap = 'round';
@@ -2712,21 +2719,32 @@ function drawPetHouse(id, hx, G, L) {
     x.beginPath(); x.roundRect(-8, -12, 16, 12, 1); petPath(x, pGrad(x, 0, -6, 10, '#F2D3A0', '#C99A5E'), 'rgba(90,60,25,.5)');
     x.beginPath(); x.moveTo(-10, -11); x.lineTo(0, -19); x.lineTo(10, -11); x.closePath(); petPath(x, pGrad(x, 0, -15, 9, '#E87866', '#B8453A'), 'rgba(90,25,20,.5)');
     x.beginPath(); x.arc(0, -5, 3.6, 0, Math.PI * 2); petPath(x, '#2A1D18');
-    x.fillStyle = '#9FD3F0'; x.beginPath(); x.roundRect(4, -10.5, 2.8, 2.8, 0.4); x.fill();
+    x.fillStyle = '#9FD3F0'; x.beginPath(); x.roundRect(-6.5, -10.5, 2.8, 2.8, 0.4); x.fill();
     door = [0, -5];
-  } else if (id === 'pet_turtle') { // hollow log lying on its side, opening towards the twin
-    x.beginPath(); x.roundRect(-13, -11, 24, 11, 5.5); petPath(x, pGrad(x, -2, -6, 14, '#9A6B42', '#5E3F25'), 'rgba(40,25,10,.5)');
-    x.strokeStyle = 'rgba(40,25,10,.4)'; x.lineWidth = 0.5; [[-9, -8, -2, -8], [-6, -4, 4, -4]].forEach(([a, b2, c, d]) => { x.beginPath(); x.moveTo(a, b2); x.lineTo(c, d); x.stroke(); });
-    x.beginPath(); x.ellipse(11, -5.5, 3.6, 5.5, 0, 0, Math.PI * 2); petPath(x, '#E3C08F', 'rgba(90,60,25,.5)');
-    x.beginPath(); x.ellipse(11, -5.5, 2.4, 4, 0, 0, Math.PI * 2); petPath(x, '#2A1D18');
-    x.fillStyle = '#6FAE5A'; [[-8, -11], [-4, -11.5], [3, -11]].forEach(([a, b2]) => { x.beginPath(); x.ellipse(a, b2, 1.6, 0.8, 0, 0, 7); x.fill(); });
-    door = [11, -5.5];
   }
   x.restore();
   return door;
 }
-// ---- the spot where the pet sits (right of the twin); returns how high the pet sits above the ground (cm)
-function drawPetSpot(id, rx, G, L, time, act) {
+// ---- the turtle's pond (its "house"); the pet spot stone stands at its right edge, partly in the water
+function drawPond(px, G, L, time) {
+  const x = petUnits(px, G, L);
+  // reeds on the far side
+  x.strokeStyle = '#5DA34A'; x.lineWidth = 0.8; x.lineCap = 'round';
+  [[-17, 9], [-15, 12], [-13, 8]].forEach(([rx2, h]) => { x.beginPath(); x.moveTo(rx2, -1); x.quadraticCurveTo(rx2 - 1, -h / 2, rx2 + 0.5, -h); x.stroke(); });
+  x.fillStyle = '#8A5A35'; x.beginPath(); x.ellipse(-14.6, -11.5, 0.8, 2, 0, 0, 7); x.fill();
+  // pebble rim + water
+  x.beginPath(); x.ellipse(0, -1.2, 20.5, 4.9, 0, 0, Math.PI * 2); petPath(x, '#B9BFC7');
+  const wg = x.createLinearGradient(0, -5, 0, 2); wg.addColorStop(0, '#9ED8F2'); wg.addColorStop(1, '#4C9FD0');
+  x.beginPath(); x.ellipse(0, -1.2, 19, 4, 0, 0, Math.PI * 2); petPath(x, wg);
+  // ripples
+  x.strokeStyle = 'rgba(255,255,255,.6)'; x.lineWidth = 0.45;
+  const f = (time * 0.4) % 1;
+  [[-7, -1.6], [6, -0.6]].forEach(([wx, wy], i) => { const k = (f + i * 0.5) % 1; x.globalAlpha = 1 - k; x.beginPath(); x.ellipse(wx, wy, 1.5 + k * 4, 0.4 + k, 0, 0, Math.PI * 2); x.stroke(); });
+  x.globalAlpha = 1;
+  x.restore();
+}
+// ---- the spot where the pet sits; returns how high the pet sits above the ground (cm)
+function drawPetSpot(id, rx, G, L) {
   const x = petUnits(rx, G, L);
   let lift = 0;
   if (id === 'pet_dog' || id === 'pet_cat') {          // round bed
@@ -2735,37 +2753,49 @@ function drawPetSpot(id, rx, G, L, time, act) {
     x.beginPath(); x.ellipse(1, -2.6, 16.5, 4.4, 0, 0, Math.PI * 2); petPath(x, pGrad(x, 1, -3, 16, rim[0], rim[1]), 'rgba(30,30,60,.4)');
     x.beginPath(); x.ellipse(1, -3.4, 12.5, 2.6, 0, 0, Math.PI * 2); petPath(x, id === 'pet_dog' ? '#DCE6F7' : '#F6E1EC');
     lift = 3;
-  } else if (id === 'pet_turtle') {                       // flat stone with moss
-    x.fillStyle = 'rgba(27,42,74,.14)'; x.beginPath(); x.ellipse(1, 0.5, 18, 2.4, 0, 0, 7); x.fill();
-    x.beginPath(); x.moveTo(-16, 0); x.bezierCurveTo(-16, -4, -10, -5.5, 0, -5.5); x.bezierCurveTo(10, -5.5, 17, -4.5, 17, 0); x.closePath();
-    petPath(x, pGrad(x, 0, -3, 16, '#B5BCC5', '#6E7781'), 'rgba(40,45,55,.45)');
-    x.fillStyle = 'rgba(111,174,90,.75)'; [[-11, -3.2, 2.4], [9, -4.4, 2], [13, -2.4, 1.5]].forEach(([a, b2, r]) => { x.beginPath(); x.ellipse(a, b2, r, r * 0.5, 0, 0, 7); x.fill(); });
-    lift = 5;
+  } else if (id === 'pet_turtle') {                       // flat stone, its left side in the pond
+    x.beginPath(); x.moveTo(-10, -0.4); x.bezierCurveTo(-10, -4.6, -5, -6, 1, -6); x.bezierCurveTo(7, -6, 11, -4.6, 11, 0); x.bezierCurveTo(5, 0.6, -5, 0.6, -10, -0.4); x.closePath();
+    petPath(x, pGrad(x, 0, -3, 12, '#B5BCC5', '#6E7781'), 'rgba(40,45,55,.45)');
+    x.fillStyle = 'rgba(111,174,90,.75)'; [[6, -4.8, 2], [9, -2.6, 1.4]].forEach(([a, b2, r]) => { x.beginPath(); x.ellipse(a, b2, r, r * 0.5, 0, 0, 7); x.fill(); });
+    x.strokeStyle = 'rgba(255,255,255,.55)'; x.lineWidth = 0.45; x.beginPath(); x.ellipse(-9, -0.6, 3, 0.7, 0, 0, Math.PI * 2); x.stroke();   // water touching the stone
+    lift = 5.6;
   } else if (id === 'pet_rabbit') {                       // grass tufts and a carrot
     x.strokeStyle = '#5DA34A'; x.lineWidth = 0.9; x.lineCap = 'round';
-    [[-15, 0], [17, 0], [20, 0]].forEach(([gx]) => { for (let k = -1; k <= 1; k++) { x.beginPath(); x.moveTo(gx + k, 0); x.quadraticCurveTo(gx + k * 2, -3, gx + k * 2.6, -5 + Math.abs(k)); x.stroke(); } });
-    x.save(); x.translate(-13, -1.4); x.rotate(-0.2);
-    x.beginPath(); x.moveTo(0, -1.3); x.quadraticCurveTo(-7, -0.6, -9, 0); x.quadraticCurveTo(-7, 0.8, 0, 1.3); x.closePath(); petPath(x, '#F08A3C', 'rgba(140,60,10,.5)');
-    x.strokeStyle = '#4E9A3E'; x.lineWidth = 0.8; [-0.8, 0, 0.8].forEach(d => { x.beginPath(); x.moveTo(0.3, d * 0.6); x.lineTo(3, d * 1.6 - 0.4); x.stroke(); });
-    x.restore();
-  } else if (id === 'pet_hamster') {                      // hay pile + exercise wheel
-    x.fillStyle = 'rgba(27,42,74,.14)'; x.beginPath(); x.ellipse(2, 0.5, 20, 2.4, 0, 0, 7); x.fill();
-    // wheel on its stand (right)
-    const wx = 12, wy = -15, R = 14, ang = act === 'wheel' ? time * 7 : 0;
-    x.strokeStyle = '#8A93A3'; x.lineWidth = 1.2; x.lineCap = 'round';
-    x.beginPath(); x.moveTo(wx - 6, 0); x.lineTo(wx, wy); x.lineTo(wx + 6, 0); x.stroke();
-    x.beginPath(); x.arc(wx, wy, R, 0, Math.PI * 2); x.strokeStyle = '#5E8FD6'; x.lineWidth = 1.4; x.stroke();
-    x.strokeStyle = 'rgba(94,143,214,.55)'; x.lineWidth = 0.5;
-    for (let k = 0; k < 8; k++) { const a = ang + k * Math.PI / 4; x.beginPath(); x.moveTo(wx, wy); x.lineTo(wx + Math.cos(a) * R, wy + Math.sin(a) * R); x.stroke(); }
-    x.fillStyle = '#C9CED6'; x.beginPath(); x.arc(wx, wy, 1.2, 0, 7); x.fill();
-    // hay (left)
-    x.beginPath(); x.ellipse(-10, -1.6, 11, 3.4, 0, Math.PI, Math.PI * 2); x.closePath(); petPath(x, '#E8C766');
+    [[-12, 0], [15, 0], [18, 0]].forEach(([gx]) => { for (let k = -1; k <= 1; k++) { x.beginPath(); x.moveTo(gx + k, 0); x.quadraticCurveTo(gx + k * 2, -3, gx + k * 2.6, -5 + Math.abs(k)); x.stroke(); } });
+  } else if (id === 'pet_hamster') {                      // hay pile
+    x.beginPath(); x.ellipse(0, -1.4, 10, 3.2, 0, Math.PI, Math.PI * 2); x.closePath(); petPath(x, '#E8C766');
     x.strokeStyle = '#C9A240'; x.lineWidth = 0.45;
-    for (let k = -19; k <= -1; k += 1.6) { x.beginPath(); x.moveTo(k, -0.8); x.lineTo(k + 2.4 * Math.sin(k * 3), -3.2 - Math.abs(Math.sin(k)) * 1.6); x.stroke(); }
+    for (let k = -9; k <= 9; k += 1.6) { x.beginPath(); x.moveTo(k, -0.8); x.lineTo(k + 2.4 * Math.sin(k * 3), -3.2 - Math.abs(Math.sin(k)) * 1.6); x.stroke(); }
     lift = 2.4;
   }
   x.restore();
   return lift;
+}
+function drawWheel(wx0, G, L, time, spinning) {
+  const x = petUnits(wx0, G, L), wy = -15, R = 14, ang = spinning ? time * 7 : 0;
+  x.fillStyle = 'rgba(27,42,74,.12)'; x.beginPath(); x.ellipse(0, 0.5, 12, 1.8, 0, 0, 7); x.fill();
+  x.strokeStyle = '#8A93A3'; x.lineWidth = 1.2; x.lineCap = 'round';
+  x.beginPath(); x.moveTo(-6, 0); x.lineTo(0, wy); x.lineTo(6, 0); x.stroke();
+  x.beginPath(); x.arc(0, wy, R, 0, Math.PI * 2); x.strokeStyle = '#5E8FD6'; x.lineWidth = 1.4; x.stroke();
+  x.strokeStyle = 'rgba(94,143,214,.55)'; x.lineWidth = 0.5;
+  for (let k = 0; k < 8; k++) { const a = ang + k * Math.PI / 4; x.beginPath(); x.moveTo(0, wy); x.lineTo(Math.cos(a) * R, wy + Math.sin(a) * R); x.stroke(); }
+  x.fillStyle = '#C9CED6'; x.beginPath(); x.arc(0, wy, 1.2, 0, 7); x.fill();
+  x.restore();
+}
+// food bowl: full (fed today) or empty; returns its tap rectangle
+function drawBowl(id, bx, G, L, full) {
+  const x = petUnits(bx, G, L);
+  const col = { pet_dog: ['#E5484D', '#A8282D'], pet_cat: ['#F2A93B', '#C27C1A'], pet_rabbit: ['#7FB7BE', '#4F858C'], pet_hamster: ['#9B7BD8', '#6A4FAA'], pet_turtle: ['#6FAE5A', '#4E8A3E'] }[id] || ['#5E8FD6', '#3E6BB0'];
+  x.fillStyle = 'rgba(27,42,74,.14)'; x.beginPath(); x.ellipse(0, 0.4, 5.4, 1.1, 0, 0, 7); x.fill();
+  x.beginPath(); x.moveTo(-4.8, -2.6); x.lineTo(4.8, -2.6); x.lineTo(3.8, 0); x.lineTo(-3.8, 0); x.closePath(); petPath(x, col[0], 'rgba(0,0,0,.25)');
+  x.beginPath(); x.ellipse(0, -2.6, 4.8, 1.2, 0, 0, Math.PI * 2); petPath(x, col[1]);
+  if (full) {
+    const food = { pet_rabbit: '#F08A3C', pet_hamster: '#E2B04A', pet_turtle: '#8CCF5E' }[id] || '#9A6B42';
+    x.fillStyle = food; x.beginPath(); x.ellipse(0, -3, 4.2, 1.6, 0, Math.PI, Math.PI * 2); x.fill();
+    x.fillStyle = 'rgba(255,255,255,.35)'; [[-1.8, -3.6], [0.6, -3.9], [2.2, -3.3]].forEach(([a, b2]) => { x.beginPath(); x.arc(a, b2, 0.5, 0, 7); x.fill(); });
+  } else { x.beginPath(); x.ellipse(0, -2.5, 3.9, 0.8, 0, 0, Math.PI * 2); petPath(x, 'rgba(0,0,0,.35)'); }
+  x.restore();
+  return [bx - L(6), G - L(6), bx + L(6), G + L(1.5)];
 }
 function petBubble(bx, by, text, L) {
   const x = ctx; x.save();
@@ -2779,85 +2809,102 @@ function petBubble(bx, by, text, L) {
 }
 // the whole pet corner; called from drawAvatar with the twin's measurements
 function drawPetScene(id, d, time) {
-  const { cx, G, L, Y, hipW, armW, shW, H } = d, main = !AV_TARGET;
+  const { cx, G, Y, hipW, armW, H } = d, L0 = d.L, main = !AV_TARGET;
   const inside = petInside(id), asleep = petAsleepAuto(id) && inside;
   const act = !inside && PET_RT.act && time - PET_RT.t0 < PET_ACT[id][1] ? PET_ACT[id][0] : null;
-  const st = petStage(id), sc = PET_SCALE[st];
+  const sc = PET_SCALE[petStage(id)], fed = petData(id).fed === todayStr();
   const pop = clamp((time - PET_RT.pop) / 0.35, 0, 1), popS = 0.55 + 0.45 * (1 - (1 - pop) ** 3);
   const hit = {};
   if (id === 'pet_parrot') {
-    const sx = Math.max(cx - L(Math.max(hipW, 14) + armW * 2 + 17), 24 + L(13)), top = Y(0.81);
-    drawParrotStand(sx, G, top, L);
-    // birdhouse fixed on the pole, door facing the twin
-    const by = top + L(34), x = petUnits(sx, by, L);
-    x.fillStyle = '#5E3F25'; x.fillRect(-1.6, 0, 3.2, 1.4);
-    x.beginPath(); x.roundRect(-5, -9, 10, 9, 0.8); petPath(x, pGrad(x, 0, -4.5, 7, '#F2D3A0', '#C99A5E'), 'rgba(90,60,25,.5)');
-    x.beginPath(); x.moveTo(-6.4, -8.4); x.lineTo(0, -13.5); x.lineTo(6.4, -8.4); x.closePath(); petPath(x, '#3F9E8F', 'rgba(20,60,55,.5)');
-    x.beginPath(); x.arc(1.2, -5, 2.2, 0, Math.PI * 2); petPath(x, '#2A1D18');
-    x.strokeStyle = '#5E3F25'; x.lineWidth = 0.7; x.beginPath(); x.moveTo(1.2, -2); x.lineTo(4.6, -2); x.stroke();
-    if (inside) { peekEyes(x, 1.2, -5, 1.9, asleep, time); if (asleep) sleepZ(x, 6.5, -12, time); }
-    x.restore();
-    hit.house = [sx - L(8), by - L(15), sx + L(8), by + L(2)];
-    if (!inside) {
-      ctx.save(); const sP = popS; ctx.translate(sx, top); ctx.scale(sP, sP); ctx.translate(-sx, -top);
-      drawPetV2(id, sx, top, L, time * (act ? 1.8 : 1), { stand: true, excited: !!act });
-      ctx.restore();
-      if (act) petBubble(sx + L(4), top - L(34) * sc, t('petSayParrot'), L);
-      hit.pet = [sx - L(13), top - L(36) * sc, sx + L(13), top + L(2)];
-    }
+    // no house: it sleeps right on its perch; its seed cup on the stand is the bowl
+    const sx = Math.max(cx - L0(Math.max(hipW, 14) + armW * 2 + 17), 24 + L0(13)), top = Y(0.81);
+    hit.bowl = drawParrotStand(sx, G, top, L0, fed);
+    ctx.save(); ctx.translate(sx, top); ctx.scale(popS, popS); ctx.translate(-sx, -top);
+    drawPetV2(id, sx, top, L0, time * (act ? 1.8 : 1), { stand: true, excited: !!act, sleep: inside });
+    ctx.restore();
+    if (act) petBubble(sx + L0(4), top - L0(34) * sc, t('petSayParrot'), L0);
+    hit.pet = [sx - L0(13), top - L0(36) * sc, sx + L0(13), top + L0(2)];
+    hit.house = hit.pet;   // tapping a sleeping parrot wakes it
   } else {
-    const rx = cx + L(Math.max(hipW, 14) + 26);
-    const hx = Math.max(cx - L(Math.max(hipW, 14) + armW * 2 + 16), 24 + L(15));
-    const door = drawPetHouse(id, hx, G, L);
-    if (inside) {
-      const x = petUnits(hx, G, L);
-      peekEyes(x, door[0], door[1], id === 'pet_rabbit' || id === 'pet_turtle' ? 2.2 : 2.6, asleep, time);
+    // the corner shrinks a little when the twin is wide, so it never runs into the legs
+    const lay = PET_LAYOUT[id], x0 = 24 + L0(2), avail = (cx - L0(Math.max(hipW, 12) + 3)) - x0;
+    const k = clamp(avail / L0(lay.w), 0.6, 1), L = cm => L0(cm) * k, at = cm => x0 + L(cm);
+    let door = null;
+    if (id === 'pet_turtle') drawPond(at(lay.house), G, L, time); else door = drawPetHouse(id, at(lay.house), G, L);
+    if (lay.wheel) drawWheel(at(lay.wheel), G, L, time, act === 'wheel');
+    const lift = drawPetSpot(id, at(lay.spot), G, L);
+    hit.house = [at(lay.house) - L(id === 'pet_turtle' ? 20 : 16), G - L(id === 'pet_turtle' ? 10 : 27), at(lay.house) + L(id === 'pet_turtle' ? 20 : 16), G + L(2)];
+    const pk = PET_K[id] || 1;
+    if (inside && door) {
+      const x = petUnits(at(lay.house), G, L);
+      peekEyes(x, door[0], door[1], id === 'pet_rabbit' ? 2.2 : 2.6, asleep, time);
       if (asleep) sleepZ(x, door[0] + 6, door[1] - 14, time);
       x.restore();
     }
-    hit.house = [hx - L(15), G - L(27), hx + L(15), G + L(2)];
-    const lift = drawPetSpot(id, rx, G, L, time, act);
+    if (inside && id === 'pet_turtle') {
+      // in the pond: only the top of the shell and the eyes above the water
+      const tx = at(lay.house) + L(2), ty = G + L(6.5), wl = G - L(1.4);   // wl = water line
+      ctx.save(); ctx.beginPath(); ctx.rect(tx - L(30), wl - L(40), L(60), L(40)); ctx.clip();
+      ctx.translate(tx, ty); ctx.scale(pk, pk); ctx.translate(-tx, -ty);
+      drawPetV2(id, tx, ty, L, time, { noShadow: true, sleep: asleep });
+      ctx.restore();
+      const x = petUnits(tx, G, L); if (asleep) sleepZ(x, 6, -12, time); x.restore();
+    }
     if (!inside) {
-      let px = rx, py = G - L(lift);
-      if (id === 'pet_hamster') px = rx - L(10);
+      let px = at(lay.spot), py = G - L(lift);
       if (act === 'hop') py -= L(9) * Math.abs(Math.sin((time - PET_RT.t0) * Math.PI * 2 / 0.8));
       if (act === 'bark') py -= L(3) * Math.abs(Math.sin((time - PET_RT.t0) * 9));
-      if (act === 'wheel') {
-        // running inside the wheel: bottom of the wheel, bobbing
-        px = rx + L(12); py = G - L(2.2) - L(0.8) * Math.abs(Math.sin(time * 14));
-      }
-      const inWheel = act === 'wheel' ? 0.62 : 1;   // smaller, so it fits inside the wheel
-      ctx.save(); ctx.translate(px, py); ctx.scale(popS * inWheel, popS * inWheel); ctx.translate(-px, -py);
+      if (act === 'wheel') { px = at(lay.wheel); py = G - L(2.2) - L(0.8) * Math.abs(Math.sin(time * 14)); }
+      const s2 = popS * pk * (act === 'wheel' ? 0.62 / pk : 1);   // smaller inside the wheel
+      ctx.save(); ctx.translate(px, py); ctx.scale(s2, s2); ctx.translate(-px, -py);
       drawPetV2(id, px, py, L, time * (act ? 1.8 : 1), { tuck: act === 'tuck', excited: !!act, noShadow: lift > 0 || act === 'wheel' });
       ctx.restore();
       const say = act === 'bark' ? t('petSayDog') : act === 'purr' ? t('petSayCat') : null;
-      if (say) petBubble(px - L(6), py - L(40) * sc, say, L);
-      hit.pet = [px - L(18) * sc, py - L(40) * sc, px + L(18) * sc, py + L(3)];
+      if (say) petBubble(px + L(4), py - L(40) * sc * pk, say, L);
+      hit.pet = [px - L(18) * sc * pk, py - L(40) * sc * pk, px + L(18) * sc * pk, py + L(3)];
     }
+    hit.bowl = drawBowl(id, at(lay.bowl), G, L, fed);
   }
   if (main) PET_HIT = hit;
 }
-// tap handling on the main canvas; returns true when the tap hit the pet or its house
+// feeding — used by the bowl on the scene and by the button in the pet card
+function feedPet(id) {
+  const pd = petData(id), td = todayStr();
+  if (pd.fed === td) { toast(t('fedToday')); return false; }
+  if (pointsSummary().bal < PET_FOOD) { toast(t('notEnough', { n: PET_FOOD - pointsSummary().bal })); return false; }
+  pd.fed = td; pd.feeds++; D.petSpent = petSpent() + PET_FOOD; save(); toast(t('fedToast')); renderRewards();
+  return true;
+}
+// tap handling on the main canvas; returns true when the tap hit the pet, its house or its bowl
 function petTap(tx, ty) {
   const id = equipNow().pet; if (!id || !PET_HIT) return false;
   const inR = r => r && tx >= r[0] && tx <= r[2] && ty >= r[1] && ty <= r[3];
-  if (inR(PET_HIT.pet)) {
+  const redraw = () => { if (REDUCED && AV_STATE) drawAvatar(AV_STATE.w, AV_STATE.tone); };
+  const inside = petInside(id);
+  // the areas overlap a little (pet next to its house and bowl): the one whose centre is closest wins
+  const near = r => Math.hypot(tx - (r[0] + r[2]) / 2, ty - (r[1] + r[3]) / 2);
+  const cand = [['bowl', PET_HIT.bowl], ['pet', inside ? null : PET_HIT.pet], ['house', PET_HIT.house]].filter(([, r]) => inR(r));
+  if (!cand.length) return false;
+  const what = cand.sort((a, b) => near(a[1]) - near(b[1]))[0][0];
+  if (what === 'bowl') {
+    if (feedPet(id)) { PET_HEART = 2.5; if (inside) { PET_RT.home = 'out'; PET_RT.homeUntil = Date.now() + 10 * 60 * 1000; PET_RT.pop = AV_T; } }
+    redraw(); return true;
+  }
+  if (what === 'pet') {
     PET_RT.act = id; PET_RT.t0 = AV_T;
-    if (REDUCED && AV_STATE) { drawAvatar(AV_STATE.w, AV_STATE.tone); setTimeout(() => { PET_RT.act = null; if (AV_STATE) drawAvatar(AV_STATE.w, AV_STATE.tone); }, 2200); }
+    if (REDUCED && AV_STATE) { redraw(); setTimeout(() => { PET_RT.act = null; redraw(); }, 2200); }
     return true;
   }
-  if (inR(PET_HIT.house)) {
-    const was = petInside(id);
-    PET_RT.home = was ? 'out' : 'in'; PET_RT.homeUntil = Date.now() + 10 * 60 * 1000; PET_RT.act = null;
-    if (was) PET_RT.pop = AV_T;
-    if (REDUCED && AV_STATE) drawAvatar(AV_STATE.w, AV_STATE.tone);
-    return true;
+  {
+    PET_RT.home = inside ? 'out' : 'in'; PET_RT.homeUntil = Date.now() + 10 * 60 * 1000; PET_RT.act = null;
+    if (inside) PET_RT.pop = AV_T;
+    redraw(); return true;
   }
   return false;
 }
 
 // wooden parrot stand: weighted base on the ground, pole, perch bar at `top`, a small seed cup
-function drawParrotStand(sx, G, top, L) {
+function drawParrotStand(sx, G, top, L, full) {
   const x = ctx, wood = (y0, y1) => { const g = x.createLinearGradient(sx - L(1), 0, sx + L(1), 0); g.addColorStop(0, '#8C6440'); g.addColorStop(1, '#5E3F25'); return g; };
   x.save();
   x.fillStyle = 'rgba(27,42,74,.16)'; x.beginPath(); x.ellipse(sx, G + 1, L(11), L(1.6), 0, 0, Math.PI * 2); x.fill();
@@ -2871,19 +2918,22 @@ function drawParrotStand(sx, G, top, L) {
   x.strokeStyle = 'rgba(60,35,15,.45)'; x.lineWidth = 1; x.stroke();
   // seed cup hanging on the right end
   x.fillStyle = '#C9CED6'; x.beginPath(); x.moveTo(sx + L(5.5), top + L(1.6)); x.lineTo(sx + L(10.5), top + L(1.6)); x.lineTo(sx + L(9.7), top + L(4.6)); x.lineTo(sx + L(6.3), top + L(4.6)); x.closePath(); x.fill();
-  x.fillStyle = '#E2B04A'; x.beginPath(); x.ellipse(sx + L(8), top + L(1.7), L(2.4), L(0.75), 0, 0, Math.PI * 2); x.fill();
+  if (full) { x.fillStyle = '#E2B04A'; x.beginPath(); x.ellipse(sx + L(8), top + L(1.7), L(2.4), L(0.75), 0, 0, Math.PI * 2); x.fill(); x.beginPath(); x.ellipse(sx + L(8), top + L(1.4), L(1.8), L(1), 0, Math.PI, Math.PI * 2); x.fill(); }
+  else { x.fillStyle = '#7D8794'; x.beginPath(); x.ellipse(sx + L(8), top + L(1.7), L(2.3), L(0.6), 0, 0, Math.PI * 2); x.fill(); }
   x.restore();
+  return [sx + L(3), top - L(3), sx + L(13), top + L(7)];   // tap area of the seed cup
 }
 function drawPetV2(id, px0, G, L, time, o) {
   o = o || {}; const onStand = !!o.stand;
-  const x = ctx, mood = petMood(id), st = petStage(id), s = L(1) * PET_SCALE[st], sad = mood === 'sad', happy = mood === 'happy' || !!o.excited;
+  const x = ctx, mood = petMood(id), st = petStage(id), s = L(1) * PET_SCALE[st], happy = mood === 'happy' || !!o.excited;
+  const squash = mood === 'sad' && !o.sleep, sad = mood === 'sad' || !!o.sleep;   // sad = eyes closed + z z
   const wag = sad ? 0 : Math.sin(time * (happy ? 9 : 4));
   const TAU = Math.PI * 2;
   x.save(); x.translate(px0, G); x.scale(s, s);
   // soft ground shadow (drawn before the sad "squash" so it stays flat)
   if (!onStand && !o.noShadow) { x.fillStyle = 'rgba(27,42,74,.16)'; x.beginPath(); x.ellipse(2, 0.6, id === 'pet_parrot' ? 15 : 17, 2.6, 0, 0, TAU); x.fill(); }
   if (onStand) x.scale(-1, 1);   // on the left stand it faces right, towards the twin
-  if (sad) x.scale(1.06, 0.9);
+  if (squash) x.scale(1.06, 0.9);
   // helpers
   const shade = (cx, cy, r, light, dark) => { const g = x.createRadialGradient(cx - r * 0.4, cy - r * 0.5, r * 0.15, cx, cy, r * 1.15); g.addColorStop(0, light); g.addColorStop(1, dark); return g; };
   const ell = (cx, cy, rx, ry, rot, fill, line) => { x.beginPath(); x.ellipse(cx, cy, rx, ry, rot || 0, 0, TAU); x.fillStyle = fill; x.fill(); if (line) { x.strokeStyle = line; x.lineWidth = 0.8; x.stroke(); } };
