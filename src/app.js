@@ -294,9 +294,9 @@ Object.assign(T_ADD.en, { coachTitle: '🤖 AI coach', coachSub: 'Ask about exer
   q1: 'How do I squat correctly?', q2: 'What should I eat after a workout?', q3: 'How much protein do I need?', q4: 'How do I lose belly fat?', q5: 'Make me a weekly workout plan' });
 Object.assign(T_ADD.en, { noPtsLate: 'no points (logged late)', lateNote: 'ℹ️ This is a past day: entries are saved and count toward your weight, but they earn no points.', ptsRules: 'At most 100 ⭐ per day, so you can rise at most one level a day. Points only come from entries made the same or the next day — nothing is awarded for back-filling.', eyesL: 'Eye colour', shirtStyle: 'Top', pantsL: 'Bottoms', ssTshirt: 'T-shirt', ssTank: 'Tank top', ssPolo: 'Polo', ssLong: 'Long sleeve', ssHoodie: 'Hoodie', ssJersey: 'Sports jersey',
   ptShorts: 'Shorts', ptJoggers: 'Joggers', ptJeans: 'Jeans', hsSide: 'Side part', hsCurly: 'Curly', hsAfro: 'Afro', hsPony: 'Ponytail', hsBun: 'Bun', hsMohawk: 'Mohawk', shirt: 'Clothes colour' });
-Object.assign(T_ADD.uk, { themeTitle: '🎨 Оформлення', thLight: 'Світле', thBlue: 'Блакитне', thDark: 'Темне' });
-Object.assign(T_ADD.cs, { themeTitle: '🎨 Vzhled aplikace', thLight: 'Světlý', thBlue: 'Modrý', thDark: 'Tmavý' });
-Object.assign(T_ADD.en, { themeTitle: '🎨 Appearance', thLight: 'Light', thBlue: 'Blue', thDark: 'Dark' });
+Object.assign(T_ADD.uk, { themeTitle: '🎨 Колір тла', thLight: 'Світле', thBlue: 'Блакитне', thMint: 'Мʼятне', thLavender: 'Лавандове', thPeach: 'Персикове', thPink: 'Рожеве', thSand: 'Пісочне', thGray: 'Сіре', thDark: 'Темне', thBlack: 'Чорне', thCustom: 'Свій колір', thNow: 'Зараз: {n}. Натисніть 🌈, щоб вибрати будь-який відтінок.' });
+Object.assign(T_ADD.cs, { themeTitle: '🎨 Barva pozadí', thLight: 'Světlá', thBlue: 'Modrá', thMint: 'Mátová', thLavender: 'Levandulová', thPeach: 'Broskvová', thPink: 'Růžová', thSand: 'Písková', thGray: 'Šedá', thDark: 'Tmavá', thBlack: 'Černá', thCustom: 'Vlastní barva', thNow: 'Teď: {n}. Klepněte na 🌈 a vyberte jakýkoli odstín.' });
+Object.assign(T_ADD.en, { themeTitle: '🎨 Background colour', thLight: 'Light', thBlue: 'Blue', thMint: 'Mint', thLavender: 'Lavender', thPeach: 'Peach', thPink: 'Pink', thSand: 'Sand', thGray: 'Grey', thDark: 'Dark', thBlack: 'Black', thCustom: 'Your colour', thNow: 'Now: {n}. Tap 🌈 to pick any shade.' });
 for (const l of ['uk', 'cs', 'en']) Object.assign(T[l], T_ADD[l]);
 if (!AI_ON) {
   Object.assign(T.uk, { lblBtn: '🏷 Етикетка вручну', lblManual: 'Введіть цифри з етикетки:', fridgeLocal: 'ℹ️ Рецепти з вбудованого списку під ваші продукти.' });
@@ -1385,17 +1385,45 @@ function showTab(id) {
 document.querySelectorAll('nav button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.t)));
 $('lang').addEventListener('change', e => { LANG = e.target.value; D.lang = LANG; save(); applyLang(); fillStatic(); render(); });
 
-// app colour theme — D.theme: 'light' (default, also when missing) | 'blue' | 'dark'
-const THEMES = ['light', 'blue', 'dark'];
+// app colour theme — D.theme: a preset id ('light' = original look, also when missing) or 'custom' with D.themeBg (#rrggbb).
+// D.themeCss caches the resulting CSS so storage.js can paint it before the app starts (no light flash).
+const THEME_PRESETS = [['light', '#E9F0F5', 'thLight'], ['blue', '#CFE6FA', 'thBlue'], ['mint', '#D3F0E2', 'thMint'], ['lavender', '#E3DCF7', 'thLavender'],
+  ['peach', '#FBE2CF', 'thPeach'], ['pink', '#F8DAE5', 'thPink'], ['sand', '#EFE6D2', 'thSand'], ['gray', '#E2E4E8', 'thGray'],
+  ['dark', '#0F151C', 'thDark'], ['black', '#000000', 'thBlack']];
+const THEME_VARS = ['--bg', '--card', '--line', '--solid'];
+const hexRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const mixHex = (h, to, k) => '#' + hexRgb(h).map((c, i) => Math.round(c + (to[i] - c) * k).toString(16).padStart(2, '0')).join('');
+function themeVars(bg) {
+  const lum = hexRgb(bg).map(c => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; }).reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
+  if (lum < 0.2) return { a: 'dark', v: { '--bg': bg, '--card': mixHex(bg, [255, 255, 255], 0.08), '--line': mixHex(bg, [255, 255, 255], 0.16), '--solid': mixHex(bg, [255, 255, 255], 0.22) } };
+  return { a: 'tint', v: { '--bg': bg, '--line': mixHex(bg, [0, 0, 0], 0.09) } };
+}
+const themeBg = () => D.theme === 'custom' ? (/^#[0-9a-f]{6}$/i.test(D.themeBg || '') ? D.themeBg : '#E9F0F5') : ((THEME_PRESETS.find(p => p[0] === D.theme) || THEME_PRESETS[0])[1]);
+function themeCss() { const p = THEME_PRESETS.find(x => x[0] === D.theme); return (!D.theme || D.theme === 'light' || (!p && D.theme !== 'custom')) ? { a: null, v: {} } : themeVars(themeBg()); }
 function applyTheme() {
-  const th = THEMES.includes(D.theme) ? D.theme : 'light', root = document.documentElement;
-  if (th === 'light') delete root.dataset.theme; else root.dataset.theme = th;
+  const css = themeCss(), root = document.documentElement;
+  THEME_VARS.forEach(k => root.style.removeProperty(k));
+  if (css.a) root.dataset.theme = css.a; else delete root.dataset.theme;
+  for (const k in css.v) root.style.setProperty(k, css.v[k]);
   const bg = getComputedStyle(root).getPropertyValue('--bg').trim();
   const mt = document.querySelector('meta[name="theme-color"]'); if (mt && bg) mt.content = bg;
-  const cs = document.querySelector('meta[name="color-scheme"]'); if (cs) cs.content = th === 'dark' ? 'dark' : 'light';
-  document.querySelectorAll('#themeSeg button').forEach(b => b.classList.toggle('on', b.dataset.th === th));
+  const cs = document.querySelector('meta[name="color-scheme"]'); if (cs) cs.content = css.a === 'dark' ? 'dark' : 'light';
+  renderThemePal();
 }
-$('themeSeg').addEventListener('click', e => { const b = e.target.closest('[data-th]'); if (!b) return; D.theme = b.dataset.th; save(); applyTheme(); });
+function renderThemePal() {
+  const box = $('themePal'); if (!box) return;
+  const cur = THEME_PRESETS.some(p => p[0] === D.theme) || D.theme === 'custom' ? D.theme : 'light';
+  box.innerHTML = THEME_PRESETS.map(([id, c, key]) => `<button class="sw${cur === id ? ' on' : ''}" data-th="${id}" style="background:${c}" title="${esc(t(key))}" aria-label="${esc(t(key))}"></button>`).join('') +
+    `<label class="sw swCustom${cur === 'custom' ? ' on' : ''}" title="${esc(t('thCustom'))}" aria-label="${esc(t('thCustom'))}"${cur === 'custom' ? ` style="background:${themeBg()}"` : ''}>🌈<input type="color" id="themeColor" value="${themeBg()}"></label>`;
+  const name = cur === 'custom' ? t('thCustom') : t((THEME_PRESETS.find(p => p[0] === cur) || THEME_PRESETS[0])[2]);
+  $('themeName').textContent = t('thNow', { n: name });
+}
+function setTheme(id, bg) { D.theme = id; if (bg) D.themeBg = bg; D.themeCss = themeCss(); applyTheme(); }
+$('themePal').addEventListener('click', e => { const b = e.target.closest('[data-th]'); if (!b) return; setTheme(b.dataset.th); save(); });
+// live preview while dragging the colour picker; saved when the picker closes
+$('themePal').addEventListener('input', e => { if (e.target.id !== 'themeColor') return; D.theme = 'custom'; D.themeBg = e.target.value; D.themeCss = themeCss();
+  const css = D.themeCss, root = document.documentElement; THEME_VARS.forEach(k => root.style.removeProperty(k)); root.dataset.theme = css.a; for (const k in css.v) root.style.setProperty(k, css.v[k]); });
+$('themePal').addEventListener('change', e => { if (e.target.id !== 'themeColor') return; setTheme('custom', e.target.value); save(); });
 function render() {
   applyTheme();
   $('firstRun').style.display = P() ? 'none' : 'block';

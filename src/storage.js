@@ -110,7 +110,10 @@
 
   // ---- boot: restore from the mirror if it is newer, then start the app ----
   function start() {
-    try { var th = (JSON.parse(window.AppStore.boot || '{}') || {}).theme; if (th === 'blue' || th === 'dark') document.documentElement.setAttribute('data-theme', th); } catch (e) {}
+    try { // paint the saved colour theme before the app starts, so the screen doesn't flash the default first
+      var tc = (JSON.parse(window.AppStore.boot || '{}') || {}).themeCss, root = document.documentElement;
+      if (tc && tc.a) { root.setAttribute('data-theme', tc.a); for (var k in tc.v || {}) if (/^--[a-z]+$/.test(k)) root.style.setProperty(k, tc.v[k]); }
+    } catch (e) {}
     var s = document.createElement('script'); s.src = 'app.js'; document.body.appendChild(s);
   }
   var guard = new Promise(function (res) { setTimeout(function () { res(null); }, 2500); }); // never block start for long
