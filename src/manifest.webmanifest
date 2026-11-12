@@ -1,6 +1,6 @@
 {
-  "name": "Мій двійник",
-  "short_name": "Двійник",
+  "name": "Mirro",
+  "short_name": "Mirro",
   "description": "Ваш двійник змінюється разом із вами: їжа, рух і зважування.",
   "lang": "uk",
   "start_url": "./",

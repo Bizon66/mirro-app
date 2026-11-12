@@ -1,6 +1,6 @@
 {
   "appId": "com.example.dvijnyk",
-  "appName": "Мій двійник",
+  "appName": "Mirro",
   "webDir": "www",
   "android": {
     "allowMixedContent": false,

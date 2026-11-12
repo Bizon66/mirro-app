@@ -1,8 +1,8 @@
 {
-  "name": "mij-dvijnyk",
+  "name": "mirro-app",
   "version": "1.0.0",
   "private": true,
-  "description": "Мій двійник — a personal body twin that changes with real food, activity and weigh-ins.",
+  "description": "Mirro — a personal body twin that changes with real food, activity and weigh-ins.",
   "license": "UNLICENSED",
   "scripts": {
     "build": "node scripts/build.mjs",

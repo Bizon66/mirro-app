@@ -1,8 +1,8 @@
-# Zásady ochrany osobních údajů — „Můj dvojník“ (verze 1.0)
+# Zásady ochrany osobních údajů — „Mirro“ (verze 1.0)
 
 *Návrh ke kontrole právníkem. Datum: [DATUM]. Místa v [závorkách] doplnit.*
 
-**Kdo jsme.** Aplikaci „Můj dvojník“ vyvíjí [JMÉNO A PŘÍJMENÍ / OBCHODNÍ FIRMA], IČO [ČÍSLO], [ADRESA],
+**Kdo jsme.** Aplikaci „Mirro“ vyvíjí [JMÉNO A PŘÍJMENÍ / OBCHODNÍ FIRMA], IČO [ČÍSLO], [ADRESA],
 Česká republika. Kontakt: [EMAIL].
 
 **Stručně.** Verze 1.0 nemá účty, server, reklamy ani analytiku. Vše, co zadáte, se ukládá jen ve vašem

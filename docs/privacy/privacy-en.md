@@ -1,8 +1,8 @@
-# Privacy policy — "My Twin" (version 1.0)
+# Privacy policy — "Mirro" (version 1.0)
 
 *Draft for review by a lawyer. Date: [DATE]. Fill in the parts in [brackets].*
 
-**Who we are.** The app "My Twin" is developed by [FULL NAME / BUSINESS NAME], IČO [NUMBER], [ADDRESS],
+**Who we are.** The app "Mirro" is developed by [FULL NAME / BUSINESS NAME], IČO [NUMBER], [ADDRESS],
 Czech Republic. Contact: [EMAIL].
 
 **In short.** Version 1.0 has no accounts, no server, no ads and no analytics. Everything you enter is

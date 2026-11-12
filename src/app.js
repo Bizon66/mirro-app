@@ -1,4 +1,4 @@
-/* Мій двійник — app logic.
+/* Mirro (working name «Мій двійник») — app logic.
  * Copyright (c) 2026 the app's author. All rights reserved. Proprietary and confidential; see LICENSE.
  * Unauthorized copying, distribution or modification of this file is prohibited. */
 // feature flags come from config.js; the Claude-artifact build has no config, so AI stays on there
@@ -7,7 +7,7 @@ const AI_ON = CFG.features ? !!CFG.features.ai : true;
 // ================= i18n =================
 const T = {
   uk: {
-    app: 'Мій двійник', tabMe: 'Я', tabToday: 'Сьогодні', tabMeasure: 'Заміри', tabProgress: 'Прогрес', tabProfile: 'Профіль',
+    app: 'Mirro', tabMe: 'Я', tabToday: 'Сьогодні', tabMeasure: 'Заміри', tabProgress: 'Прогрес', tabProfile: 'Профіль',
     timeMachine: '⏳ Машина часу', now: 'Зараз', w1: '+1 тиж.', m1: '+1 міс.', m3: '+3 міс.', m6: '+6 міс.', y1: '+1 рік', daysWord: 'днів',
     statWeight: 'Вага (модель)', statBmi: 'ІМТ', statNorm: 'Витрата без спорту, ккал/день', statToday: 'Баланс сьогодні, ккал',
     girths: '📏 Обхвати', girthNote: '«оцінка» — розраховано за зростом і вагою. Коли введете заміри, персонаж малюється за ними й далі змінюється разом із вагою.',
@@ -53,7 +53,7 @@ const T = {
     wd: ['нд', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'], today: 'сьогодні', food: 'Їжа', min: 'хв'
   },
   cs: {
-    app: 'Můj dvojník', tabMe: 'Já', tabToday: 'Dnes', tabMeasure: 'Míry', tabProgress: 'Pokrok', tabProfile: 'Profil',
+    app: 'Mirro', tabMe: 'Já', tabToday: 'Dnes', tabMeasure: 'Míry', tabProgress: 'Pokrok', tabProfile: 'Profil',
     timeMachine: '⏳ Stroj času', now: 'Teď', w1: '+1 týd.', m1: '+1 měs.', m3: '+3 měs.', m6: '+6 měs.', y1: '+1 rok', daysWord: 'dní',
     statWeight: 'Váha (model)', statBmi: 'BMI', statNorm: 'Výdej bez sportu, kcal/den', statToday: 'Dnešní bilance, kcal',
     girths: '📏 Obvody', girthNote: '„odhad" = spočítáno z výšky a váhy. Když zadáte míry, postava se kreslí podle nich a dál se mění s váhou.',
@@ -99,7 +99,7 @@ const T = {
     wd: ['ne', 'po', 'út', 'st', 'čt', 'pá', 'so'], today: 'dnes', food: 'Jídlo', min: 'min'
   },
   en: {
-    app: 'My Twin', tabMe: 'Me', tabToday: 'Today', tabMeasure: 'Measure', tabProgress: 'Progress', tabProfile: 'Profile',
+    app: 'Mirro', tabMe: 'Me', tabToday: 'Today', tabMeasure: 'Measure', tabProgress: 'Progress', tabProfile: 'Profile',
     timeMachine: '⏳ Time machine', now: 'Now', w1: '+1 wk', m1: '+1 mo', m3: '+3 mo', m6: '+6 mo', y1: '+1 yr', daysWord: 'days',
     statWeight: 'Weight (model)', statBmi: 'BMI', statNorm: 'Burn without sport, kcal/day', statToday: "Today's balance, kcal",
     girths: '📏 Measurements', girthNote: '"estimate" = calculated from height and weight. Once you enter measurements, the character is drawn from them and keeps changing with your weight.',
