@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a7bea"/><stop offset="1" stop-color="#2050b8"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- twin: lighter figure behind -->
+  <g fill="#ffffff" opacity="0.38" transform="translate(118 0)">
+    <circle cx="512" cy="300" r="92"/>
+    <path d="M512 420c-110 0-170 60-170 150v170c0 30 24 52 52 52h236c28 0 52-22 52-52V570c0-90-60-150-170-150z"/>
+  </g>
+  <!-- person in front -->
+  <g fill="#ffffff" transform="translate(-70 0)">
+    <circle cx="512" cy="330" r="98"/>
+    <path d="M512 456c-120 0-184 64-184 160v178c0 32 26 56 56 56h256c30 0 56-24 56-56V616c0-96-64-160-184-160z"/>
+  </g>
+</svg>

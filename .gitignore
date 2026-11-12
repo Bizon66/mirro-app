@@ -1,0 +1,12 @@
+node_modules/
+www/
+dist/
+.env
+*.env
+# signing keys must never be committed
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+key.properties
+.DS_Store

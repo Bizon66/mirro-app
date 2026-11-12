@@ -1,0 +1,29 @@
+{
+  "name": "mij-dvijnyk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Мій двійник — a personal body twin that changes with real food, activity and weigh-ins.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:artifact": "node scripts/build.mjs --artifact",
+    "serve": "node scripts/serve.mjs",
+    "test": "node scripts/build.mjs && node tests/smoke.mjs",
+    "android": "node scripts/build.mjs && npx cap sync android",
+    "ios": "node scripts/build.mjs && npx cap sync ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/ios": "^8.6.0",
+    "@capacitor/share": "^8.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "@fontsource/manrope": "^5.3.0",
+    "@fontsource/unbounded": "^5.3.0",
+    "terser": "^5.51.2"
+  }
+}

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; media-src 'self' data: blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#f5f3ef">
+<title>Мій двійник · Můj dvojník · My Twin</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header>
+  <h1 data-i="app"></h1>
+  <select id="lang"><option value="uk">🇺🇦 UA</option><option value="cs">🇨🇿 CZ</option><option value="en">🇬🇧 EN</option></select>
+</header>
+<main>
+  <section class="tab on" id="tabMe">
+    <div id="avatarWrap"><canvas id="avatar"></canvas><div id="formTag"></div><div id="avWeight"><b id="avW">–</b><span data-i="statWeight"></span><em id="avMeas"></em></div><div id="avHint" data-i="tapHint"></div><div id="avPts"></div></div>
+    <div class="card">
+      <div class="ptHead"><div><b id="ptBal" class="ptBal"></b><div id="ptLvl" class="ptLvl"></div></div><button class="btn" id="shopBtn" data-i="shopBtn"></button></div>
+      <div class="bar"><i id="ptBar" style="width:0"></i></div>
+      <p class="muted" id="ptNext" style="margin-top:6px"></p>
+      <p style="font-weight:800;margin-top:4px;color:var(--acc)" id="ptToday"></p>
+      <details class="how muted"><summary data-i="howTitle"></summary><p data-i="howPts"></p><p data-i="ptsRules"></p></details>
+    </div>
+    <div class="card"><h2 data-i="petTitle"></h2><div id="petBox"></div></div>
+    <div class="card"><h2 data-i="questsTitle"></h2><div id="questList"></div></div>
+    <div class="card">
+      <h2 data-i="timeMachine"></h2>
+      <div class="seg" id="timeSeg">
+        <button data-d="0" class="on" data-i="now"></button><button data-d="7" data-i="w1"></button><button data-d="30" data-i="m1"></button><button data-d="90" data-i="m3"></button><button data-d="182" data-i="m6"></button><button data-d="365" data-i="y1"></button>
+      </div>
+      <p class="muted" id="timeNote" style="margin-top:8px"></p><p class="muted" id="calNote" style="margin-top:6px"></p>
+    </div>
+    <div class="card">
+      <h2 data-i="goalTitle"></h2>
+      <div class="row"><div><input id="goalIn" type="number" step="0.1" inputmode="decimal" data-ph="targetW"></div><div class="narrow"><button class="btn" id="goalSave" style="margin-top:0" data-i="setGoal"></button></div></div>
+      <div class="bar"><i id="goalBar" style="width:0"></i></div>
+      <p class="muted" id="goalText" style="margin-top:6px"></p>
+      <p style="margin-top:8px;font-weight:800" id="streakText"></p>
+    </div>
+    <div class="card">
+      <div class="grid2">
+        <div class="stat"><b id="mWeight">–</b><span data-i="statWeight"></span></div>
+        <div class="stat"><b id="mBmi">–</b><span data-i="statBmi"></span></div>
+        <div class="stat"><b id="mNorm">–</b><span data-i="statNorm"></span></div>
+        <div class="stat"><b id="mToday">–</b><span data-i="statToday"></span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 data-i="girths"></h2>
+      <div id="girthList"></div>
+      <p class="muted" style="margin-top:6px" data-i="girthNote"></p>
+    </div>
+  </section>
+
+  <section class="tab" id="tabToday">
+    <div class="daynav"><button id="dayPrev">‹</button><b id="dayLbl"></b><button id="dayNext">›</button></div>
+    <p class="muted" id="lateNote" data-i="lateNote" style="display:none;margin:-4px 6px 10px"></p>
+    <div class="card">
+      <div class="grid2">
+        <div class="stat"><b id="dEaten">0</b><span data-i="eaten"></span></div>
+        <div class="stat"><b id="dBurned">0</b><span data-i="burned"></span></div>
+      </div>
+      <p style="margin-top:10px"><span class="balance" id="dBal">0</span> <span class="muted" id="dBalNote"></span></p>
+      <p class="muted" id="dTarget" style="margin-top:4px"></p>
+      <label class="dayDone"><input type="checkbox" id="dDone"> <span data-i="dayDone"></span></label>
+      <p class="muted dayHint" id="dDoneHint"></p>
+    </div>
+    <div class="card"><h2 data-i="macroTitle"></h2><div id="macroBars"></div></div>
+    <div class="card"><h2 data-i="qlTitle"></h2><p class="muted" data-i="qlSub"></p>
+      <div class="qlIn"><textarea id="qlText" data-ph="qlPh" rows="2"></textarea><span id="qlMicSlot"></span></div>
+      <div class="grid2 qlBtns"><button class="btn" id="qlGo" data-i="qlGo"></button><label class="btn ghost fileBtn" id="lblBtn" for="lblFile"><span data-i="lblBtn"></span><input type="file" id="lblFile" accept="image/*"></label></div>
+      <p class="muted" id="lblTip" style="display:none;margin-top:8px"></p><div id="qlOut"></div></div>
+    <div class="card"><h2 data-i="whatAte"></h2><div id="meals"></div></div>
+    <div class="card">
+      <h2 data-i="water"></h2><div class="glasses" id="waterRow"></div><p class="muted" id="waterN" style="margin-top:4px"></p>
+      <h2 data-i="steps" style="margin-top:14px"></h2>
+      <div class="row"><div><input id="stepsIn" type="number" inputmode="numeric" data-ph="stepsPh"></div><div class="narrow"><button class="btn" id="stepsSave" style="margin-top:0" data-i="saveSteps"></button></div></div>
+      <p class="muted" id="stepsK" style="margin-top:4px"></p>
+    </div>
+    <div class="card">
+      <h2 data-i="fridgeTitle"></h2>
+      <div class="qlIn"><textarea id="fridgeText" data-ph="fridgePh" style="height:70px;font-size:15px"></textarea><span id="fridgeMicSlot"></span></div>
+      <button class="btn" id="fridgeBtn" data-i="fridgeBtn"></button>
+      <p class="muted" id="fridgeNote" style="margin-top:8px"></p>
+      <div id="fridgeOut"></div>
+    </div>
+    <div class="card">
+      <h2 data-i="whatDid"></h2>
+      <label data-i="activity"></label>
+      <select id="aType"></select>
+      <div class="row">
+        <div><label data-i="minutes"></label><input id="aMin" type="number" inputmode="numeric" value="60"></div>
+        <div id="aKcalBox" style="display:none"><label data-i="kcal"></label><input id="aKcal" type="number" inputmode="numeric"></div>
+      </div>
+      <p class="muted" id="aPreview" style="margin-top:6px"></p>
+      <button class="btn" id="aAdd" data-i="addAct"></button>
+      <div id="actList" style="margin-top:8px"></div>
+    </div>
+    <p class="muted" style="padding:0 6px 10px" data-i="dayNote"></p>
+  </section>
+
+  <section class="tab" id="tabMeasure">
+    <div class="card">
+      <h2 data-i="newMeas"></h2>
+      <p class="muted" data-i="measHint"></p>
+      <label data-i="date"></label><input id="msDate" type="date">
+      <div class="grid2" id="msFields"></div>
+      <button class="btn" id="msSave" data-i="saveMeas"></button>
+      <p class="muted" style="margin-top:8px" data-i="howTo"></p>
+    </div>
+    <div class="card"><h2 data-i="history"></h2><div id="msHist"></div></div>
+  </section>
+
+  <section class="tab" id="tabProgress">
+    <div class="card">
+      <h2 data-i="weightTitle"></h2>
+      <canvas id="chart"></canvas>
+      <p class="muted" style="margin-top:6px" data-i="chartNote"></p>
+    </div>
+    <div class="card"><h2 data-i="achTitle"></h2><p class="muted" id="achCount"></p><div class="achgrid" id="achGrid"></div></div>
+    <div class="card"><h2 data-i="last7"></h2><div id="weekTable"></div></div>
+    <div class="card" id="shareBox"><h2 data-i="shareTitle"></h2><p class="muted" data-i="shareSub"></p>
+      <label data-i="sharePeriod"></label><div class="seg"><button data-sd="30" data-i="m1"></button><button data-sd="90" data-i="m3"></button><button data-sd="182" data-i="m6"></button></div>
+      <label class="lblSave"><input type="checkbox" id="shareFood"> <span data-i="shareFood"></span></label>
+      <p class="muted" data-i="shareWarn" style="margin-top:8px"></p>
+      <div class="grid2"><button class="btn" id="shareFile" data-i="shareFile"></button><button class="btn ghost" id="shareCopy" data-i="shareCopy"></button></div>
+      <p class="bLast" id="shareLast"></p><textarea id="shareText" style="display:none;margin-top:8px;height:70px"></textarea></div>
+  </section>
+
+  <section class="tab" id="tabTips">
+    <div class="card coachCard"><h2 data-i="coachTitle"></h2><p class="muted" data-i="coachSub"></p><button class="btn" id="coachOpen" data-i="coachOpen"></button></div>
+    <div class="card">
+      <h2 data-i="calTitle"></h2>
+      <div class="seg" id="goalSeg"><button data-g="lose" data-i="gLose"></button><button data-g="keep" data-i="gKeep"></button><button data-g="gain" data-i="gGain"></button></div>
+      <p style="margin-top:12px"><span class="big" id="calTarget">–</span> <span class="muted" data-i="kcalDay"></span></p>
+      <div class="bar"><i id="calBar" style="width:0"></i></div>
+      <p class="muted" id="calToday" style="margin-top:4px"></p>
+      <ul class="tips" id="calLines" style="margin-top:10px"></ul>
+    </div>
+    <div class="card">
+      <h2 data-i="weekTitle"></h2>
+      <p class="muted" id="weekAct"></p><div class="bar"><i id="weekActBar" style="width:0"></i></div>
+      <p class="muted" id="weekStr" style="margin-top:8px"></p><div class="bar"><i id="weekStrBar" style="width:0"></i></div>
+    </div>
+    <div class="card">
+      <h2 data-i="woTitle"></h2>
+      <p class="muted" data-i="woIntro"></p>
+      <div class="seg" id="lvlSeg" style="margin-top:10px"><button data-l="0" data-i="lvlBeg"></button><button data-l="1" data-i="lvlMid"></button><button data-l="2" data-i="lvlAdv"></button></div>
+      <p class="muted" id="woSex" style="margin-top:8px"></p>
+      <p style="margin-top:6px;font-weight:800" id="woMeta"></p>
+      <button class="btn" id="woStartBtn" data-i="woStart"></button>
+      <div id="woList"></div>
+      <button class="btn" id="woLog" data-i="woLog"></button>
+      <p class="muted" style="margin-top:8px" data-i="woNote"></p>
+    </div>
+    <div class="card">
+      <h2 data-i="tipsTitle"></h2>
+      <ul class="tips"><li data-i="tip1"></li><li data-i="tip2"></li><li data-i="tip3"></li><li data-i="tip4"></li></ul>
+      <p class="muted" data-i="srcNote"></p>
+    </div>
+  </section>
+
+  <section class="tab" id="tabProfile">
+    <p class="muted" id="firstRun" style="padding:4px 6px 10px;display:none" data-i="firstRun"></p>
+    <div class="card">
+      <h2 data-i="about"></h2>
+      <label data-i="name"></label><input id="pName" data-ph="namePh">
+      <div class="grid2">
+        <div><label data-i="sex"></label><select id="pSex"><option value="m" data-i="male"></option><option value="f" data-i="female"></option></select></div>
+        <div><label data-i="age"></label><input id="pAge" type="number" inputmode="numeric"></div>
+        <div><label data-i="heightCm"></label><input id="pHeight" type="number" inputmode="numeric"></div>
+        <div><label data-i="startWeight"></label><input id="pWeight" type="number" step="0.1" inputmode="decimal"></div>
+      </div>
+      <label data-i="job"></label>
+      <select id="pJob"><option value="1.2" data-i="job1"></option><option value="1.35" data-i="job2"></option><option value="1.5" data-i="job3"></option></select>
+      <label data-i="shape"></label>
+      <select id="pShape"><option value="belly" data-i="shBelly"></option><option value="even" data-i="shEven"></option><option value="hips" data-i="shHips"></option></select>
+      <label data-i="sporty"></label>
+      <select id="pSporty"><option value="0" data-i="sp0"></option><option value="15" data-i="sp1"></option><option value="30" data-i="sp2"></option><option value="50" data-i="sp3"></option></select>
+    </div>
+    <div class="card">
+      <h2 data-i="looks"></h2>
+      <label data-i="skin"></label><div class="swatches" id="swSkin"></div>
+      <label data-i="hair"></label><div class="swatches" id="swHair"></div>
+      <div class="grid2">
+        <div><label data-i="hairStyle"></label><select id="pHairStyle"><option value="short" data-i="hsShort"></option><option value="side" data-i="hsSide"></option><option value="buzz" data-i="hsBuzz"></option><option value="curly" data-i="hsCurly"></option><option value="afro" data-i="hsAfro"></option><option value="long" data-i="hsLong"></option><option value="ponytail" data-i="hsPony"></option><option value="bun" data-i="hsBun"></option><option value="mohawk" data-i="hsMohawk"></option><option value="bald" data-i="hsBald"></option></select></div>
+        <div><label data-i="beard"></label><select id="pBeard"><option value="none" data-i="bNone"></option><option value="stubble" data-i="bStubble"></option><option value="full" data-i="bFull"></option><option value="moustache" data-i="bMoustache"></option><option value="both" data-i="bBoth"></option></select></div>
+      </div>
+      <label data-i="eyesL"></label><div class="swatches" id="swEyes"></div>
+      <div class="grid2">
+        <div><label data-i="shirtStyle"></label><select id="pShirtStyle"><option value="tshirt" data-i="ssTshirt"></option><option value="tank" data-i="ssTank"></option><option value="polo" data-i="ssPolo"></option><option value="longsleeve" data-i="ssLong"></option><option value="hoodie" data-i="ssHoodie"></option><option value="jersey" data-i="ssJersey"></option></select></div>
+        <div><label data-i="pantsL"></label><select id="pPants"><option value="shorts" data-i="ptShorts"></option><option value="joggers" data-i="ptJoggers"></option><option value="jeans" data-i="ptJeans"></option></select></div>
+      </div>
+      <label data-i="shirt"></label><div class="swatches" id="swShirt"></div>
+      <canvas id="profPrev" style="width:100%;height:230px;display:block;margin-top:12px;border-radius:18px;background:linear-gradient(180deg,#CFE3F3,#F3F8FB)"></canvas>
+      <div class="check"><input type="checkbox" id="pGlasses"> <span data-i="glasses"></span></div>
+    </div>
+    <button class="btn" id="pSave" data-i="saveProfile"></button>
+    <div class="card" style="margin-top:12px">
+      <h2 data-i="backup"></h2>
+      <p class="muted" data-i="backupNote"></p>
+      <p id="bLast" class="bLast"></p>
+      <div class="grid2"><button class="btn" id="bFile" data-i="bFile"></button><label class="btn ghost fileBtn" for="bFileIn"><span data-i="bFileLoad"></span><input type="file" id="bFileIn" accept=".json,application/json,text/plain"></label></div>
+      <details class="how muted" style="margin-top:10px"><summary data-i="bText"></summary>
+      <textarea id="backup"></textarea>
+      <div class="grid2"><button class="btn ghost" id="bCopy" data-i="copy"></button><button class="btn ghost" id="bLoad" data-i="restore"></button></div></details>
+      <button class="btn danger" id="bReset" data-i="reset"></button>
+    </div>
+    <div class="card" style="margin-top:12px"><h2 data-i="trainerTitle"></h2><p class="muted" data-i="trainerSub"></p>
+      <label class="btn fileBtn" for="repFile"><span data-i="repOpen"></span><input type="file" id="repFile" accept=".json,application/json,text/plain"></label>
+      <details class="how muted" style="margin-top:10px"><summary data-i="repPasteT"></summary><textarea id="repPaste" style="height:70px"></textarea><button class="btn ghost" id="repPasteGo" data-i="repPasteGo"></button></details>
+      <div id="clientList" style="margin-top:10px"></div></div>
+  </section>
+</main>
+<nav>
+  <button data-t="tabMe" class="on">🧍<small data-i="tabMe"></small></button>
+  <button data-t="tabToday">🍽<small data-i="tabToday"></small></button>
+  <button data-t="tabMeasure">📏<small data-i="tabMeasure"></small></button>
+  <button data-t="tabProgress">📈<small data-i="tabProgress"></small></button>
+  <button data-t="tabTips">💪<small data-i="tabTips"></small></button>
+  <button data-t="tabProfile">⚙️<small data-i="tabProfile"></small></button>
+</nav>
+<div id="toast"></div>
+<div id="sheet" class="sheet hidden"><div class="sheetBox">
+  <div class="sheetHead"><b id="sheetTitle"></b><button id="sheetClose">✕</button></div>
+  <div class="seg" id="sheetTabs"><button data-st="db" data-i="sheetProducts"></button><button data-st="dish" data-i="sheetDishes"></button><button data-st="man" data-i="sheetManual"></button></div>
+  <div id="sheetBody" style="margin-top:8px"></div>
+</div></div>
+<div id="builder" class="sheet hidden" style="z-index:10"><div class="sheetBox">
+  <div class="sheetHead"><b data-i="builderTitle"></b><button id="bClose">✕</button></div>
+  <div class="row"><div><label data-i="dishName"></label><input id="bName"></div><div class="narrow"><label data-i="portions"></label><input id="bPort" type="number" step="0.5" inputmode="decimal" value="1"></div></div>
+  <label data-i="ingredients"></label><div id="bIngs"></div>
+  <input id="bq" data-ph="addIng" autocomplete="off" style="margin-top:8px"><div id="bres"></div>
+  <div id="bTot" style="margin-top:10px"></div>
+  <button class="btn" id="bSaveEat" data-i="saveDishAdd"></button><button class="btn ghost" id="bSave" data-i="saveDish"></button>
+  <p class="muted" style="margin-top:8px" data-i="dbNote"></p>
+</div></div>
+<div id="shop" class="sheet hidden"><div class="sheetBox">
+  <div class="sheetHead"><b data-i="shopTitle"></b><span id="shopBal" class="shopBal"></span><button id="shopClose">✕</button></div>
+  <canvas id="shopPrev"></canvas>
+  <p class="muted" data-i="tryHint" style="text-align:center;margin-top:6px"></p>
+  <div class="seg scroll" id="shopCats"></div>
+  <div class="sgrid" id="shopGrid"></div>
+</div></div>
+<div id="client" class="sheet hidden" style="z-index:11"><div class="sheetBox">
+  <div class="sheetHead"><b id="clientTitle"></b><button id="clientClose">✕</button></div><div id="clientBody"></div></div></div>
+<div id="coach" class="sheet hidden"><div class="sheetBox chatBox">
+  <div class="sheetHead"><b data-i="coachTitle"></b><button id="coachClear" class="chip" data-i="coachClear"></button><button id="coachClose">✕</button></div>
+  <p class="muted" id="coachOff" data-i="coachOff" style="display:none;margin-bottom:6px"></p>
+  <div id="chatLog"></div>
+  <div class="chips" id="chatChips"></div>
+  <div class="chatIn"><textarea id="chatText" data-ph="chatPh"></textarea><button id="chatSend">➤</button></div>
+  <p class="muted" data-i="coachNote" style="font-size:11.5px;margin-top:6px"></p>
+</div></div>
+<div id="woRun" class="runov hidden">
+  <div class="runTop"><span id="runInfo"></span><button id="runSound">🔊</button></div>
+  <div id="runPhase"></div>
+  <canvas class="anim big" id="runCanvas" data-a="squat" data-v=""></canvas>
+  <h2 id="runName"></h2><div id="runDose"></div>
+  <div class="runTimer" id="runTimer"></div>
+  <button class="btn" id="runDone"></button>
+  <p class="muted" id="runNext"></p>
+  <div class="grid3"><button class="btn ghost" id="runPause"></button><button class="btn ghost" id="runSkip"></button><button class="btn danger" id="runStop"></button></div>
+</div>
+<script src="config.js"></script>
+<script src="storage.js"></script>
+</body>
+</html>
