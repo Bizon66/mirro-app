@@ -9,7 +9,7 @@
   const TOPS=Object.freeze(['tshirt','tank','polo','longsleeve','hoodie','jersey']);
   const PANTS=Object.freeze(['shorts','joggers','jeans']);
   const SOURCE_W=768,SOURCE_H=1024,CENTER=384,ROWS=192;
-  const ANCHORS=Object.freeze([[0,1.04],[.13,.875],[.18,.842],[.22,.81],[.30,.745],[.43,.645],[.47,.60],[.49,.53],[.65,.395],[.76,.28],[.91,.045],[.99,0],[1,-.006]]);
+  const ANCHORS=Object.freeze([[0,1012/998],[14/1024,1],[1012/1024,0],[1,-12/998]]);
   const SHAPE_KEYS=['shoulders','chest','waist','belly','hips','thigh','knee','calf','ankle','legCenter','arm','neck'];
   const images={},rawCache=new Map(),tintCache=new Map();
   let loaded=false,gpu=null,gpuUnavailable=false,cpu=null,cpuKey='',cpuBaseKey='',cpuStamp=0,serial=0,lastError='';
@@ -74,6 +74,9 @@
     if(reducedMotion)return 1;
     return clamp(Math.min(5*(2.2-wave),3*wave),0,1);
   }
+  // Two poses have different arm silhouettes. Dissolving between them creates
+  // two translucent arms, so select one opaque pose and animate its palm.
+  function texturePose(wave){return wave>0?1:0;}
   function watchAnchor(options){
     const s=options.shape;
     return {x:options.center-(Math.max(s.waist,s.belly,s.chest,s.hips*.96)+s.arm*.8+1.6)*options.scale,
@@ -88,40 +91,55 @@
     const dx=point[0]-pivot[0],dy=point[1]-pivot[1],c=Math.cos(angle),s=Math.sin(angle);
     return [pivot[0]+dx*c-dy*s,pivot[1]+dx*s+dy*c];
   }
-  // Return horizontal displacement in the host's native body units. Each source
-  // row carries its own silhouette landmarks, so recoloring cannot affect shape.
+  // Preserve the atlas's natural anatomy. Girth changes are local deltas from
+  // the source body, not the legacy vector avatar's exaggerated silhouette.
+  function measurementRatios(options){
+    const h=options.height,male=options.appearance!=='female',unit=h/175;
+    const reference=male?{shoulders:126,chest:100,waist:84,belly:87.36,thigh:58}:{shoulders:108,chest:94,waist:76,belly:79.04,thigh:58};
+    let measured=options.measurements;
+    if(!measured){
+      // Compatibility with the original integration: undo its explicit
+      // exaggeration gains before using those values on photographic art.
+      const s=options.shape,base={shoulders:(male?.66:.6)*h,chest:(male?.55:.53)*h,waist:(male?.45:.4)*h,thigh:(male?.31:.33)*h};
+      base.belly=base.waist*1.04;
+      measured={shoulders:base.shoulders+(s.shoulders*5.7-base.shoulders)/1.3,chest:base.chest+(s.chest*5.5-base.chest)/1.5,waist:base.waist+(s.waist*5.3-base.waist)/1.6,belly:base.belly+(s.belly*5.1-base.belly)/1.8,thigh:base.thigh+(s.thigh*6-base.thigh)/1.5};
+    }
+    const ratios={};
+    for(const key of Object.keys(reference)){
+      const value=Number(measured[key]);
+      if(!Number.isFinite(value)||value<=0)throw new Error('Invalid body measurement: '+key);
+      ratios[key]=clamp(value/(reference[key]*unit),key==='shoulders'?.82:.65,key==='shoulders'?1.35:1.65);
+    }
+    ratios.hips=clamp(1+(ratios.waist-1)*.35+(ratios.thigh-1)*.40,.75,1.45);
+    return ratios;
+  }
+  function shapeRatio(y,r){
+    return interpolate(y,[[0,1],[.135,1],[.205,r.shoulders],[.29,r.chest],[.385,r.waist],[.44,r.belly],[.50,r.hips],[.56,r.hips],[1,1]]);
+  }
+  function armShift(y,r){
+    // Translate the arm as a connected limb. Its cuff and hand retain their
+    // original width even when the waist or shoulder measurements change.
+    const shoulder=118*(r.shoulders-1),clearance=Math.max(112*(r.chest-1),108*(r.waist-1),108*(r.belly-1));
+    const wrist=clamp(Math.max(shoulder*.65,clearance+3*(r.waist-1)),-38,65);
+    return interpolate(y,[[0,0],[.14,0],[.225,shoulder],[.34,wrist],[.54,wrist],[1,wrist]]);
+  }
   function mapSourceX(x,y,row,options){
     if(x===0)return 0;
-    const sign=x<0?-1:1,ax=Math.abs(x),shape=options.shape;
-    const physical=options.height/998;
-    if(y<.13)return x*physical; // Preserve the raised palm, head is transparent.
-    const side=sign<0?row.left:row.right;
-    let torso;
-    {
-      const edge=side.edge,target=bodyHalfWidth(y,shape);
-      if(ax<=edge)torso=ax/Math.max(1,edge)*target;
-      else if(side.armInner>edge&&side.armOuter>side.armInner){
-        const radius=shape.arm*interpolate(y,[[0,.95],[.22,.95],[.40,.78],[.56,.58],[1,.58]]);
-        const widest=Math.max(shape.chest,shape.waist,shape.belly,shape.hips*.96);
-        const desiredCenter=y<.30?mix(shape.shoulders,widest+shape.arm+.8,clamp((y-.22)/.08,0,1)):widest+shape.arm+.8;
-        const center=Math.max(desiredCenter,target+radius+.3);
-        const inner=Math.max(target+.3,center-radius),outer=center+radius;
-        if(ax<=side.armInner)torso=mix(target,inner,(ax-edge)/Math.max(1,side.armInner-edge));
-        else if(ax<=side.armCenter)torso=mix(inner,center,(ax-side.armInner)/Math.max(1,side.armCenter-side.armInner));
-        else if(ax<=side.armOuter)torso=mix(center,outer,(ax-side.armCenter)/Math.max(1,side.armOuter-side.armCenter));
-        else torso=outer+(ax-side.armOuter)*physical;
-        torso=mix(target+(ax-edge)*physical,torso,smooth(0,14,side.armInner-edge)*smooth(.30,.42,y));
-      }else torso=target+(ax-edge)*physical;
-    }
-    const radius=legRadius(y,shape),center=shape.legCenter+smooth(.91,.98,y)*.8;
-    const inner=Math.max(.1,center-radius)*smooth(0,12,side.legInner);
-    const sourceCenter=side.legCenter,sourceOuter=side.legOuter;
-    let leg;
-    if(ax<=side.legInner&&side.legInner>0)leg=ax/side.legInner*inner;
-    else if(ax<=sourceCenter)leg=mix(inner,center,(ax-side.legInner)/Math.max(1,sourceCenter-side.legInner));
-    else if(ax<=sourceOuter)leg=mix(center,center+radius,(ax-sourceCenter)/Math.max(1,sourceOuter-sourceCenter));
-    else leg=center+radius+(ax-sourceOuter)*physical;
-    return sign*mix(torso,leg,smooth(.52,.68,y));
+    const sign=x<0?-1:1,ax=Math.abs(x),physical=options.height/998;
+    if(y<.135)return x*physical;
+    const ratios=options.ratios||measurementRatios(options),side=sign<0?row.left:row.right;
+    const edge=clamp(side.edge,65,155),ratio=shapeRatio(y,ratios);
+    const torso=ax*ratio,arm=ax+armShift(y,ratios);
+    const outer=smooth(edge*.78,edge*1.17,ax);
+    const upper=mix(torso,arm,outer);
+    const sourceCenter=clamp(side.legCenter,50,105);
+    const radiusRatio=1+(ratios.thigh-1)*(1-smooth(.69,.94,y));
+    const shiftedCenter=sourceCenter*(1+(ratios.hips-1)*.12);
+    const leg=shiftedCenter+(ax-sourceCenter)*radiusRatio;
+    // Keep the crotch center pinned and let thigh girth taper toward the ankles.
+    const lower=mix(ax,leg,smooth(0,sourceCenter*.5,ax));
+    const mapped=mix(upper,lower,smooth(.50,.60,y));
+    return sign*mapped*physical;
   }
   function mapSourcePoint(x,y,row,options){
     return [options.center+mapSourceX(x,y,row,options)*options.scale,
@@ -301,14 +319,14 @@
       for(const index of [a,c,b,b,c,d]){vertices.set(points.subarray(index*4,index*4+4),offset);offset+=4;}
     }
     gl.viewport(0,0,width,height);gl.clear(gl.COLOR_BUFFER_BIT);gl.bufferData(gl.ARRAY_BUFFER,vertices,gl.DYNAMIC_DRAW);
-    gl.uniform1f(gpu.poseUniform,waveEnvelope(options.wave,options.reducedMotion));gl.drawArrays(gl.TRIANGLES,0,vertices.length/4);return gpu.canvas;
+    gl.uniform1f(gpu.poseUniform,texturePose(options.wave));gl.drawArrays(gl.TRIANGLES,0,vertices.length/4);return gpu.canvas;
   }
   function renderCPU(pair,options){
     const rounded={...options,shape:{...options.shape}};
     for(const key of SHAPE_KEYS)rounded.shape[key]=Math.round(rounded.shape[key]/.4)*.4||options.shape[key];
-    const pose=Math.round(waveEnvelope(options.wave,options.reducedMotion)*2)/2;
+    const pose=texturePose(options.wave);
     const baseKey=JSON.stringify([pair.id,Math.round(options.center),Math.round(options.ground),options.height,Math.round(options.scale*100),options.targetWidth,options.targetHeight]);
-    const key=JSON.stringify([baseKey,rounded.shape,pose]);
+    const key=JSON.stringify([baseKey,rounded.shape,options.ratios,pose]);
     if(cpuKey===key&&cpu)return cpu;
     const now=root.performance.now();
     // Keep software redraws under 8 Hz during a greeting or breathing; the host
@@ -330,13 +348,13 @@
         }
       }
     }
-    layer(pair.neutral,1-pose);if(pose){ctx.globalCompositeOperation='lighter';layer(pair.wave,pose);ctx.globalCompositeOperation='source-over';}
+    layer(pose?pair.wave:pair.neutral,1);
     ctx.globalAlpha=1;cpuKey=key;cpuBaseKey=baseKey;cpuStamp=now;return cpu;
   }
   function draw(ctx,input){
     if(!loaded||!ctx||typeof ctx.drawImage!=='function')return false;
     try{
-      const options=normalizeOptions(input),pair=texturePair(options);
+      const options=normalizeOptions(input);options.ratios=measurementRatios(options);const pair=texturePair(options);
       let output=renderGPU(pair,options),renderer='webgl';
       if(output===null)return false; // Context loss: let the native scene draw.
       if(output===false){output=renderCPU(pair,options);renderer='canvas2d';}
@@ -352,6 +370,6 @@
     const src=root.MirroWardrobeArt&&root.MirroWardrobeArt[variant];if(!src){resolve(false);return;}
     const image=new Image();image.onload=()=>{images[variant]=image;resolve(true);};image.onerror=()=>resolve(false);image.src=src;
   }))).then(results=>(loaded=results.every(Boolean)));
-  return {TOPS,PANTS,ANCHORS,normalizeOptions,outfitIndex,verticalFraction,bodyHalfWidth,legRadius,waveEnvelope,watchAnchor,waveHandPoint,mapSourceX,mapSourcePoint,
+  return {TOPS,PANTS,ANCHORS,normalizeOptions,outfitIndex,verticalFraction,bodyHalfWidth,legRadius,measurementRatios,shapeRatio,armShift,waveEnvelope,texturePose,watchAnchor,waveHandPoint,mapSourceX,mapSourcePoint,
     ready,isReady:()=>loaded,draw,destroy,getLastError:()=>lastError};
 });

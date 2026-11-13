@@ -1300,6 +1300,7 @@ function drawAvatar(w, tone) {
     try {
       bodyArt = MirroBody.draw(ctx, {
         profile: p, appearance: male ? 'male' : 'female',
+        measurements: g, referenceGirths: g0, head: { cx, cy: headCY, halfWidth: headRx, halfHeight: headRy },
         shape: { shoulders: shW, chest: chW, waist: waW, belly: beW, hips: hipW, thigh: thW, knee: kneeW, calf: calfW, ankle: ankW, legCenter: legC, arm: armW, neck: neckW },
         center: cx, ground: G, scale: px, height: H, targetWidth: CW, targetHeight: CH,
         time: AV_T, wave: AV_WAVE, reducedMotion: REDUCED, equipment: EQ, pantsColor: pantsC,
@@ -1474,7 +1475,9 @@ function drawAvatar(w, tone) {
   }
 
   }   // end of the code-drawn body
-  // head
+  // head (skipped when the painted head from vendor/mirro-site-adapter.js is ready: the old ears would show under it)
+  const hc = p.hair;
+  if (!(window.MirroSiteAdapter && MirroSiteAdapter.hasActiveHeadPlan && MirroSiteAdapter.hasActiveHeadPlan())) {
   ctx.fillStyle = skin;
   [-1, 1].forEach(sd => { ctx.fillStyle = skin; ctx.beginPath(); ctx.ellipse(cx + sd * headRx * 0.98, headCY + headRy * 0.06, headRx * 0.17, headRy * 0.22, 0, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = skinD; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.ellipse(cx + sd * headRx * 1.0, headCY + headRy * 0.06, headRx * 0.08, headRy * 0.12, 0, sd > 0 ? -1.2 : 1.9, sd > 0 ? 1.2 : 4.4); ctx.stroke(); });
@@ -1482,13 +1485,13 @@ function drawAvatar(w, tone) {
   { const hg = ctx.createRadialGradient(cx - headRx * 0.25, headCY - headRy * 0.25, headRy * 0.1, cx, headCY, headRy * 1.15); hg.addColorStop(0, 'rgba(255,255,255,.14)'); hg.addColorStop(0.6, 'rgba(255,255,255,0)'); hg.addColorStop(1, 'rgba(0,0,0,.12)'); ctx.fillStyle = hg; headPath(cx, headCY, headRx, headRy); ctx.fill(); }
   ctx.fillStyle = 'rgba(0,0,0,.05)'; ctx.beginPath(); ctx.ellipse(cx + headRx * 0.55, headCY + headRy * 0.2, headRx * 0.35, headRy * 0.6, 0, 0, Math.PI * 2); ctx.fill();
   if (bmi > 29) { ctx.strokeStyle = skinD; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.ellipse(cx, headCY + headRy * 0.98, headRx * 0.55, headRy * 0.16, 0, 0.1, Math.PI - 0.1); ctx.stroke(); }
-  const hc = p.hair;
   if (p.beard === 'stubble') { ctx.globalAlpha = 0.35; ctx.fillStyle = hc; ctx.beginPath(); ctx.ellipse(cx, headCY + headRy * 0.35, headRx * 0.95, headRy * 0.68, 0, 0.05 * Math.PI, 0.95 * Math.PI); ctx.fill(); ctx.globalAlpha = 1; }
   if (p.beard === 'full' || p.beard === 'both') {
     ctx.fillStyle = hc; ctx.beginPath(); ctx.ellipse(cx, headCY + headRy * 0.3, headRx * 0.98, headRy * 0.82, 0, 0.04 * Math.PI, 0.96 * Math.PI); ctx.fill();
     ctx.fillStyle = skin; ctx.beginPath(); ctx.ellipse(cx, headCY + headRy * 0.42, headRx * 0.32, headRy * 0.17, 0, 0, Math.PI * 2); ctx.fill();
   }
   if (p.beard === 'moustache' || p.beard === 'both') { ctx.fillStyle = shade(hc, 0.9); ctx.beginPath(); ctx.ellipse(cx, headCY + headRy * 0.3, headRx * 0.4, headRy * 0.09, 0, 0, Math.PI * 2); ctx.fill(); }
+  }   // end of the code-drawn head
   drawHairFront(p.hairStyle, hc, cx, headCY, headRx, headRy);
   if (HAIR_STRANDS) { const [hc2, hx, hy, hrx, hry] = HAIR_STRANDS; ctx.strokeStyle = shade(hc2, 0.78); ctx.lineWidth = 0.8; ctx.globalAlpha = 0.55; for (let i = -3; i <= 3; i++) { ctx.beginPath(); ctx.moveTo(hx + i * hrx * 0.12, hy - hry * 1.0); ctx.quadraticCurveTo(hx + i * hrx * 0.24, hy - hry * 0.85, hx + i * hrx * 0.27, hy - hry * 0.55); ctx.stroke(); } ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.beginPath(); ctx.arc(hx - hrx * 0.25, hy - hry * 0.55, hrx * 0.5, Math.PI * 1.15, Math.PI * 1.45); ctx.stroke(); ctx.globalAlpha = 1; }
   if (EQ.hat) drawHat(EQ.hat, cx, headCY, headRx, headRy);

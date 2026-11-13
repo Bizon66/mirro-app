@@ -178,7 +178,10 @@
       const eyeY = cy - .06 * halfHeight;
       const chinY = cy + 1.03 * halfHeight;
       const height = (chinY - eyeY) / (m.chinY - m.eyeY);
-      const width = halfWidth / m.faceHalfWidth;
+      // Preserve the portrait's own aspect ratio. The legacy vector head gets
+      // wider with BMI, but stretching these painted faces horizontally makes
+      // eyes, ears and jaws look flattened. Girth changes belong to the body.
+      const width = height * plan.image.width / plan.image.height;
       try {
         // ctx is the app's current 2D drawing context, including when a profile,
         // shop or client report temporarily renders into a different canvas.
@@ -323,6 +326,11 @@
     resolveReady(false);
   }
 
-  window.MirroSiteAdapter = { ready, install, uninstall, isInstalled: () => installed, mapStyle };
+  window.MirroSiteAdapter = {
+    ready, install, uninstall, isInstalled: () => installed, mapStyle,
+    // The optional body patcher uses this after drawHairBack prepared the
+    // decoded portrait, before painting the old vector ears/head underneath.
+    hasActiveHeadPlan: () => !!(installed && activeHead && activeHead.image),
+  };
   waitForApp();
 })();
