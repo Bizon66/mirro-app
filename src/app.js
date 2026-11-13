@@ -2919,8 +2919,8 @@ const ACT_DUR = { bark: 2.2, purr: 2.4, hop: 1.6, wheel: 6, tuck: 2.4, talk: 2.4
 const PET_LAYOUT = {
   // dog and cat have no house: they sleep right on their bed
   pet_dog: { bowl: 4, spot: 30, w: 50, noHouse: true }, pet_cat: { bowl: 4, spot: 30, w: 50, noHouse: true },
-  pet_rabbit: { bowl: 4, spot: 27, house: 63, w: 77 }, pet_hamster: { bowl: 4, spot: 22, wheel: 50, house: 74, w: 84 },
-  pet_turtle: { bowl: 4, spot: 28, house: 62, w: 92 }
+  pet_rabbit: { bowl: 4, spot: 27, house: 66, w: 87 }, pet_hamster: { bowl: 4, spot: 22, wheel: 50, house: 82, w: 98 },
+  pet_turtle: { bowl: 4, spot: 28, house: 72, w: 114 }
 };
 // the least free floor between the twin's sneaker and the corner (a sneaker is ~13 cm wide)
 const PET_GAP = 13;
@@ -3140,7 +3140,8 @@ function drawPetScene(id, d, time, pass) {
     if (pass === 'back') {
       ctx.fillStyle = 'rgba(27,42,74,.07)'; ctx.beginPath(); ctx.ellipse(x0 + L(lay.w / 2), G + 1, L(lay.w / 2 + 6), L(2.6), 0, 0, Math.PI * 2); ctx.fill();
       if (id === 'pet_rabbit') drawGrassStrip(at(lay.bowl) - L(8), at(lay.house) + L(10), G, L);   // a strip of lawn from the bowl to the burrow
-      if (lay.noHouse) { /* sleeps on its bed */ } else if (id === 'pet_turtle') drawPond(at(lay.house), G, L, time, true); else {
+      let water = null;
+      if (lay.noHouse) { /* sleeps on its bed */ } else if (id === 'pet_turtle') water = drawPond(at(lay.house), G, L, time, true); else {
         const door = drawPetHouse(id, at(lay.house), G, L, true);   // mirrored: the door faces the pet
         if (inside) {
           const x = petUnits(at(lay.house), G, L, true);
@@ -3152,15 +3153,15 @@ function drawPetScene(id, d, time, pass) {
       if (lay.wheel) { drawWheel(at(lay.wheel), G, L, time, act === 'wheel'); if (main) PET_WHEEL = [at(lay.wheel) - L(15), G - L(30), at(lay.wheel) + L(15), G + L(1)]; }
       if (inside && id === 'pet_turtle') {
         // in the pond: only the top of the shell and the eyes above the water
-        const tx = at(lay.house) + L(2), ty = G + L(6.5), wl = G - L(1.4);   // wl = water line
+        const wl = water ? G - L(water[1]) : G - L(1.4), tx = at(lay.house) + L(water ? water[0] : 2), ty = wl + L(7.9);   // wl = water line
         ctx.save(); ctx.beginPath(); ctx.rect(tx - L(30), wl - L(40), L(60), L(40)); ctx.clip();
         ctx.translate(tx, ty); ctx.scale(pk, pk); ctx.translate(-tx, -ty);
         drawPetV2(id, tx, ty, L, time, { noShadow: true, sleep: asleep });
         ctx.restore();
         const x = petUnits(tx, G, L); if (asleep) sleepZ(x, 6, -12, time); x.restore();
       }
-      const hw = id === 'pet_turtle' ? 28 : 15;
-      if (main) PET_HIT = { house: lay.noHouse ? null : [at(lay.house) - L(hw), G - L(id === 'pet_turtle' ? 12 : 27), at(lay.house) + L(hw), G + L(2)], wheel: lay.wheel ? PET_WHEEL : null };
+      const hw = id === 'pet_turtle' ? 38 : 20;
+      if (main) PET_HIT = { house: lay.noHouse ? null : [at(lay.house) - L(hw), G - L(id === 'pet_turtle' ? 14 : 30), at(lay.house) + L(hw), G + L(2)], wheel: lay.wheel ? PET_WHEEL : null };
       return;
     }
     const lift = drawPetSpot(id, at(lay.spot), G, L, true);

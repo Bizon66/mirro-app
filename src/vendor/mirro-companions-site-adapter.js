@@ -10,8 +10,9 @@
     dog: [44, 40], cat: [40, 40], hamster: [30, 28],
     rabbit: [40, 46], turtle: [44, 24], parrot: [30, 40],
   };
-  const HOUSE_BOXES = { dog: [27, 25], cat: [26, 24], hamster: [20, 19], rabbit: [28, 16] };
-  const HOUSE_EYES = { dog: [0, -5.5], cat: [0, -6.5], hamster: [0, -5], rabbit: [6.5, -3.5] };
+  const HOUSE_BOXES = { dog: [27, 25], cat: [26, 24], hamster: [32, 28], rabbit: [42, 28] };
+  // door of the new pictures, in the host's mirrored house units (x is flipped there)
+  const HOUSE_EYES = { dog: [0, -5.5], cat: [0, -6.5], hamster: [2.2, -9], rabbit: [1.9, -7.5] };
   const SPOT_BOXES = { dog: [46, 14], cat: [46, 14], rabbit: [40, 10], turtle: [46, 18] };
   const SPOT_SUPPORT = { dog: 3, cat: 3, hamster: 2.4, rabbit: 0, turtle: 5.6 };
   const originals = {}, wrappers = {}, propCache = new Map();
@@ -252,12 +253,13 @@
       const species = SPECIES[petId], size = HOUSE_BOXES[species], scale = unitScale(unit);
       // Retain the original house while the animal is inside: its precise door
       // coordinates are used by the host to draw peeking/sleeping eyes.
-      if (!size || !scale || inside(petId) || !paintProp(species, 'home', cx, groundY, unit(size[0]), unit(size[1]), mirror)) return originals.drawPetHouse.apply(this, arguments);
+      if (!size || !scale || !paintProp(species, 'home', cx, groundY, unit(size[0]), unit(size[1]), false)) return originals.drawPetHouse.apply(this, arguments);
       return [...HOUSE_EYES[species]];
     });
     hook('drawPond', function (cx, groundY, unit, time, mirror) {
       const scale = unitScale(unit);
-      if (!scale || inside('pet_turtle') || !paintProp('turtle', 'home', cx, groundY + unit(3.7), unit(62), unit(30), mirror)) return originals.drawPond.apply(this, arguments);
+      if (!scale || !paintProp('turtle', 'home', cx, groundY + unit(3.7), unit(84), unit(40), mirror)) return originals.drawPond.apply(this, arguments);
+      return [1, 13];   // the water: centre x offset and water line height above the floor, in units
     });
     hook('drawWheel', function (cx, groundY, unit, time, running) {
       const scale = unitScale(unit);
