@@ -12,7 +12,7 @@
   };
   const HOUSE_BOXES = { dog: [27, 25], cat: [26, 24], hamster: [20, 19], rabbit: [28, 16] };
   const HOUSE_EYES = { dog: [0, -5.5], cat: [0, -6.5], hamster: [0, -5], rabbit: [6.5, -3.5] };
-  const SPOT_BOXES = { dog: [46, 14], cat: [46, 14], rabbit: [40, 10], turtle: [27, 8] };
+  const SPOT_BOXES = { dog: [46, 14], cat: [46, 14], rabbit: [40, 10], turtle: [33, 10] };
   const SPOT_SUPPORT = { dog: 3, cat: 3, hamster: 2.4, rabbit: 0, turtle: 5.6 };
   const originals = {}, wrappers = {}, propCache = new Map();
   let installed = false, stopped = false, timer = 0, attempts = 0;
@@ -126,10 +126,11 @@
 
 
   // dog / cat: a flat round mat (as in the owner's picture), drawn in code so it stays flat and wide
-  const MAT = { dog: ['#3E5C9A', '#2B4378', '#F3E6C8', 'bone'], cat: ['#D9868F', '#B5626C', '#FCEFEA', 'paw'] };
+  const MAT = { dog: ['#3E5C9A', '#2B4378', '#F3E6C8', 'bone', 19], cat: ['#D9868F', '#B5626C', '#FCEFEA', 'paw', 19],
+    rabbit: ['#7CC05E', '#4E8E3A', '#3F7A2E', 'grass', 13], hamster: ['#EBCB6E', '#C49A3C', '#A97F2A', 'hay', 9.5] };
   function drawMat(species, cx, groundY, unit, grow) {
-    const [top, side, deco, kind] = MAT[species];
-    const rx = unit(19) * grow, ry = rx * 0.27, th = Math.max(1, unit(1.3) * grow), cy = groundY - th;
+    const [top, side, deco, kind, size] = MAT[species];
+    const rx = unit(size) * grow, ry = rx * 0.27, th = Math.max(1, unit(1.3) * grow), cy = groundY - th;
     ctx.save();
     ctx.fillStyle = 'rgba(27,42,74,.16)'; ctx.beginPath(); ctx.ellipse(cx, groundY + th * 0.3, rx * 1.04, ry * 1.05, 0, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = side; ctx.beginPath(); ctx.ellipse(cx, cy + th, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
@@ -137,6 +138,26 @@
     const g = ctx.createRadialGradient(cx - rx * 0.2, cy - ry * 0.4, rx * 0.1, cx, cy, rx);
     g.addColorStop(0, top); g.addColorStop(1, side);
     ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
+    if (kind === 'grass' || kind === 'hay') {
+      // grass blades / straws spread over the mat, a few sticking out of the edge
+      ctx.lineCap = 'round';
+      const n = kind === 'grass' ? 34 : 46;
+      for (let i = 0; i < n; i++) {
+        const a = (i * 2.399) % (Math.PI * 2), r = Math.sqrt(((i * 0.618) % 1)) * 0.98;
+        const px = cx + Math.cos(a) * rx * r, py = cy + Math.sin(a) * ry * r;
+        ctx.strokeStyle = i % 3 ? deco : top; ctx.lineWidth = Math.max(0.6, rx * (kind === 'grass' ? 0.035 : 0.03));
+        ctx.beginPath(); ctx.moveTo(px, py);
+        if (kind === 'grass') { const hgt = rx * (0.12 + 0.1 * ((i * 0.37) % 1)); ctx.quadraticCurveTo(px + rx * 0.02, py - hgt * 0.6, px + rx * 0.05 * Math.sin(i), py - hgt); }
+        else { const d = rx * 0.22, t = a + 1.3 * Math.sin(i * 1.7); ctx.lineTo(px + Math.cos(t) * d, py + Math.sin(t) * d * 0.35 - rx * 0.03); }
+        ctx.stroke();
+      }
+      if (kind === 'grass') {   // two small clovers
+        ctx.fillStyle = '#9ED67F';
+        [[-0.45, 0.1], [0.5, -0.2]].forEach(([u, v]) => [0, 2.1, 4.2].forEach(q => { ctx.beginPath(); ctx.ellipse(cx + u * rx + Math.cos(q) * rx * 0.05, cy + v * ry + Math.sin(q) * rx * 0.025, rx * 0.05, rx * 0.03, q, 0, Math.PI * 2); ctx.fill(); }));
+      }
+      ctx.restore();
+      return th / unit(1);
+    }
     ctx.strokeStyle = deco; ctx.globalAlpha = 0.55; ctx.lineWidth = Math.max(0.6, rx * 0.018); ctx.setLineDash([rx * 0.05, rx * 0.035]);
     ctx.beginPath(); ctx.ellipse(cx, cy, rx * 0.9, ry * 0.86, 0, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
     ctx.fillStyle = deco;
