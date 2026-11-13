@@ -243,6 +243,7 @@
       // The wheel is replaced separately by drawWheel, avoiding a duplicate.
       // the mat grows with the pet (same four stages as the picture)
       const grow = [.6, .74, .88, 1][visualStage(petId)];
+      if (species === 'rabbit') return 0;   // the rabbit sits right on its lawn strip
       if (MAT[species] && scale) { try { return drawMat(species, cx, groundY, unit, grow); } catch (error) { /* fall through */ } }
       if (!size || !scale || !paintProp(species, 'bed', cx, groundY, unit(size[0] * grow), unit(size[1] * grow), mirror)) return originals.drawPetSpot.apply(this, arguments);
       return SPOT_SUPPORT[species] * grow;
