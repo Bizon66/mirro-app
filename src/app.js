@@ -1308,7 +1308,7 @@ function drawAvatar(w, tone) {
       });
     } catch (e) { bodyArt = null; } finally { ctx.restore(); }
   }
-  if (bodyArt) { if (EQ.acc === 'watch' && bodyArt.watch) drawWatch(bodyArt.watch.x, bodyArt.watch.y, bodyArt.watch.size); }
+  if (bodyArt) { if (EQ.acc === 'watch' && bodyArt.watch) { const w = bodyArt.watch; drawWatch(w.x - w.size * 0.35, w.y - w.size * 0.15, w.size * 0.85); /* on the wrist of the painted arm */ } }
   else {
   // legs
   [-1, 1].forEach(sd => {
