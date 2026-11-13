@@ -2918,7 +2918,7 @@ const ACT_DUR = { bark: 2.2, purr: 2.4, hop: 1.6, wheel: 6, tuck: 2.4, talk: 2.4
 // bowl, the pet's spot, the house / pond on the right — each with its own room, nothing piled up; total width
 const PET_LAYOUT = {
   // dog and cat have no house: they sleep right on their bed
-  pet_dog: { bowl: 4, spot: 28, w: 48, noHouse: true }, pet_cat: { bowl: 4, spot: 28, w: 48, noHouse: true },
+  pet_dog: { bowl: 4, spot: 30, w: 50, noHouse: true }, pet_cat: { bowl: 4, spot: 30, w: 50, noHouse: true },
   pet_rabbit: { bowl: 4, spot: 24, house: 60, w: 74 }, pet_hamster: { bowl: 4, spot: 20, wheel: 45, house: 70, w: 80 },
   pet_turtle: { bowl: 4, spot: 22, house: 50, w: 71 }
 };

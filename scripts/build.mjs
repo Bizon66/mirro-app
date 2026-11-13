@@ -43,6 +43,10 @@ async function buildApp() {
   writeFileSync(join(OUT, 'config.js'), await min(config));
   writeFileSync(join(OUT, 'storage.js'), await min(read('storage.js')));
   writeFileSync(join(OUT, 'app.js'), await min(read('app.js')));
+  // image-based pets (owner's art + MIT companion module): sprite sheets in pets/, scripts in vendor/
+  mkdirSync(join(OUT, 'vendor'), { recursive: true }); mkdirSync(join(OUT, 'pets'), { recursive: true });
+  for (const f of readdirSync(join(SRC, 'vendor'))) f.endsWith('.js') ? writeFileSync(join(OUT, 'vendor', f), await min(read('vendor/' + f))) : copyFileSync(join(SRC, 'vendor', f), join(OUT, 'vendor', f));
+  for (const f of readdirSync(join(SRC, 'pets'))) copyFileSync(join(SRC, 'pets', f), join(OUT, 'pets', f));
   writeFileSync(join(OUT, 'app.css'), read('app.css').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\n\s*/g, '\n'));
   writeFileSync(join(OUT, 'index.html'), read('index.html'));
   writeFileSync(join(OUT, 'manifest.webmanifest'), read('manifest.webmanifest'));
