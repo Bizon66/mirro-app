@@ -25,6 +25,15 @@ const CASES = [
   ['rohlík s pomazánkou', ['roll', 'spread']],
   ['brown bread with butter', ['rye', 'butter']],
   ['greek salad', ['greek_salad']],
+  ['вареники з вишнею', ['varenyky_cherry']],
+  ['шашлик 200 г', ['shashlyk']],
+  ['холодець', ['kholodets']],
+  ['спагеті болоньєзе', ['pasta_bolognese']],
+  ['медовик', ['honey_cake']],
+  ['ряжанка', ['ryazhenka']],
+  ['svařené víno', ['mulled_wine']],
+  ['segedínský guláš', ['szegedin']],
+  ['chicken curry', ['chicken_curry']],
 ];
 const server = await serve(0);
 const b = await chromium.launch(); const p = await b.newPage();
