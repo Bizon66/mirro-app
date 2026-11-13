@@ -197,7 +197,7 @@
         const w=S*.041,h=S*(appearance==='female'?.023:.016);
         const close=clamp(blink,0,1);
         ctx.save();ctx.beginPath();ctx.ellipse(cx,cy,w,h,0,0,Math.PI*2);ctx.clip();
-        const sample=ctx.getImageData(Math.round(cx),Math.round(cy-h-5),1,1).data;
+        const sample=ctx.getImageData(Math.round(cx),Math.round(cy+h+S*.03),1,1).data;   // Mirro change: lid colour from the cheek (above the eye hit lashes/brows)
         const grad=ctx.createLinearGradient(0,cy-h,0,cy+h);
         grad.addColorStop(0,`rgb(${sample[0]},${sample[1]},${sample[2]})`);
         grad.addColorStop(1,`rgb(${sample[0]*.87},${sample[1]*.82},${sample[2]*.8})`);

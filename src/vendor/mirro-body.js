@@ -152,6 +152,26 @@
     const supplied=frames&&frames[index];
     return supplied||{x:index%6*image.width/6,y:Math.floor(index/6)*image.height/3,width:image.width/6,height:image.height/3};
   }
+  function compressHoodieNeck(data){
+    // Bring the original neck and the adjoining inner hood toward the portrait
+    // together. Deleting just skin creates background slivers beside the jaw.
+    // Fixed outer anchors keep shoulders and the raised palm exactly in place.
+    const source=new Uint8ClampedArray(data.data),pixels=data.data,outer=72,inner=45;
+    for(let y=112;y<166;y++){
+      const weight=smooth(112,128,y)*(1-smooth(143,166,y));
+      const targetInner=inner-11*weight;
+      if(weight<=0)continue;
+      for(let x=CENTER-outer;x<CENTER+outer;x++){
+        const dx=x+.5-CENTER,ax=Math.abs(dx),sign=dx<0?-1:1;
+        const mapped=ax<=targetInner?ax*inner/targetInner:inner+(ax-targetInner)*(outer-inner)/(outer-targetInner);
+        const sourceX=CENTER+sign*mapped-.5,left=Math.floor(sourceX),fraction=sourceX-left;
+        const a=(y*SOURCE_W+left)*4,b=a+4,out=(y*SOURCE_W+x)*4;
+        const alpha=source[a+3]*(1-fraction)+source[b+3]*fraction;
+        for(let channel=0;channel<3;channel++)pixels[out+channel]=alpha?(source[a+channel]*source[a+3]*(1-fraction)+source[b+channel]*source[b+3]*fraction)/alpha:0;
+        pixels[out+3]=alpha;
+      }
+    }
+  }
   function normalizeFrame(variant,index){
     const key=variant+index;if(rawCache.has(key))return rawCache.get(key);
     const image=images[variant],frame=frameFor(variant,index,image);
@@ -177,7 +197,7 @@
     ctx.drawImage(tile,CENTER-center*scale,14-top*scale,tile.width*scale,tile.height*scale);
     // Remove only the central bald head. The waving hand occupies this height
     // outside the center band and must remain visible.
-    const data=ctx.getImageData(0,0,SOURCE_W,SOURCE_H);
+    const data=ctx.getImageData(0,0,SOURCE_W,SOURCE_H),trimHoodieNeck=variant.startsWith('male')&&TOPS[index%6]==='hoodie';
     for(let index=0;index<data.data.length;index+=4){
       const x=index/4%SOURCE_W,y=Math.floor(index/4/SOURCE_W);
       // Remove the low-alpha studio matte before recoloring or pose blending.
@@ -188,7 +208,9 @@
         const r=data.data[index],g=data.data[index+1],b=data.data[index+2];
         if(!(b>r*1.18&&b>g*1.12))data.data[index+3]=0;
       }
+
     }
+    if(trimHoodieNeck)compressHoodieNeck(data);
     ctx.putImageData(data,0,0);
     const result={canvas:out,data};rawCache.set(key,result);trimCache(rawCache,6);return result;
   }

@@ -94,8 +94,9 @@
     return { ...supplied, eyeY, chinY, faceHalfWidth, faceCenterX: Number(supplied.faceCenterX) || .5 };
   }
 
-  function prepareHead(appearance, value, skinColor, blink, landmarks) {
-    const key = JSON.stringify([appearance, value, skinColor, blink]);
+  function prepareHead(appearance, value, skinColor, blink, landmarks, shirtStyle) {
+    const highCollar = appearance === 'male' && shirtStyle === 'hoodie';
+    const key = JSON.stringify([appearance, value, skinColor, blink, highCollar]);
     if (cache.has(key)) return cache.get(key);
     const core = window.MirroAppearance;
     const portrait = core.getHeadCanvas(appearance, value, { blink, skinColor });
@@ -108,9 +109,10 @@
 
     // Portrait atlas cells include a blue shirt. Remove that shirt so the
     // application's own tank/polo/hoodie and shirt color remain visible. Inspect
-    // a neutral brown-hair copy, so choosing blue hair does not erase long hair.
-    const neutralValue = { ...value, hairColor: '#65432e', beardColor: '#65432e' };
-    const neutral = core.getHeadCanvas(appearance, neutralValue, { blink, skinColor });
+    // a canonical green-hair / warm-skin copy: hair, skin and the blue shirt
+    // stay distinguishable even when the user recolors any of those layers.
+    const neutralValue = { ...value, hairColor: '#20b060', beardColor: '#20b060' };
+    const neutral = core.getHeadCanvas(appearance, neutralValue, { blink, skinColor: '#e3ad83' });
     if (!neutral || neutral.width !== result.width || neutral.height !== result.height) return null;
     const maskCanvas = document.createElement('canvas');
     maskCanvas.width = result.width; maskCanvas.height = result.height;
@@ -119,7 +121,6 @@
     maskContext.drawImage(neutral, 0, 0);
     const mask = maskContext.getImageData(0, 0, result.width, result.height).data;
     const pixels = context.getImageData(0, 0, result.width, result.height);
-    const neckCut = Math.min(.87, landmarks.chinY + .04);
     for (let y = Math.floor(landmarks.chinY * result.height); y < result.height; y++) {
       const ny = y / result.height;
       for (let x = 0; x < result.width; x++) {
@@ -127,10 +128,19 @@
         if (!pixels.data[index + 3]) continue;
         const red = mask[index], green = mask[index + 1], blue = mask[index + 2];
         const shirt = blue > red * 1.18 && blue > green * 1.12;
-        // Trim the center of the portrait's long neck while preserving side
-        // lengths, ponytails and braids. The existing body's neck stays intact.
-        const centralNeck = ny > neckCut && Math.abs(x / result.width - landmarks.faceCenterX) < landmarks.faceHalfWidth * .72;
-        if (shirt || centralNeck) pixels.data[index + 3] = 0;
+        if (shirt) { pixels.data[index + 3] = 0; continue; }
+        const skin = red > green * 1.06 && red > blue * 1.15;
+        if (skin) {
+          // Blend painted neck skin into the body's own neck. A curved, soft
+          // boundary avoids the old horizontal cut without trimming long hair.
+          const lateral = Math.min(1, Math.abs(x / result.width - landmarks.faceCenterX) / (landmarks.faceHalfWidth * .65));
+          const start = landmarks.chinY + .018;
+          // The high hood covers the lower portrait neck; let the body's
+          // registered neck show there instead of painting skin over its rim.
+          const end = landmarks.chinY + (highCollar ? .065 : .11) - (highCollar ? .02 : .035) * lateral * lateral;
+          const t = Math.max(0, Math.min(1, (ny - start) / (end - start)));
+          pixels.data[index + 3] = Math.round(pixels.data[index + 3] * (1 - t * t * (3 - 2 * t)));
+        }
       }
     }
     context.putImageData(pixels, 0, 0);
@@ -159,7 +169,7 @@
       }, appearance);
       const landmarks = landmarksFor(appearance, hairStyle);
       if (!landmarks) return null;
-      const image = prepareHead(appearance, value, profile.skin, readBlink(), landmarks);
+      const image = prepareHead(appearance, value, profile.skin, readBlink(), landmarks, profile.shirtStyle);
       if (!image) return null;
       return { image, landmarks, style, cx, cy, halfWidth, halfHeight, painted: false };
     } catch (error) { return null; }
