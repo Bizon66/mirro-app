@@ -2917,7 +2917,8 @@ const ACT_DUR = { bark: 2.2, purr: 2.4, hop: 1.6, wheel: 6, tuck: 2.4, talk: 2.4
 // layout of each corner in cm from where the corner starts (after the free floor next to the twin), going right:
 // bowl, the pet's spot, the house / pond on the right — each with its own room, nothing piled up; total width
 const PET_LAYOUT = {
-  pet_dog: { bowl: 4, spot: 26, house: 58, w: 72 }, pet_cat: { bowl: 4, spot: 26, house: 58, w: 72 },
+  // dog and cat have no house: they sleep right on their bed
+  pet_dog: { bowl: 4, spot: 28, w: 48, noHouse: true }, pet_cat: { bowl: 4, spot: 28, w: 48, noHouse: true },
   pet_rabbit: { bowl: 4, spot: 24, house: 60, w: 74 }, pet_hamster: { bowl: 4, spot: 20, wheel: 45, house: 70, w: 80 },
   pet_turtle: { bowl: 4, spot: 22, house: 50, w: 71 }
 };
@@ -3119,7 +3120,7 @@ function drawPetScene(id, d, time, pass) {
     const pk = PET_K[id] || 1;
     if (pass === 'back') {
       ctx.fillStyle = 'rgba(27,42,74,.07)'; ctx.beginPath(); ctx.ellipse(x0 + L(lay.w / 2), G + 1, L(lay.w / 2 + 6), L(2.6), 0, 0, Math.PI * 2); ctx.fill();
-      if (id === 'pet_turtle') drawPond(at(lay.house), G, L, time, true); else {
+      if (lay.noHouse) { /* sleeps on its bed */ } else if (id === 'pet_turtle') drawPond(at(lay.house), G, L, time, true); else {
         const door = drawPetHouse(id, at(lay.house), G, L, true);   // mirrored: the door faces the pet
         if (inside) {
           const x = petUnits(at(lay.house), G, L, true);
@@ -3139,10 +3140,17 @@ function drawPetScene(id, d, time, pass) {
         const x = petUnits(tx, G, L); if (asleep) sleepZ(x, 6, -12, time); x.restore();
       }
       const hw = id === 'pet_turtle' ? 20 : 15;
-      if (main) PET_HIT = { house: [at(lay.house) - L(hw), G - L(id === 'pet_turtle' ? 10 : 27), at(lay.house) + L(hw), G + L(2)], wheel: lay.wheel ? PET_WHEEL : null };
+      if (main) PET_HIT = { house: lay.noHouse ? null : [at(lay.house) - L(hw), G - L(id === 'pet_turtle' ? 10 : 27), at(lay.house) + L(hw), G + L(2)], wheel: lay.wheel ? PET_WHEEL : null };
       return;
     }
     const lift = drawPetSpot(id, at(lay.spot), G, L, true);
+    if (inside && lay.noHouse) {
+      // asleep on its bed: eyes closed, z z; a tap on it wakes it up
+      const px = at(lay.spot), py = G - L(lift);
+      ctx.save(); ctx.translate(px, py); ctx.scale(pk, pk); ctx.translate(-px, -py);
+      drawPetV2(id, px, py, L, time, { sleep: true, noShadow: true }); ctx.restore();
+      hit.pet = [px - L(18) * sc * pk, py - L(40) * sc * pk, px + L(18) * sc * pk, py + L(3)]; hit.house = hit.pet;
+    }
     if (!inside) {
       let px = at(lay.spot), py = G - L(lift);
       if (act === 'hop') py -= L(9) * Math.abs(Math.sin((time - PET_RT.t0) * Math.PI * 2 / 0.8));
@@ -3223,7 +3231,7 @@ function drawParrotStand(sx, G, top, L) {
 }
 function drawPetV2(id, px0, G, L, time, o) {
   o = o || {}; const onStand = !!o.stand;
-  const x = ctx, mood = petMood(id), st = petStage(id), s = L(1) * PET_SCALE[st], happy = mood === 'happy' || !!o.excited;
+  const x = ctx, mood = petMood(id), st = petStage(id), s = L(1) * PET_SCALE[st], happy = !o.sleep && (mood === 'happy' || !!o.excited);
   const squash = mood === 'sad' && !o.sleep, sad = mood === 'sad' || !!o.sleep;   // sad = eyes closed + z z
   const wag = sad ? 0 : Math.sin(time * (happy ? 9 : 4));
   const TAU = Math.PI * 2;
