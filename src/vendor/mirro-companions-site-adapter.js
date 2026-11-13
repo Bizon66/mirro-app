@@ -12,7 +12,7 @@
   };
   const HOUSE_BOXES = { dog: [27, 25], cat: [26, 24], hamster: [20, 19], rabbit: [28, 16] };
   const HOUSE_EYES = { dog: [0, -5.5], cat: [0, -6.5], hamster: [0, -5], rabbit: [6.5, -3.5] };
-  const SPOT_BOXES = { dog: [46, 14], cat: [46, 14], rabbit: [40, 10], turtle: [33, 10] };
+  const SPOT_BOXES = { dog: [46, 14], cat: [46, 14], rabbit: [40, 10], turtle: [46, 18] };
   const SPOT_SUPPORT = { dog: 3, cat: 3, hamster: 2.4, rabbit: 0, turtle: 5.6 };
   const originals = {}, wrappers = {}, propCache = new Map();
   let installed = false, stopped = false, timer = 0, attempts = 0;
@@ -127,7 +127,7 @@
 
   // dog / cat: a flat round mat (as in the owner's picture), drawn in code so it stays flat and wide
   const MAT = { dog: ['#3E5C9A', '#2B4378', '#F3E6C8', 'bone', 19], cat: ['#D9868F', '#B5626C', '#FCEFEA', 'paw', 19],
-    rabbit: ['#7CC05E', '#4E8E3A', '#3F7A2E', 'grass', 13], hamster: ['#EBCB6E', '#C49A3C', '#A97F2A', 'hay', 9.5] };
+    rabbit: ['#7CC05E', '#4E8E3A', '#3F7A2E', 'grass', 18], hamster: ['#EBCB6E', '#C49A3C', '#A97F2A', 'hay', 12.5] };
   function drawMat(species, cx, groundY, unit, grow) {
     const [top, side, deco, kind, size] = MAT[species];
     const rx = unit(size) * grow, ry = rx * 0.27, th = Math.max(1, unit(1.3) * grow), cy = groundY - th;
@@ -256,7 +256,7 @@
     });
     hook('drawPond', function (cx, groundY, unit, time, mirror) {
       const scale = unitScale(unit);
-      if (!scale || inside('pet_turtle') || !paintProp('turtle', 'home', cx, groundY + unit(3.7), unit(48), unit(16), mirror)) return originals.drawPond.apply(this, arguments);
+      if (!scale || inside('pet_turtle') || !paintProp('turtle', 'home', cx, groundY + unit(3.7), unit(62), unit(30), mirror)) return originals.drawPond.apply(this, arguments);
     });
     hook('drawWheel', function (cx, groundY, unit, time, running) {
       const scale = unitScale(unit);

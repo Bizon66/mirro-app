@@ -2919,8 +2919,8 @@ const ACT_DUR = { bark: 2.2, purr: 2.4, hop: 1.6, wheel: 6, tuck: 2.4, talk: 2.4
 const PET_LAYOUT = {
   // dog and cat have no house: they sleep right on their bed
   pet_dog: { bowl: 4, spot: 30, w: 50, noHouse: true }, pet_cat: { bowl: 4, spot: 30, w: 50, noHouse: true },
-  pet_rabbit: { bowl: 4, spot: 24, house: 60, w: 74 }, pet_hamster: { bowl: 4, spot: 20, wheel: 45, house: 70, w: 80 },
-  pet_turtle: { bowl: 4, spot: 22, house: 50, w: 71 }
+  pet_rabbit: { bowl: 4, spot: 27, house: 63, w: 77 }, pet_hamster: { bowl: 4, spot: 22, wheel: 50, house: 74, w: 84 },
+  pet_turtle: { bowl: 4, spot: 28, house: 62, w: 92 }
 };
 // the least free floor between the twin's sneaker and the corner (a sneaker is ~13 cm wide)
 const PET_GAP = 13;
@@ -3007,6 +3007,25 @@ function drawPond(px, G, L, time, flip) {
   x.restore();
 }
 // ---- the spot where the pet sits; returns how high the pet sits above the ground (cm)
+// rabbit: a flat strip of lawn on the floor with short blades and a few clovers
+function drawGrassStrip(x1, x2, G, L) {
+  const ctx2 = ctx, h = L(2.6), r = h;
+  ctx2.save();
+  const g = ctx2.createLinearGradient(0, G - h, 0, G + h); g.addColorStop(0, '#8ACB68'); g.addColorStop(1, '#5A9E43');
+  ctx2.fillStyle = g; ctx2.beginPath(); ctx2.moveTo(x1 + r, G - h);
+  ctx2.lineTo(x2 - r, G - h); ctx2.quadraticCurveTo(x2 + r * 0.4, G, x2 - r, G + h); ctx2.lineTo(x1 + r, G + h); ctx2.quadraticCurveTo(x1 - r * 0.4, G, x1 + r, G - h);
+  ctx2.closePath(); ctx2.fill();
+  ctx2.lineCap = 'round'; ctx2.lineWidth = Math.max(0.6, L(0.45));
+  const n = Math.round((x2 - x1) / L(1.6));
+  for (let i = 0; i < n; i++) {
+    const bx = x1 + r + (x2 - x1 - 2 * r) * (i + 0.5) / n, by = G - h + h * 2 * ((i * 0.618) % 1), hb = L(1.4 + ((i * 0.37) % 1) * 1.6);
+    ctx2.strokeStyle = i % 3 ? '#3F7A2E' : '#9ED67F';
+    ctx2.beginPath(); ctx2.moveTo(bx, by); ctx2.quadraticCurveTo(bx + L(0.3), by - hb * 0.6, bx + L(0.6) * Math.sin(i), by - hb); ctx2.stroke();
+  }
+  ctx2.fillStyle = '#B5E39A';
+  [0.3, 0.72].forEach(f => [0, 2.1, 4.2].forEach(q => { ctx2.beginPath(); ctx2.ellipse(x1 + (x2 - x1) * f + Math.cos(q) * L(0.7), G + L(0.6) + Math.sin(q) * L(0.35), L(0.65), L(0.4), q, 0, Math.PI * 2); ctx2.fill(); }));
+  ctx2.restore();
+}
 function drawPetSpot(id, rx, G, L, flip) {
   const x = petUnits(rx, G, L, flip);
   let lift = 0;
@@ -3120,6 +3139,7 @@ function drawPetScene(id, d, time, pass) {
     const pk = PET_K[id] || 1;
     if (pass === 'back') {
       ctx.fillStyle = 'rgba(27,42,74,.07)'; ctx.beginPath(); ctx.ellipse(x0 + L(lay.w / 2), G + 1, L(lay.w / 2 + 6), L(2.6), 0, 0, Math.PI * 2); ctx.fill();
+      if (id === 'pet_rabbit') drawGrassStrip(at(lay.bowl) - L(8), at(lay.house) + L(10), G, L);   // a strip of lawn from the bowl to the burrow
       if (lay.noHouse) { /* sleeps on its bed */ } else if (id === 'pet_turtle') drawPond(at(lay.house), G, L, time, true); else {
         const door = drawPetHouse(id, at(lay.house), G, L, true);   // mirrored: the door faces the pet
         if (inside) {
@@ -3139,8 +3159,8 @@ function drawPetScene(id, d, time, pass) {
         ctx.restore();
         const x = petUnits(tx, G, L); if (asleep) sleepZ(x, 6, -12, time); x.restore();
       }
-      const hw = id === 'pet_turtle' ? 20 : 15;
-      if (main) PET_HIT = { house: lay.noHouse ? null : [at(lay.house) - L(hw), G - L(id === 'pet_turtle' ? 10 : 27), at(lay.house) + L(hw), G + L(2)], wheel: lay.wheel ? PET_WHEEL : null };
+      const hw = id === 'pet_turtle' ? 28 : 15;
+      if (main) PET_HIT = { house: lay.noHouse ? null : [at(lay.house) - L(hw), G - L(id === 'pet_turtle' ? 12 : 27), at(lay.house) + L(hw), G + L(2)], wheel: lay.wheel ? PET_WHEEL : null };
       return;
     }
     const lift = drawPetSpot(id, at(lay.spot), G, L, true);
