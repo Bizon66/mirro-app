@@ -47,6 +47,8 @@ async function buildApp() {
   mkdirSync(join(OUT, 'vendor'), { recursive: true }); mkdirSync(join(OUT, 'pets'), { recursive: true });
   for (const f of readdirSync(join(SRC, 'vendor'))) f.endsWith('.js') ? writeFileSync(join(OUT, 'vendor', f), await min(read('vendor/' + f))) : copyFileSync(join(SRC, 'vendor', f), join(OUT, 'vendor', f));
   for (const f of readdirSync(join(SRC, 'pets'))) copyFileSync(join(SRC, 'pets', f), join(OUT, 'pets', f));
+  mkdirSync(join(OUT, 'art'), { recursive: true });   // body / clothes / hair atlases
+  for (const f of readdirSync(join(SRC, 'art'))) copyFileSync(join(SRC, 'art', f), join(OUT, 'art', f));
   writeFileSync(join(OUT, 'app.css'), read('app.css').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\n\s*/g, '\n'));
   writeFileSync(join(OUT, 'index.html'), read('index.html'));
   writeFileSync(join(OUT, 'manifest.webmanifest'), read('manifest.webmanifest'));

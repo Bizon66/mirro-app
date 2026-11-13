@@ -1293,6 +1293,22 @@ function drawAvatar(w, tone) {
 
   // the pet's house / pond / wheel stand a little behind the twin's legs (drawn before the body)
   if (EQ.pet) drawPetScene(EQ.pet, { cx, G, L, Y, hipW, armW, shW, H, CW, legC, calfW, ankW }, AV_T, 'back');
+  // detailed body from the owner's pictures (vendor/mirro-body.js); the code-drawn body below is the fallback
+  let bodyArt = null;
+  if (window.MirroBody && typeof MirroBody.draw === 'function') {
+    ctx.save();
+    try {
+      bodyArt = MirroBody.draw(ctx, {
+        profile: p, appearance: male ? 'male' : 'female',
+        shape: { shoulders: shW, chest: chW, waist: waW, belly: beW, hips: hipW, thigh: thW, knee: kneeW, calf: calfW, ankle: ankW, legCenter: legC, arm: armW, neck: neckW },
+        center: cx, ground: G, scale: px, height: H, targetWidth: CW, targetHeight: CH,
+        time: AV_T, wave: AV_WAVE, reducedMotion: REDUCED, equipment: EQ, pantsColor: pantsC,
+        shoeColor: EQ.shoes ? itemById(EQ.shoes).col : '#E9EDF1'
+      });
+    } catch (e) { bodyArt = null; } finally { ctx.restore(); }
+  }
+  if (bodyArt) { if (EQ.acc === 'watch' && bodyArt.watch) drawWatch(bodyArt.watch.x, bodyArt.watch.y, bodyArt.watch.size); }
+  else {
   // legs
   [-1, 1].forEach(sd => {
     const inner = Math.max(0.4, legC - thW);
@@ -1457,6 +1473,7 @@ function drawAvatar(w, tone) {
     ctx.fillStyle = shirtD; ctx.beginPath(); ctx.ellipse(cx, Y(0.842), L(neckW + 1.2), L(1.6), 0, 0, Math.PI); ctx.fill();
   }
 
+  }   // end of the code-drawn body
   // head
   ctx.fillStyle = skin;
   [-1, 1].forEach(sd => { ctx.fillStyle = skin; ctx.beginPath(); ctx.ellipse(cx + sd * headRx * 0.98, headCY + headRy * 0.06, headRx * 0.17, headRy * 0.22, 0, 0, Math.PI * 2); ctx.fill();
@@ -1487,6 +1504,14 @@ function drawAvatar(w, tone) {
   if (EQ.pet) drawPetScene(EQ.pet, { cx, G, L, Y, hipW, armW, shW, H, CW, legC, calfW, ankW }, AV_T, 'front');
   ctx = cv.getContext('2d');
 }
+// once the body pictures are decoded, redraw what is on screen
+if (window.MirroBody) Promise.resolve(MirroBody.ready).then(() => {
+  try {
+    if (typeof curTab !== 'undefined' && curTab === 'tabProfile' && typeof profPreview === 'function') profPreview();
+    else if (AV_STATE) drawAvatar(AV_STATE.w, AV_STATE.tone);
+    const sh = document.getElementById('shop'); if (sh && !sh.classList.contains('hidden')) renderShop();
+  } catch (e) { /* no profile yet */ }
+}, () => {});
 
 // ================= exercises =================
 const EXS = [
