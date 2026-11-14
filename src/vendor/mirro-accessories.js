@@ -9,8 +9,10 @@
     ['bandana','acc_bandana','Бандана на шию'],['towel','acc_towel','Спортивний рушник'],
     ['waistbag','acc_waistbag','Поясна сумка'],['crossbody','acc_crossbody','Сумка через плече'],
     ['wristbands','acc_wristbands','Напульсники'],['watch','watch','Смартгодинник'],['bottle','acc_bottle','Пляшка для води'],
+    ['cap_blue','cap_blue','Синя кепка'],['cap_red','cap_red','Червона кепка'],['beanie','beanie','Шапка з помпоном'],
   ].map(([kind,id,label])=>Object.freeze({kind,id,label})));
-  const sprites=new Map();let atlas=null,loaded=false;
+  const HAT_IDS=Object.freeze(['cap_blue','cap_red','beanie']);
+  const sprites=new Map();let atlas=null,hatAtlas=null,loaded=false,hatsLoaded=false;
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a),0,1);return t*t*(3-2*t);};
   function getCatalog(appearance='male'){
@@ -20,16 +22,18 @@
   function canvas(w,h){const c=root.document.createElement('canvas');c.width=w;c.height=h;return c;}
   function sprite(appearance,kind,part){
     const key=[appearance,kind,part||''].join(':');if(sprites.has(key))return sprites.get(key);
-    const supplied=root.MirroAccessoryArt?.frames?.[appearance]?.[kind];
+    const hat=HAT_IDS.includes(kind);
+    const supplied=hat?root.MirroAccessoryArt?.hatFrames?.[appearance]?.[kind]:root.MirroAccessoryArt?.frames?.[appearance]?.[kind];
     const box=part?supplied?.parts?.[part]:supplied;if(!box)return null;
     const c=canvas(box.width,box.height),ctx=c.getContext('2d',{willReadFrequently:true});
-    ctx.drawImage(atlas,box.x,box.y,box.width,box.height,0,0,c.width,c.height);
+    const source=hat?hatAtlas:atlas;if(!source)return null;
+    ctx.drawImage(source,box.x,box.y,box.width,box.height,0,0,c.width,c.height);
     const data=ctx.getImageData(0,0,c.width,c.height),pixels=data.data,n=c.width*c.height;
     // Remove disconnected alpha-matte flecks, preserving the actual white
     // headphone housing and lavender fabric. No chroma tinting of the art.
     for(let i=0;i<n;i++){
       const p=i*4,r=pixels[p],g=pixels[p+1],b=pixels[p+2];
-      const neon=(r>g*1.9&&b>g*1.8&&r+b>300)||(g>r*2&&g>b*1.7&&g>170)||(b>r*2.2&&b>g*1.9&&b>180);
+      const neon=!hat&&((r>g*1.9&&b>g*1.8&&r+b>300)||(g>r*2&&g>b*1.7&&g>170)||(b>r*2.2&&b>g*1.9&&b>180));
       if(pixels[p+3]<145||neon)pixels[p+3]=0;
     }
     const labels=new Int32Array(n),queue=new Int32Array(n),sizes=[0];let count=0;
@@ -57,15 +61,17 @@
     if(!loaded||!ctx)return false;
     const g=headGeometry(options),image=sprite(options.appearance||'male','headphones');if(!image)return false;
     const width=g.face*3.05,x=g.x-width/2;
+    const wornHat=root.MirroBody?.getLastOptions?.()?.equipment?.hat;
+    const rise=wornHat==='beanie'?.42:HAT_IDS.includes(wornHat)?.16:options.withHeadband?.05:0;
     ctx.save();
     // The face is in front of the inside of the ear cups. This occlusion also
     // keeps product-view padding from covering the eyes or beard.
-    ctx.beginPath();ctx.rect(x-2,g.y-g.q*1.5,width+4,g.q*2.4);
+    ctx.beginPath();ctx.rect(x-2,g.y-g.q*(1.5+rise),width+4,g.q*(2.4+rise));
     ctx.ellipse(g.x,g.y+g.q*.08,g.face*.88,g.q*.86,0,0,Math.PI*2);
     ctx.clip('evenodd');
     // Preserve the high arch while shortening the product-view ear cups to
     // actual ear height; the transparent center leaves eyes and face clear.
-    ctx.drawImage(image,0,0,image.width,image.height*.54,x,g.y-g.q*1.28,width,g.q*1.16);
+    ctx.drawImage(image,0,0,image.width,image.height*.54,x,g.y-g.q*(1.28+rise),width,g.q*(1.16+rise));
     const cupW=g.q*.69,cupH=g.q*.92;
     for(const sign of [-1,1]){
       const sx=sign<0?0:image.width*.52;
@@ -78,7 +84,26 @@
   function drawHeadband(ctx,options){
     if(!loaded||!ctx)return false;
     const g=headGeometry(options),image=sprite(options.appearance||'male','headband');
-    return drawRect(ctx,image,g.x-g.face*1.02,g.y-g.q*.67,g.face*2.04,g.q*.35);
+    ctx.save();
+    if(options.frontOnly){ctx.beginPath();ctx.rect(g.x-g.face*.88,g.y-g.q*.68,g.face*1.76,g.q*.38);ctx.clip();}
+    const result=drawRect(ctx,image,g.x-g.face*1.02,g.y-g.q*.67,g.face*2.04,g.q*.35);
+    ctx.restore();return result;
+  }
+  function isHatReady(id,appearance='male'){
+    return !!(root&&hatsLoaded&&HAT_IDS.includes(id)&&root.MirroAccessoryArt?.hatFrames?.[appearance]?.[id]);
+  }
+  function drawHat(ctx,options){
+    if(!ctx||!isHatReady(options.id,options.appearance||'male'))return false;
+    const g=headGeometry(options),image=sprite(options.appearance||'male',options.id),beanie=options.id==='beanie';
+    const width=g.face*(beanie?2.65:2.75),height=g.q*(beanie?1.72:1.10),bottom=g.y-g.q*(beanie?.30:.35);
+    ctx.save();
+    if(!beanie){
+      const shadow=ctx.createLinearGradient(0,bottom-g.q*.05,0,bottom+g.q*.22);
+      shadow.addColorStop(0,'rgba(24,28,35,.14)');shadow.addColorStop(1,'rgba(24,28,35,0)');
+      ctx.fillStyle=shadow;ctx.beginPath();ctx.ellipse(g.x,bottom+g.q*.03,g.face*.84,g.q*.20,0,0,Math.PI*2);ctx.fill();
+    }
+    const result=drawRect(ctx,image,g.x-width/2,bottom-height,width,height);
+    ctx.restore();return result;
   }
   function geometry(input){
     if(!input||!Number.isFinite(input.height)||!Number.isFinite(input.scale)||input.height<=0||input.scale<=0)throw new TypeError('Invalid accessory body geometry');
@@ -169,9 +194,11 @@
       return true;
     }finally{ctx.restore();}
   }
-  const ready=!root?Promise.resolve(false):new Promise(resolve=>{
-    const src=root.MirroAccessoryArt?.atlas;if(!src){resolve(false);return;}
-    const image=new Image();image.onload=()=>{atlas=image;loaded=true;resolve(true);};image.onerror=()=>resolve(false);image.src=src;
+  function loadImage(src){return new Promise(resolve=>{
+    if(!src){resolve(null);return;}const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>resolve(null);image.src=src;
+  });}
+  const ready=!root?Promise.resolve(false):Promise.all([loadImage(root.MirroAccessoryArt?.atlas),loadImage(root.MirroAccessoryArt?.hatsAtlas)]).then(([base,hats])=>{
+    atlas=base;hatAtlas=hats;loaded=!!base;hatsLoaded=!!hats;return loaded;
   });
-  return {ITEMS,getCatalog,geometry,drawHeadphones,drawHeadband,drawWatch,drawBodyAccessories,ready,isReady:()=>loaded};
+  return {ITEMS,HAT_IDS,getCatalog,geometry,drawHeadphones,drawHeadband,drawHat,isHatReady,drawWatch,drawBodyAccessories,ready,isReady:()=>loaded};
 });

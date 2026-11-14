@@ -17,6 +17,7 @@
     acc_bandana: 'bandana', acc_towel: 'towel', acc_waistbag: 'waistbag',
     acc_crossbody: 'crossbody', acc_wristbands: 'wristbands', acc_bottle: 'bottle',
   };
+  const DETAILED_HATS = new Set(['cap_blue', 'cap_red', 'beanie']);
   const originals = {}, wrappers = {};
   let installed = false, stopped = false, timer = 0, attempts = 0, generation = 0;
   let bodyOwner = null, originalBodyDraw = null, bodyWrapper = null;
@@ -45,6 +46,19 @@
     try { return typeof ctx !== 'undefined' ? ctx : null; }
     catch (error) { return null; }
   }
+  function equipmentNow() {
+    try {
+      // Use the host's trial equipment as well as saved choices. The avatar
+      // has already initialized its shop before any of these drawing hooks.
+      if (typeof equipNow === 'function') return equipNow() || {};
+      return typeof D !== 'undefined' && D.shop && D.shop.eq || {};
+    } catch (error) { return {}; }
+  }
+  function detailedHatReady(id, appearance) {
+    const core = available('drawHat');
+    if (!core || !DETAILED_HATS.has(id) || typeof core.isHatReady !== 'function') return false;
+    try { return !!core.isHatReady(id, appearance); } catch (error) { return false; }
+  }
   function extendCatalog() {
     try {
       if (typeof SHOP === 'undefined' || !Array.isArray(SHOP)) return false;
@@ -62,13 +76,39 @@
     const current = () => installed && !stopped && generation === token;
     const nativeHeadphones = window.drawHeadphones, nativeHat = window.drawHat, nativeWatch = window.drawWatch;
     hook('drawHeadphones', function (cx, cy, halfWidth, halfHeight) {
-      if (current() && paint(currentContext(), 'drawHeadphones', { appearance: appearanceNow(), cx, cy, halfWidth, halfHeight })) return;
+      const withHeadband = equipmentNow().hat === 'headband';
+      const options = { appearance: appearanceNow(), cx, cy, halfWidth, halfHeight, withHeadband };
+      if (current() && paint(currentContext(), 'drawHeadphones', options)) {
+        // The native scene paints hats before headphones. Repaint only the
+        // frontal cloth strip so the selected band remains in front of the
+        // arch, while the ear cups keep their natural foreground position.
+        if (withHeadband) paint(currentContext(), 'drawHeadband', { ...options, frontOnly: true, withHeadphones: true });
+        return;
+      }
       return nativeHeadphones.apply(this, arguments);
     });
     hook('drawHat', function (id, cx, cy, halfWidth, halfHeight) {
-      if (current() && id === 'headband' && paint(currentContext(), 'drawHeadband', { appearance: appearanceNow(), cx, cy, halfWidth, halfHeight })) return;
+      const options = { appearance: appearanceNow(), id, cx, cy, halfWidth, halfHeight, withHeadphones: equipmentNow().acc === 'headphones' };
+      if (current() && id === 'headband' && paint(currentContext(), 'drawHeadband', options)) return;
+      if (current() && DETAILED_HATS.has(id) && paint(currentContext(), 'drawHat', options)) return;
       return nativeHat.apply(this, arguments);
     });
+    if (typeof window.drawHairFront === 'function') {
+      const nativeHairFront = window.drawHairFront;
+      hook('drawHairFront', function (style, color, cx, cy, halfWidth, halfHeight) {
+        const id = equipmentNow().hat, appearance = appearanceNow(), context = currentContext();
+        if (!current() || !context || !detailedHatReady(id, appearance) ||
+            typeof context.beginPath !== 'function' || typeof context.clip !== 'function') return nativeHairFront.apply(this, arguments);
+        // The ready photo crown covers the clipped area. Long hair below the
+        // hem stays visible, including ponytails and braids beside the neck.
+        const brim = cy - halfHeight * (id === 'beanie' ? .42 : .55);
+        context.save();
+        try {
+          context.beginPath(); context.rect(-100000, brim, 200000, 200000); context.clip();
+          return nativeHairFront.apply(this, arguments);
+        } finally { context.restore(); }
+      });
+    }
     hook('drawWatch', function (x, y, size) {
       if (current() && paint(currentContext(), 'drawWatch', { appearance: appearanceNow(), x, y, size })) return;
       return nativeWatch.apply(this, arguments);
@@ -102,6 +142,14 @@
     if (installed) return true;
     if (!window.MirroAccessories || !window.MirroBody || typeof window.MirroBody.draw !== 'function' ||
         !['drawHeadphones', 'drawHat', 'drawWatch'].every(name => typeof window[name] === 'function')) return false;
+    // storage.js loads the host asynchronously. Wait for the detailed head
+    // hooks before wrapping drawHairFront; otherwise its later installation
+    // would replace our portrait clipping hook and let tall hair pierce hats.
+    const headAdapter = window.MirroSiteAdapter;
+    if (headAdapter && typeof headAdapter.isInstalled === 'function') {
+      try { if (!headAdapter.isInstalled()) return false; }
+      catch (error) { return false; }
+    }
     if (!extendCatalog()) return false;
     stopped = false; installHooks(); installed = true;
     Promise.resolve(window.MirroAccessories.ready).then(refreshOnce, () => {});
