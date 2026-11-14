@@ -12,7 +12,7 @@
   const ANCHORS=Object.freeze([[0,1012/998],[14/1024,1],[1012/1024,0],[1,-12/998]]);
   const SHAPE_KEYS=['shoulders','chest','waist','belly','hips','thigh','knee','calf','ankle','legCenter','arm','neck'];
   const images={},rawCache=new Map(),tintCache=new Map();
-  let loaded=false,gpu=null,gpuUnavailable=false,cpu=null,cpuKey='',cpuBaseKey='',cpuStamp=0,serial=0,lastError='';
+  let loaded=false,gpu=null,gpuUnavailable=false,cpu=null,cpuKey='',cpuBaseKey='',cpuStamp=0,serial=0,lastError='',lastLayer=null,lastOptions=null;
   const clamp=(value,low,high)=>Math.max(low,Math.min(high,value));
   const mix=(a,b,t)=>a+(b-a)*t;
   function smooth(low,high,value){const t=clamp((value-low)/(high-low),0,1);return t*t*(3-2*t);}
@@ -34,7 +34,7 @@
     const profile=input.profile||{},appearance=input.appearance||(profile.sex==='f'?'female':'male');
     if(appearance!=='male'&&appearance!=='female')throw new Error('Invalid body appearance');
     const top=profile.shirtStyle||'tshirt',pants=profile.pants||'shorts';
-    if(!TOPS.includes(top)||!PANTS.includes(pants))throw new Error('Unsupported outfit');
+    if((!TOPS.includes(top)&&top!=='jacket'&&top!=='sweatshirt')||(!PANTS.includes(pants)&&pants!=='leggings')||(appearance==='male'&&pants==='leggings'))throw new Error('Unsupported outfit');
     const height=Number(input.height===undefined?profile.height:input.height);
     const normalized={...input,profile,appearance,top,pants,height,shape:{...input.shape}};
     for(const key of ['center','ground','scale','height','targetWidth','targetHeight']){
@@ -52,9 +52,12 @@
     normalized.time=Number.isFinite(input.time)?input.time:0;
     normalized.wave=Number.isFinite(input.wave)?Math.max(0,input.wave):0;
     normalized.reducedMotion=!!input.reducedMotion;
+    normalized.morphology=root&&root.MirroMorphology?root.MirroMorphology.getMorphology(normalized):null;
     return normalized;
   }
   function outfitIndex(top,pants){
+    if(top==='jacket'||top==='sweatshirt')top='longsleeve';
+    if(pants==='leggings')pants='joggers';
     const column=TOPS.indexOf(top),row=PANTS.indexOf(pants);
     if(column<0||row<0)throw new Error('Unsupported outfit');
     return row*TOPS.length+column;
@@ -139,7 +142,8 @@
     // Keep the crotch center pinned and let thigh girth taper toward the ankles.
     const lower=mix(ax,leg,smooth(0,sourceCenter*.5,ax));
     const mapped=mix(upper,lower,smooth(.50,.60,y));
-    return sign*mapped*physical;
+    const mappedX=sign*mapped*physical;
+    return root&&root.MirroMorphology?root.MirroMorphology.mapX(mappedX,x,y,row,options):mappedX;
   }
   function mapSourcePoint(x,y,row,options){
     return [options.center+mapSourceX(x,y,row,options)*options.scale,
@@ -276,15 +280,25 @@
       else if(warm){semantic='skin';shade=clamp((luminance+.10)/.68,.3,1.4);}
       else if(y<.50||(y<.64&&x>145)){semantic='shirt';shade=clamp((luminance+.025)/.26,.2,2.0);}
       else {semantic='pants';shade=clamp((luminance+.025)/(options.pants==='jeans'?.29:.14),.2,2.1);}
+      if(semantic==='skin'&&root&&root.MirroMorphology)shade=root.MirroMorphology.shadeSkin(shade,index%SOURCE_W-CENTER,y,options);
       for(let channel=0;channel<3;channel++)pixels.data[i+channel]=clamp(targets[semantic][channel]*shade,0,255);
     }
     ctx.putImageData(pixels,0,0);return out;
   }
   function texturePair(options){
     const index=outfitIndex(options.top,options.pants);
-    const key=JSON.stringify([options.appearance,index,options.skinColor,options.shirtColor,options.pantsColor,options.shoeColor]);
+    const extraRequired=options.top==='jacket'||options.top==='sweatshirt'||options.pants==='leggings';
+    const extra=root.MirroWardrobeExtra;
+    if(extraRequired&&(!extra||!extra.isReady()))throw new Error('Additional clothing art is not ready');
+    const key=JSON.stringify([options.appearance,index,options.top,options.pants,options.skinColor,options.shirtColor,options.pantsColor,options.shoeColor,options.morphology&&options.morphology.cacheKey]);
     if(tintCache.has(key))return tintCache.get(key);
-    const neutral=normalizeFrame(options.appearance,index),wave=normalizeFrame(options.appearance+'Wave',index);
+    function fitted(raw,pose){
+      if(!extraRequired)return raw;
+      const output=extra.compose(raw.canvas,options,pose);
+      if(!output)throw new Error('Additional clothing could not be fitted');
+      return {canvas:output,data:output.getContext('2d',{willReadFrequently:true}).getImageData(0,0,SOURCE_W,SOURCE_H)};
+    }
+    const neutral=fitted(normalizeFrame(options.appearance,index),0),wave=fitted(normalizeFrame(options.appearance+'Wave',index),1);
     const result={key,id:++serial,neutral:tint(neutral,options),wave:tint(wave,options),rows:analyzeRows(neutral.data.data)};
     tintCache.set(key,result);trimCache(tintCache,4);return result;
   }
@@ -348,7 +362,7 @@
     for(const key of SHAPE_KEYS)rounded.shape[key]=Math.round(rounded.shape[key]/.4)*.4||options.shape[key];
     const pose=texturePose(options.wave);
     const baseKey=JSON.stringify([pair.id,Math.round(options.center),Math.round(options.ground),options.height,Math.round(options.scale*100),options.targetWidth,options.targetHeight]);
-    const key=JSON.stringify([baseKey,rounded.shape,options.ratios,pose]);
+    const key=JSON.stringify([baseKey,rounded.shape,options.ratios,options.morphology&&options.morphology.cacheKey,pose]);
     if(cpuKey===key&&cpu)return cpu;
     const now=root.performance.now();
     // Keep software redraws under 8 Hz during a greeting or breathing; the host
@@ -374,6 +388,7 @@
     ctx.globalAlpha=1;cpuKey=key;cpuBaseKey=baseKey;cpuStamp=now;return cpu;
   }
   function draw(ctx,input){
+    lastLayer=null;lastOptions=null;
     if(!loaded||!ctx||typeof ctx.drawImage!=='function')return false;
     try{
       const options=normalizeOptions(input);options.ratios=measurementRatios(options);const pair=texturePair(options);
@@ -381,17 +396,18 @@
       if(output===null)return false; // Context loss: let the native scene draw.
       if(output===false){output=renderCPU(pair,options);renderer='canvas2d';}
       ctx.save();try{ctx.drawImage(output,0,0,options.targetWidth,options.targetHeight);}finally{ctx.restore();}
+      lastLayer=output;lastOptions=options;
       lastError='';return {drawn:true,watch:watchAnchor(options),renderer};
     }catch(error){lastError=error.message||'body-render-failed';return false;}
   }
   function destroy(){
     if(gpu&&!gpu.lost){const gl=gpu.gl;for(const texture of gpu.textures)gl.deleteTexture(texture);gl.deleteBuffer(gpu.buffer);gl.deleteProgram(gpu.program);gl.deleteShader(gpu.vertex);gl.deleteShader(gpu.fragment);}
-    gpu=null;gpuUnavailable=false;cpu=null;cpuKey='';cpuBaseKey='';rawCache.clear();tintCache.clear();
+    gpu=null;gpuUnavailable=false;cpu=null;cpuKey='';cpuBaseKey='';rawCache.clear();tintCache.clear();lastLayer=null;lastOptions=null;
   }
   const ready=!root?Promise.resolve(false):Promise.all(['male','female','maleWave','femaleWave'].map(variant=>new Promise(resolve=>{
     const src=root.MirroWardrobeArt&&root.MirroWardrobeArt[variant];if(!src){resolve(false);return;}
     const image=new Image();image.onload=()=>{images[variant]=image;resolve(true);};image.onerror=()=>resolve(false);image.src=src;
   }))).then(results=>(loaded=results.every(Boolean)));
   return {TOPS,PANTS,ANCHORS,normalizeOptions,outfitIndex,verticalFraction,bodyHalfWidth,legRadius,measurementRatios,shapeRatio,armShift,waveEnvelope,texturePose,watchAnchor,waveHandPoint,mapSourceX,mapSourcePoint,
-    ready,isReady:()=>loaded,draw,destroy,getLastError:()=>lastError};
+    ready,isReady:()=>loaded,draw,destroy,getLastError:()=>lastError,getLastLayer:()=>lastLayer,getLastOptions:()=>lastOptions};
 });
