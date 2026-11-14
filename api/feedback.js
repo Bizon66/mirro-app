@@ -17,6 +17,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'method' });
+  console.log('feedback: request from', origin || 'same site');
 
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = null; } }
@@ -26,7 +27,7 @@ module.exports = async function handler(req, res) {
   const text = clip(body.text, 2000), kind = ['idea', 'bug', 'other'].includes(body.kind) ? body.kind : 'other';
   if (text.length < 3) return res.status(400).json({ ok: false, error: 'short' });
   const token = process.env.FEEDBACK_GITHUB_TOKEN;
-  if (!token) return res.status(503).json({ ok: false, error: 'not-configured' });
+  if (!token) { console.error('feedback: FEEDBACK_GITHUB_TOKEN is not set'); return res.status(503).json({ ok: false, error: 'not-configured' }); }
   const repo = process.env.FEEDBACK_REPO || 'Bizon66/mirro-app';
 
   const tech = body.tech && typeof body.tech === 'object'
@@ -44,9 +45,11 @@ module.exports = async function handler(req, res) {
       headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'mirro-feedback', 'X-GitHub-Api-Version': '2022-11-28' },
       body: JSON.stringify(issue),
     });
-    if (!r.ok) return res.status(502).json({ ok: false, error: 'github-' + r.status });
+    if (!r.ok) { console.error('feedback: GitHub answered', r.status, (await r.text()).slice(0, 300)); return res.status(502).json({ ok: false, error: 'github-' + r.status }); }
+    console.log('feedback: issue created');
     return res.status(200).json({ ok: true });
   } catch (e) {
+    console.error('feedback: network error', e && e.message);
     return res.status(502).json({ ok: false, error: 'network' });
   }
 };
