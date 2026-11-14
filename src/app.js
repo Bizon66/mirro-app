@@ -303,6 +303,10 @@ Object.assign(T_ADD.en, { petSayDog: 'Woof!', petSayCat: 'Purr…', petSayParrot
 Object.assign(T_ADD.uk, { testOn: '🧪 Режим тестування увімкнено: усі речі й улюбленці відкриті безкоштовно', testOff: 'Режим тестування вимкнено', testBanner: '🧪 Режим тестування: усе відкрито безкоштовно, бали не витрачаються. Вимкнути — 5 натискань на версію внизу Профілю.' });
 Object.assign(T_ADD.cs, { testOn: '🧪 Testovací režim zapnut: všechny věci a mazlíčci jsou zdarma', testOff: 'Testovací režim vypnut', testBanner: '🧪 Testovací režim: vše odemčeno zdarma, body se neutrácejí. Vypnutí — 5 klepnutí na verzi dole v Profilu.' });
 Object.assign(T_ADD.en, { testOn: '🧪 Test mode on: all items and pets are unlocked for free', testOff: 'Test mode off', testBanner: '🧪 Test mode: everything is unlocked for free, no points are spent. To turn it off, tap the version at the bottom of Profile 5 times.' });
+// feedback form (14.11): goes to the owner as a GitHub issue through api/feedback.js
+Object.assign(T_ADD.uk, { fbTitle: '💬 Відгук', fbSub: 'Що не працює, що незручно, чого бракує? Напишіть — це читає автор застосунку.', fbIdea: '💡 Ідея', fbBug: '🐞 Помилка', fbOther: '💬 Інше', fbPh: 'Ваш відгук…', fbTech: 'Додати технічні дані (версія, мова, екран) — допомагає знайти помилку', fbSend: 'Надіслати', fbSending: 'Надсилаю…', fbSent: 'Дякуємо! Відгук надіслано 💙', fbShort: 'Напишіть хоча б кілька слів', fbErr: 'Не вдалося надіслати. Перевірте інтернет і спробуйте пізніше.', fbPrivacy: '🔒 Надсилається лише цей текст. Вага, їжа й заміри не надсилаються.' });
+Object.assign(T_ADD.cs, { fbTitle: '💬 Zpětná vazba', fbSub: 'Co nefunguje, co je nepohodlné, co chybí? Napište — čte to autor aplikace.', fbIdea: '💡 Nápad', fbBug: '🐞 Chyba', fbOther: '💬 Jiné', fbPh: 'Vaše zpráva…', fbTech: 'Přidat technické údaje (verze, jazyk, obrazovka) — pomáhá najít chybu', fbSend: 'Odeslat', fbSending: 'Odesílám…', fbSent: 'Děkujeme! Zpráva odeslána 💙', fbShort: 'Napište aspoň pár slov', fbErr: 'Nepodařilo se odeslat. Zkontrolujte internet a zkuste to později.', fbPrivacy: '🔒 Odesílá se jen tento text. Váha, jídlo a míry se neodesílají.' });
+Object.assign(T_ADD.en, { fbTitle: '💬 Feedback', fbSub: 'What doesn’t work, what’s awkward, what’s missing? Write to us — the app’s author reads it.', fbIdea: '💡 Idea', fbBug: '🐞 Bug', fbOther: '💬 Other', fbPh: 'Your message…', fbTech: 'Add technical details (version, language, screen) — helps find bugs', fbSend: 'Send', fbSending: 'Sending…', fbSent: 'Thank you! Feedback sent 💙', fbShort: 'Please write at least a few words', fbErr: 'Couldn’t send. Check your connection and try again later.', fbPrivacy: '🔒 Only this text is sent. Your weight, food and measurements are not.' });
 for (const l of ['uk', 'cs', 'en']) Object.assign(T[l], T_ADD[l]);
 for (const l of ['ru', 'lt']) T[l] = Object.assign({}, (window.I18N_X || {})[l] && window.I18N_X[l].T);
 if (!AI_ON) {
@@ -4186,6 +4190,23 @@ function renderBackupInfo() {
   el.textContent = D.lastBackup ? t('bLastW', { d: fmtDate(D.lastBackup) }) : t('bNever');
   el.className = 'bLast' + (!D.lastBackup || diffDays(D.lastBackup, todayStr()) > 14 ? ' warn' : '');
 }
+// ---- feedback ----
+let FB_KIND = 'idea';
+$('fbKinds').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; FB_KIND = b.dataset.k; document.querySelectorAll('#fbKinds button').forEach(x => x.classList.toggle('on', x === b)); });
+$('fbSend').addEventListener('click', async () => {
+  const text = $('fbText').value.trim();
+  if (text.length < 3) { toast(t('fbShort')); return; }
+  const web = /^https?:$/.test(location.protocol) && !/^(localhost|127\.)/.test(location.hostname) && !window.Capacitor;
+  const url = web ? '/api/feedback' : 'https://mirro-app-self.vercel.app/api/feedback';
+  const tech = $('fbTech').checked ? { ver: (window.APP_CONFIG || {}).version, lang: LANG, screen: innerWidth + '×' + innerHeight + ' @' + (devicePixelRatio || 1), ua: navigator.userAgent, tab: curTab } : null;
+  const btn = $('fbSend'); btn.disabled = true; btn.textContent = t('fbSending');
+  try {
+    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, kind: FB_KIND, tech, hp: $('fbHp').value }) });
+    if (!r.ok) throw new Error(r.status);
+    $('fbText').value = ''; toast(t('fbSent'));
+  } catch (e) { toast(t('fbErr')); }
+  btn.disabled = false; btn.textContent = t('fbSend');
+});
 $('bFile').addEventListener('click', async () => {
   const txt = JSON.stringify(Object.assign({}, D, { lastBackup: todayStr() })), name = 'dvijnyk-' + todayStr() + '.json';
   if (DL) {

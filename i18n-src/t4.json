@@ -1,0 +1,15 @@
+{
+"fbTitle": ["💬 Отзыв", "💬 Atsiliepimas"],
+"fbSub": ["Что не работает, что неудобно, чего не хватает? Напишите — это читает автор приложения.", "Kas neveikia, kas nepatogu, ko trūksta? Parašykite — tai skaito programėlės autorius."],
+"fbIdea": ["💡 Идея", "💡 Idėja"],
+"fbBug": ["🐞 Ошибка", "🐞 Klaida"],
+"fbOther": ["💬 Другое", "💬 Kita"],
+"fbPh": ["Ваш отзыв…", "Jūsų atsiliepimas…"],
+"fbTech": ["Добавить технические данные (версия, язык, экран) — помогает найти ошибку", "Pridėti techninius duomenis (versija, kalba, ekranas) — padeda rasti klaidą"],
+"fbSend": ["Отправить", "Siųsti"],
+"fbSending": ["Отправляю…", "Siunčiu…"],
+"fbSent": ["Спасибо! Отзыв отправлен 💙", "Ačiū! Atsiliepimas išsiųstas 💙"],
+"fbShort": ["Напишите хотя бы несколько слов", "Parašykite bent kelis žodžius"],
+"fbErr": ["Не удалось отправить. Проверьте интернет и попробуйте позже.", "Nepavyko išsiųsti. Patikrinkite internetą ir pabandykite vėliau."],
+"fbPrivacy": ["🔒 Отправляется только этот текст. Вес, еда и замеры не отправляются.", "🔒 Siunčiamas tik šis tekstas. Svoris, maistas ir matavimai nesiunčiami."]
+}

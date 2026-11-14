@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..'), SRC = join(ROOT, 'i18n-src');
 const load = f => JSON.parse(readFileSync(join(SRC, f), 'utf8'));
 const merge = files => Object.assign({}, ...files.map(load));
-const T = merge(['t1.json', 't2.json', 't3.json']), N = merge(['a1.json', 'f1.json', 'f2.json', 'extra.json']), S = load('steps.json');
+const T = merge(['t1.json', 't2.json', 't3.json', 't4.json']), N = merge(['a1.json', 'f1.json', 'f2.json', 'extra.json']), S = load('steps.json');
 const LVL = {
   ru: ['Новичок', 'Начинающий', 'Активный', 'Стабильный', 'Выносливый', 'Сильный', 'Атлет', 'Мастер', 'Легенда', 'Чемпион'],
   lt: ['Naujokas', 'Pradedantysis', 'Aktyvus', 'Pastovus', 'Ištvermingas', 'Stiprus', 'Atletas', 'Meistras', 'Legenda', 'Čempionas'],
