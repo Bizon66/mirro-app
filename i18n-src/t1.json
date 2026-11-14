@@ -1,0 +1,682 @@
+{
+"app": [
+"Mirro",
+"Mirro"
+],
+"tabMe": [
+"Я",
+"Aš"
+],
+"tabToday": [
+"Сегодня",
+"Šiandien"
+],
+"tabMeasure": [
+"Замеры",
+"Matavimai"
+],
+"tabProgress": [
+"Прогресс",
+"Pažanga"
+],
+"tabProfile": [
+"Профиль",
+"Profilis"
+],
+"timeMachine": [
+"⏳ Машина времени",
+"⏳ Laiko mašina"
+],
+"now": [
+"Сейчас",
+"Dabar"
+],
+"w1": [
+"+1 нед.",
+"+1 sav."
+],
+"m1": [
+"+1 мес.",
+"+1 mėn."
+],
+"m3": [
+"+3 мес.",
+"+3 mėn."
+],
+"m6": [
+"+6 мес.",
+"+6 mėn."
+],
+"y1": [
+"+1 год",
+"+1 met."
+],
+"daysWord": [
+"дней",
+"dienų"
+],
+"statWeight": [
+"Вес (модель)",
+"Svoris (modelis)"
+],
+"statBmi": [
+"ИМТ",
+"KMI"
+],
+"statNorm": [
+"Расход без спорта, ккал/день",
+"Išlaidos be sporto, kcal/d."
+],
+"statToday": [
+"Баланс сегодня, ккал",
+"Balansas šiandien, kcal"
+],
+"girths": [
+"📏 Обхваты",
+"📏 Apimtys"
+],
+"girthNote": [
+"«оценка» — рассчитано по росту и весу. Когда введёте замеры, персонаж рисуется по ним и дальше меняется вместе с весом.",
+"„įvertis“ — apskaičiuota pagal ūgį ir svorį. Kai įvesite matavimus, veikėjas bus piešiamas pagal juos ir toliau keisis kartu su svoriu."
+],
+"estimate": [
+"оценка",
+"įvertis"
+],
+"measured": [
+"замерено",
+"išmatuota"
+],
+"adjusted": [
+"с поправкой",
+"su pataisa"
+],
+"waist": [
+"Талия",
+"Juosmuo"
+],
+"belly": [
+"Живот",
+"Pilvas"
+],
+"chest": [
+"Грудь",
+"Krūtinė"
+],
+"shoulders": [
+"Плечи",
+"Pečiai"
+],
+"thigh": [
+"Бедро",
+"Šlaunis"
+],
+"weightKg": [
+"Вес, кг",
+"Svoris, kg"
+],
+"cm": [
+"см",
+"cm"
+],
+"kg": [
+"кг",
+"kg"
+],
+"eaten": [
+"Съедено, ккал",
+"Suvalgyta, kcal"
+],
+"burned": [
+"Потрачено, ккал",
+"Sudeginta, kcal"
+],
+"whatAte": [
+"🍽 Что съели",
+"🍽 Ką valgėte"
+],
+"dish": [
+"Блюдо",
+"Patiekalas"
+],
+"kcal": [
+"ккал",
+"kcal"
+],
+"addFood": [
+"Добавить еду",
+"Pridėti maistą"
+],
+"quick": [
+"Быстро добавить (калории примерные):",
+"Greitai pridėti (kalorijos apytikslės):"
+],
+"whatDid": [
+"🏃 Что делали",
+"🏃 Ką veikėte"
+],
+"activity": [
+"Активность",
+"Veikla"
+],
+"minutes": [
+"Минут",
+"Minučių"
+],
+"addAct": [
+"Добавить активность",
+"Pridėti veiklą"
+],
+"approx": [
+"≈ {k} ккал",
+"≈ {k} kcal"
+],
+"dayNote": [
+"Вес меняется по итогам дня: на следующее утро персонаж обновится. Дни без записанной еды считаются «в норме» (вес не меняется), но спорт всё равно добавляет мышц.",
+"Svoris keičiasi pagal dienos rezultatą: kitą rytą veikėjas atsinaujins. Dienos be įrašyto maisto laikomos „normaliomis“ (svoris nesikeičia), bet sportas vis tiek prideda raumenų."
+],
+"noFood": [
+"Еда не записана — этот день не изменит вес",
+"Maistas neįrašytas — ši diena svorio nepakeis"
+],
+"perDay": [
+"≈ {v} кг за день",
+"≈ {v} kg per dieną"
+],
+"newMeas": [
+"📏 Новые замеры",
+"📏 Nauji matavimai"
+],
+"measHint": [
+"Заполните только то, что хотите. Настоящий вес с весов исправляет расчёт модели.",
+"Užpildykite tik tai, ką norite. Tikras svoris nuo svarstyklių pataiso modelio skaičiavimą."
+],
+"date": [
+"Дата",
+"Data"
+],
+"saveMeas": [
+"Сохранить замеры",
+"Išsaugoti matavimus"
+],
+"howTo": [
+"Как мерить: талия — на уровне пупка, где живот сильнее всего выступает; грудь — по самому широкому месту; плечи — вокруг по самой широкой части плеч; бедро — самое широкое место одной ноги.",
+"Kaip matuoti: juosmuo — bambos lygyje, kur pilvas labiausiai išsikišęs; krūtinė — plačiausioje vietoje; pečiai — aplink plačiausią pečių dalį; šlaunis — plačiausia vienos kojos vieta."
+],
+"history": [
+"История замеров",
+"Matavimų istorija"
+],
+"noMeas": [
+"Замеров ещё нет.",
+"Matavimų dar nėra."
+],
+"weightTitle": [
+"⚖️ Вес",
+"⚖️ Svoris"
+],
+"chartNote": [
+"Линия — расчёт модели, точки — ваши настоящие взвешивания.",
+"Linija — modelio skaičiavimas, taškai — jūsų tikri svėrimai."
+],
+"few": [
+"Данных пока мало — записывайте каждый день.",
+"Duomenų kol kas mažai — rašykite kasdien."
+],
+"last7": [
+"📊 Последние 7 дней",
+"📊 Paskutinės 7 dienos"
+],
+"thDay": [
+"День",
+"Diena"
+],
+"thEat": [
+"Еда",
+"Maistas"
+],
+"thBurn": [
+"Расх.",
+"Sud."
+],
+"thBal": [
+"Баланс",
+"Balansas"
+],
+"thKg": [
+"кг",
+"kg"
+],
+"firstRun": [
+"👋 Привет! Заполните профиль — и появится ваш двойник.",
+"👋 Labas! Užpildykite profilį — ir atsiras jūsų antrininkas."
+],
+"about": [
+"👤 О вас",
+"👤 Apie jus"
+],
+"name": [
+"Имя",
+"Vardas"
+],
+"namePh": [
+"Как вас зовут?",
+"Koks jūsų vardas?"
+],
+"sex": [
+"Пол",
+"Lytis"
+],
+"male": [
+"Мужчина",
+"Vyras"
+],
+"female": [
+"Женщина",
+"Moteris"
+],
+"age": [
+"Возраст",
+"Amžius"
+],
+"heightCm": [
+"Рост, см",
+"Ūgis, cm"
+],
+"startWeight": [
+"Начальный вес, кг",
+"Pradinis svoris, kg"
+],
+"job": [
+"Работа / образ жизни",
+"Darbas / gyvenimo būdas"
+],
+"job1": [
+"Сидячая (офис, водитель)",
+"Sėdimas (biuras, vairuotojas)"
+],
+"job2": [
+"На ногах (склад, магазин)",
+"Ant kojų (sandėlis, parduotuvė)"
+],
+"job3": [
+"Тяжёлая физическая (стройка)",
+"Sunkus fizinis (statybos)"
+],
+"shape": [
+"Где больше всего откладывается жир",
+"Kur daugiausia kaupiasi riebalai"
+],
+"shBelly": [
+"Живот и бока",
+"Pilvas ir šonai"
+],
+"shEven": [
+"Равномерно",
+"Tolygiai"
+],
+"shHips": [
+"Бёдра и ягодицы",
+"Šlaunys ir sėdmenys"
+],
+"sporty": [
+"Насколько вы сейчас спортивны",
+"Kiek dabar sportuojate"
+],
+"sp0": [
+"Совсем нет",
+"Visai ne"
+],
+"sp1": [
+"Немного",
+"Truputį"
+],
+"sp2": [
+"Регулярно",
+"Reguliariai"
+],
+"sp3": [
+"Очень (атлет)",
+"Labai (atletas)"
+],
+"looks": [
+"🎨 Внешность",
+"🎨 Išvaizda"
+],
+"skin": [
+"Кожа",
+"Oda"
+],
+"hair": [
+"Волосы",
+"Plaukai"
+],
+"hairStyle": [
+"Причёска",
+"Šukuosena"
+],
+"hsShort": [
+"Короткая",
+"Trumpa"
+],
+"hsBuzz": [
+"Под машинку",
+"Nukirpta mašinėle"
+],
+"hsLong": [
+"Длинная",
+"Ilga"
+],
+"hsBald": [
+"Лысина",
+"Plikė"
+],
+"beard": [
+"Борода",
+"Barzda"
+],
+"bNone": [
+"Нет",
+"Nėra"
+],
+"bStubble": [
+"Щетина",
+"Ražienos"
+],
+"bFull": [
+"Борода",
+"Barzda"
+],
+"bMoustache": [
+"Усы",
+"Ūsai"
+],
+"bBoth": [
+"Борода + усы",
+"Barzda + ūsai"
+],
+"shirt": [
+"Цвет одежды",
+"Drabužių spalva"
+],
+"glasses": [
+"Очки",
+"Akiniai"
+],
+"saveProfile": [
+"Сохранить профиль",
+"Išsaugoti profilį"
+],
+"backup": [
+"💾 Резервная копия",
+"💾 Atsarginė kopija"
+],
+"backupNote": [
+"Данные хранятся только в этом браузере. Скопируйте текст и сохраните себе, чтобы не потерять. Чтобы восстановить — вставьте копию сюда.",
+"Duomenys saugomi tik šioje naršyklėje. Nukopijuokite tekstą ir išsisaugokite, kad neprarastumėte. Norėdami atkurti — įklijuokite kopiją čia."
+],
+"copy": [
+"Скопировать",
+"Kopijuoti"
+],
+"restore": [
+"Восстановить",
+"Atkurti"
+],
+"reset": [
+"Стереть все данные",
+"Ištrinti visus duomenis"
+],
+"tapAgain": [
+"Нажмите ещё раз, чтобы стереть всё",
+"Paspauskite dar kartą, kad ištrintumėte viską"
+],
+"tSaved": [
+"Профиль сохранён ✅",
+"Profilis išsaugotas ✅"
+],
+"tFill": [
+"Сначала заполните профиль",
+"Pirmiausia užpildykite profilį"
+],
+"tBad": [
+"Проверьте возраст, рост и вес",
+"Patikrinkite amžių, ūgį ir svorį"
+],
+"tAdded": [
+"Добавлено: {n}",
+"Pridėta: {n}"
+],
+"tKcal": [
+"Укажите калории",
+"Nurodykite kalorijas"
+],
+"tMeas": [
+"Замеры сохранены ✅",
+"Matavimai išsaugoti ✅"
+],
+"tOne": [
+"Заполните хотя бы одно поле",
+"Užpildykite bent vieną lauką"
+],
+"tCopied": [
+"Скопировано ✅",
+"Nukopijuota ✅"
+],
+"tCopyFail": [
+"Не удалось скопировать — выделите текст вручную",
+"Nepavyko nukopijuoti — pažymėkite tekstą rankiniu būdu"
+],
+"tRestored": [
+"Восстановлено ✅",
+"Atkurta ✅"
+],
+"tBadBackup": [
+"Это не похоже на резервную копию",
+"Tai nepanašu į atsarginę kopiją"
+],
+"tErased": [
+"Всё стёрто",
+"Viskas ištrinta"
+],
+"fThin": [
+"Худощавое телосложение",
+"Liekno sudėjimo"
+],
+"fNormal": [
+"Нормальный вес",
+"Normalus svoris"
+],
+"fOver": [
+"Немного лишнего веса",
+"Šiek tiek antsvorio"
+],
+"fHeavy": [
+"Полное телосложение",
+"Apkūnaus sudėjimo"
+],
+"fSporty": [
+"Спортивное телосложение ⚽",
+"Sportiško sudėjimo ⚽"
+],
+"fSportyBelly": [
+"Спортивный, но с животиком 😄",
+"Sportiškas, bet su pilvuku 😄"
+],
+"fAthlete": [
+"Атлетическое телосложение 💪",
+"Atletiško sudėjimo 💪"
+],
+"tmNow": [
+"Так вы выглядите сегодня по расчёту.",
+"Taip šiandien atrodote pagal skaičiavimą."
+],
+"tmFuture": [
+"Если есть и двигаться как в последние дни (в среднем {b} ккал/день), через {d} дней: ≈ {w} кг.",
+"Jei valgysite ir judėsite kaip pastarąsias dienas (vidutiniškai {b} kcal/d.), po {d} d.: ≈ {w} kg."
+],
+"tmNoData": [
+"Запишите несколько дней еды, чтобы машина времени знала ваши привычки.",
+"Įrašykite kelias dienas maisto, kad laiko mašina žinotų jūsų įpročius."
+],
+"fridgeTitle": [
+"🧊 Что приготовить из холодильника",
+"🧊 Ką pagaminti iš šaldytuvo"
+],
+"fridgePh": [
+"Что у вас есть? Например: яйца, картошка, лук, сыр, колбаса",
+"Ką turite? Pavyzdžiui: kiaušiniai, bulvės, svogūnai, sūris, dešra"
+],
+"fridgeBtn": [
+"🍳 Что приготовить?",
+"🍳 Ką pagaminti?"
+],
+"fridgeThinking": [
+"Подбираю рецепты…",
+"Renku receptus…"
+],
+"fridgeAI": [
+"✨ Рецепты подбирает Claude с учётом вашей цели по калориям.",
+"✨ Receptus parenka Claude, atsižvelgdamas į jūsų kalorijų tikslą."
+],
+"fridgeLocal": [
+"ℹ️ Рецепты из встроенного списка под ваши продукты.",
+"ℹ️ Receptai iš įtaisyto sąrašo pagal jūsų produktus."
+],
+"fridgeNone": [
+"Ничего не нашлось — допишите больше продуктов.",
+"Nieko nerasta — įrašykite daugiau produktų."
+],
+"fridgeErr": [
+"Не удалось получить рецепты. Попробуйте ещё раз чуть позже.",
+"Nepavyko gauti receptų. Pabandykite vėliau."
+],
+"fridgeEmpty": [
+"Напишите, что есть в холодильнике",
+"Parašykite, kas yra šaldytuve"
+],
+"perPortion": [
+"≈ {k} ккал / порция",
+"≈ {k} kcal / porcija"
+],
+"minW": [
+"{m} мин",
+"{m} min"
+],
+"haveW": [
+"✅ Есть",
+"✅ Turiu"
+],
+"buyW": [
+"🛒 Докупить",
+"🛒 Nupirkti"
+],
+"addEaten": [
+"➕ Съел порцию ({k} ккал)",
+"➕ Suvalgiau porciją ({k} kcal)"
+],
+"protW": [
+"белок ≈ {g} г",
+"baltymų ≈ {g} g"
+],
+"tabTips": [
+"Советы",
+"Patarimai"
+],
+"calTitle": [
+"🎯 Калории на день",
+"🎯 Kalorijos per dieną"
+],
+"gLose": [
+"Похудеть",
+"Sulieknėti"
+],
+"gKeep": [
+"Держать вес",
+"Išlaikyti svorį"
+],
+"gGain": [
+"Набрать мышцы",
+"Priaugti raumenų"
+],
+"kcalDay": [
+"ккал в день",
+"kcal per dieną"
+],
+"calBase": [
+"Ваш расход без спорта: ≈ {k} ккал.",
+"Jūsų išlaidos be sporto: ≈ {k} kcal."
+],
+"calLose": [
+"Цель на 500 ккал меньше расхода → примерно −0,5 кг в неделю.",
+"Tikslas 500 kcal mažesnis už išlaidas → maždaug −0,5 kg per savaitę."
+],
+"calKeep": [
+"Столько вы тратите — вес будет держаться.",
+"Tiek išleidžiate — svoris išliks."
+],
+"calGain": [
+"Небольшой плюс 250 ккал вместе с силовыми тренировками — мышцы без лишнего жира.",
+"Nedidelis +250 kcal kartu su jėgos treniruotėmis — raumenys be riebalų pertekliaus."
+],
+"calFloor": [
+"Без наблюдения врача не опускайтесь ниже {f} ккал в день: так трудно добрать белок и питательные вещества, а риск потерять мышцы растёт.",
+"Be gydytojo priežiūros nenusileiskite žemiau {f} kcal per dieną: taip sunku gauti pakankamai baltymų ir maistinių medžiagų, o rizika prarasti raumenis didėja."
+],
+"calLow": [
+"Ваш вес уже в норме, так что худеть не нужно. Цель — держать вес, а форму улучшат тренировки.",
+"Jūsų svoris jau normalus, tad lieknėti nereikia. Tikslas — išlaikyti svorį, o formą pagerins treniruotės."
+],
+"calFloorHit": [
+"⚠️ Цель поднята до безопасного минимума {f} ккал.",
+"⚠️ Tikslas pakeltas iki saugaus minimumo {f} kcal."
+],
+"protein": [
+"Белок: ≈ {g} г в день (мясо, рыба, яйца, творог, бобовые) — помогает сохранить мышцы.",
+"Baltymai: ≈ {g} g per dieną (mėsa, žuvis, kiaušiniai, varškė, ankštiniai) — padeda išsaugoti raumenis."
+],
+"exDays": [
+"В дни тренировок можно съесть примерно половину сожжённых калорий.",
+"Treniruočių dienomis galima suvalgyti maždaug pusę sudegintų kalorijų."
+],
+"todayVs": [
+"Сегодня съедено {e} из {t} ккал",
+"Šiandien suvalgyta {e} iš {t} kcal"
+],
+"target": [
+"Цель: {t} ккал · осталось {r}",
+"Tikslas: {t} kcal · liko {r}"
+],
+"weekTitle": [
+"📅 Ваша неделя",
+"📅 Jūsų savaitė"
+],
+"weekAct": [
+"Активность за 7 дней: {m} из 150 мин (минимум ВОЗ)",
+"Aktyvumas per 7 dienas: {m} iš 150 min (PSO minimumas)"
+],
+"weekStr": [
+"Силовые / домашние тренировки: {n} из 2–3",
+"Jėgos / namų treniruotės: {n} iš 2–3"
+],
+"woTitle": [
+"🏠 Домашняя тренировка",
+"🏠 Namų treniruotė"
+],
+"woIntro": [
+"Делайте упражнения по кругу, одно за другим. Между кругами — отдых 60–90 с. 3 раза в неделю (например пн, ср, пт).",
+"Darykite pratimus ratu, vieną po kito. Tarp ratų — 60–90 s poilsis. 3 kartus per savaitę (pvz., pr, tr, pn)."
+],
+"lvlBeg": [
+"Новичок",
+"Pradedantysis"
+],
+"lvlMid": [
+"Средний",
+"Vidutinis"
+],
+"lvlAdv": [
+"Продвинутый",
+"Pažengęs"
+]
+}

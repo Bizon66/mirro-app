@@ -43,6 +43,7 @@ async function buildApp() {
   writeFileSync(join(OUT, 'config.js'), await min(config));
   writeFileSync(join(OUT, 'storage.js'), await min(read('storage.js')));
   writeFileSync(join(OUT, 'app.js'), await min(read('app.js')));
+  writeFileSync(join(OUT, 'i18n-extra.js'), await min(read('i18n-extra.js')));   // Russian + Lithuanian texts
   // image-based pets (owner's art + MIT companion module): sprite sheets in pets/, scripts in vendor/
   mkdirSync(join(OUT, 'vendor'), { recursive: true }); mkdirSync(join(OUT, 'pets'), { recursive: true });
   for (const f of readdirSync(join(SRC, 'vendor'))) f.endsWith('.js') ? writeFileSync(join(OUT, 'vendor', f), await min(read('vendor/' + f))) : copyFileSync(join(SRC, 'vendor', f), join(OUT, 'vendor', f));

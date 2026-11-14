@@ -12,7 +12,7 @@
   function option(select,id){
     let node=[...select.options].find(item=>item.value===id);
     if(!node){node=root.document.createElement('option');node.value=id;node.dataset.mirroWardrobe='true';select.append(node);added.push(node);}
-    node.textContent=labels[id][language()];
+    node.textContent=typeof root.L3==='function'?root.L3(labels[id]):labels[id][language()];
     node.disabled=!root.MirroWardrobeExtra?.isReady();return node;
   }
   function sync(restore=false,fromProfile=false){

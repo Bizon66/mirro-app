@@ -47,6 +47,13 @@ const CASES = [
   ['roast pork', ['pork_baked']],
   ['jacket potato', ['potato_baked_skin']],
 ];
+// Russian and Lithuanian interfaces: their own words
+const CASES_X = [
+  ['ru', 'жареная картошка', ['potato_fried']], ['ru', 'куриное филе 150 г', ['chicken_breast']], ['ru', 'хлеб с маслом', ['bread', 'butter']],
+  ['ru', 'сырники со сметаной', ['syrnyky', 'sourcream']], ['ru', 'печёная рыба', ['fish_baked']], ['ru', 'яичница', ['fried_eggs']],
+  ['lt', 'kiaušinienė', ['fried_eggs']], ['lt', 'virtos bulvės', ['potato']], ['lt', 'kava su pienu', ['coffee_milk']],
+  ['lt', 'balta duona su sviestu', ['bread', 'butter']], ['lt', 'cepelinai', ['cepelinai']], ['lt', 'šaltibarščiai', ['saltibarsciai']],
+];
 const server = await serve(0);
 const b = await chromium.launch(); const p = await b.newPage();
 await p.goto(`http://localhost:${server.address().port}/`); await p.waitForFunction(() => typeof window.showTab === 'function');
@@ -55,6 +62,16 @@ for (const ui of ['uk', 'cs', 'en']) for (const [phrase, want] of CASES) {
   const got = await p.evaluate(([ph, lg]) => {
     LANG = lg;
     const parts = ph.split(/\s*(?:,|;|\+|\n|\s+і\s+|\s+та\s+|\s+й\s+|\s+а також\s+|\s+and\s+|\s+a\s+|\s+plus\s+)\s*/i).filter(x => x && x.trim().length > 1);
+    return parts.flatMap(x => splitWith(x) || [x]).map(x => { const it = parseItem(x), m = findFood(it.q || x); return m && m.food ? m.food.id : m && m.dish ? 'dish' : null; });
+  }, [phrase, ui]);
+  const ok = JSON.stringify(got) === JSON.stringify(want);
+  if (!ok) bad++;
+  console.log(`${ok ? '✓' : '✗'} [${ui}] ${phrase} → ${got.join(', ')}${ok ? '' : `   (expected ${want.join(', ')})`}`);
+}
+for (const [ui, phrase, want] of CASES_X) {
+  const got = await p.evaluate(([ph, lg]) => {
+    LANG = lg;
+    const parts = ph.split(/\s*(?:,|;|\+|\n|\s+и\s+|\s+ir\s+)\s*/i).filter(x => x && x.trim().length > 1);
     return parts.flatMap(x => splitWith(x) || [x]).map(x => { const it = parseItem(x), m = findFood(it.q || x); return m && m.food ? m.food.id : m && m.dish ? 'dish' : null; });
   }, [phrase, ui]);
   const ok = JSON.stringify(got) === JSON.stringify(want);

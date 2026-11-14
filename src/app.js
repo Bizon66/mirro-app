@@ -304,6 +304,7 @@ Object.assign(T_ADD.uk, { testOn: '🧪 Режим тестування увім
 Object.assign(T_ADD.cs, { testOn: '🧪 Testovací režim zapnut: všechny věci a mazlíčci jsou zdarma', testOff: 'Testovací režim vypnut', testBanner: '🧪 Testovací režim: vše odemčeno zdarma, body se neutrácejí. Vypnutí — 5 klepnutí na verzi dole v Profilu.' });
 Object.assign(T_ADD.en, { testOn: '🧪 Test mode on: all items and pets are unlocked for free', testOff: 'Test mode off', testBanner: '🧪 Test mode: everything is unlocked for free, no points are spent. To turn it off, tap the version at the bottom of Profile 5 times.' });
 for (const l of ['uk', 'cs', 'en']) Object.assign(T[l], T_ADD[l]);
+for (const l of ['ru', 'lt']) T[l] = Object.assign({}, (window.I18N_X || {})[l] && window.I18N_X[l].T);
 if (!AI_ON) {
   Object.assign(T.uk, { lblBtn: '🏷 Етикетка вручну', lblManual: 'Введіть цифри з етикетки:', fridgeLocal: 'ℹ️ Рецепти з вбудованого списку під ваші продукти.' });
   Object.assign(T.cs, { lblBtn: '🏷 Etiketa ručně', lblManual: 'Zadejte čísla z etikety:', fridgeLocal: 'ℹ️ Recepty z vestavěného seznamu podle vašich surovin.' });
@@ -369,7 +370,17 @@ const FOODS = [
   [['Чипси 100 г', 'Chipsy 100 g', 'Crisps 100 g'], 540], [['Пиво 0,5 л', 'Pivo 0,5 l', 'Beer 0.5 l'], 215],
   [['Кава з молоком', 'Káva s mlékem', 'Coffee with milk'], 60], [['Кола 0,5 л', 'Cola 0,5 l', 'Cola 0.5 l'], 210]
 ];
-const LI = () => ({ uk: 0, cs: 1, en: 2 }[LANG]);
+const LI = () => ({ uk: 0, cs: 1, en: 2, ru: 0, lt: 2 }[LANG]);
+// a [uk, cs, en] text in the current language; Russian and Lithuanian come from i18n-extra.js (by the Ukrainian text),
+// recipe steps (arrays) by their first Ukrainian step; anything not translated falls back to Ukrainian (ru) / English (lt)
+window.L3 = a => L3(a);   // for the add-on modules in vendor/
+const L3 = a => {
+  if (!a) return a;
+  const X = (window.I18N_X || {})[LANG];
+  if (!X) return a[LI()];
+  const key = Array.isArray(a[0]) ? a[0][0] : a[0];
+  return (Array.isArray(a[0]) ? X.S : X.N)[key] ?? a[LI()];
+};
 const GIRTH_KEYS = ['waist', 'chest', 'shoulders', 'thigh'];
 let D = { profile: null, days: {}, meas: [], lang: null };
 // storage.js already picked the newest copy (localStorage or the durable mirror) and handed it over as AppStore.boot
@@ -413,8 +424,8 @@ function save() {
   D.savedAt = Date.now(); let json = null;
   try { json = JSON.stringify(D); } catch (e) {}
   if (json && window.AppStore) AppStore.mirror(json);
-  try { localStorage.setItem(KEY, json); } catch (e) { if (!window.AppStore && typeof toast === 'function') toast({ uk: '⚠️ Не вдалося зберегти — браузер блокує сховище', cs: '⚠️ Nepodařilo se uložit — prohlížeč blokuje úložiště', en: "⚠️ Couldn't save — the browser is blocking storage" }[LANG] || "⚠️ Couldn't save"); } }
-LANG = D.lang || (/^(cs|sk)/i.test(navigator.language || '') ? 'cs' : /^(uk|ru)/i.test(navigator.language || '') ? 'uk' : 'en');
+  try { localStorage.setItem(KEY, json); } catch (e) { if (!window.AppStore && typeof toast === 'function') toast({ uk: '⚠️ Не вдалося зберегти — браузер блокує сховище', cs: '⚠️ Nepodařilo se uložit — prohlížeč blokuje úložiště', en: "⚠️ Couldn't save — the browser is blocking storage", ru: '⚠️ Не удалось сохранить — браузер блокирует хранилище', lt: '⚠️ Nepavyko išsaugoti — naršyklė blokuoja saugyklą' }[LANG] || "⚠️ Couldn't save"); } }
+LANG = D.lang || (/^(cs|sk)/i.test(navigator.language || '') ? 'cs' : /^uk/i.test(navigator.language || '') ? 'uk' : /^(ru|be)/i.test(navigator.language || '') ? 'ru' : /^lt/i.test(navigator.language || '') ? 'lt' : 'en');
 const P = () => D.profile;
 const day = s => (D.days[s] = D.days[s] || { foods: [], acts: [] });
 const peekDay = s => D.days[s] || { foods: [], acts: [] };
@@ -978,7 +989,13 @@ FOOD_DB.push(
   ['beet_baked', 'Буряк печений', 'Pečená červená řepa', 'Roasted beetroot', 50, 1.7, 0.2, 10, 150],
   ['mushrooms_baked', 'Гриби запечені', 'Pečené houby', 'Baked mushrooms', 45, 4, 1.5, 3, 150],
   ['apple_baked', 'Яблуко печене', 'Pečené jablko', 'Baked apple', 65, 0.4, 0.2, 16, 150],
-  ['egg_baked', 'Яйця запечені (у духовці)', 'Zapečená vejce', 'Baked eggs', 150, 12, 10, 1, 120]
+  ['egg_baked', 'Яйця запечені (у духовці)', 'Zapečená vejce', 'Baked eggs', 150, 12, 10, 1, 120],
+  // Lithuanian classics (14.11, with the Lithuanian interface)
+  ['cepelinai', 'Цепеліни (картопляні з мʼясом)', 'Cepelíny (bramborové knedlíky s masem)', 'Cepelinai (potato dumplings with meat)', 180, 6, 8, 21, 300],
+  ['saltibarsciai', 'Холодний борщ (литовський)', 'Studená řepná polévka', 'Cold beet soup (šaltibarščiai)', 60, 3, 3, 5, 300],
+  ['kugelis', 'Кугеліс (картопляна бабка)', 'Kugelis (bramborový nákyp)', 'Kugelis (potato pudding)', 190, 5, 10, 20, 250],
+  ['kibinai', 'Кібінай (пиріжок з мʼясом)', 'Kibinai (taštička s masem)', 'Kibinai (meat pastry)', 300, 11, 16, 28, 150],
+  ['sakotis', 'Шакотіс (торт-дерево)', 'Šakotis (stromový koláč)', 'Šakotis (tree cake)', 430, 7, 25, 45, 80]
 );
 Object.assign(FOOD_ALIAS, {
   potato_baked: ['запечена картопля', 'картопля запечена', 'картопля в духовці', 'картопля з духовки', 'печена картопля', 'brambory z trouby', 'roast potatoes', 'oven potatoes'],
@@ -1023,7 +1040,7 @@ Object.assign(FOOD_ALIAS, {
   pasta_bolognese: ['болоньєзе', 'спагеті з фаршем'], pasta_carbonara: ['карбонара'], mac_cheese: ['мак енд чіз'],
   ramen: ['рамен'], burrito: ['буріто', 'буррито'], falafel: ['фалафель'], gyoza: ['ґьоза', 'гьоза'], poke: ['поке']
 });
-const FDB = FOOD_DB.map(r => ({ id: r[0], n: [r[1], r[2], r[3]], k: r[4], p: r[5], f: r[6], c: r[7], por: r[8], al: FOOD_ALIAS[r[0]] || [] }));
+const FDB = FOOD_DB.map(r => ({ id: r[0], n: [r[1], r[2], r[3]], k: r[4], p: r[5], f: r[6], c: r[7], por: r[8], al: (FOOD_ALIAS[r[0]] || []).concat(['ru', 'lt'].map(l => ((window.I18N_X || {})[l] || { N: {} }).N[r[1]]).filter(Boolean)) }));
 const fdb = id => FDB.find(x => x.id === id);
 const fold = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/['’ʼ]/g, '');
 function searchFoods(q) {
@@ -1031,7 +1048,7 @@ function searchFoods(q) {
   if (!k) return [];
   return FDB.map(f => {
     const names = f.n.map(fold);
-    const own = names[LI()];
+    const own = fold(L3(f.n));
     const score = own.startsWith(k) ? 3 : own.includes(k) ? 2 : names.some(n => n.includes(k)) || (f.al || []).some(a => fold(a).includes(k)) ? 1 : 0;
     return { f, score };
   }).filter(x => x.score).sort((a, b) => b.score - a.score).slice(0, 15).map(x => x.f);
@@ -1847,7 +1864,7 @@ $('avatar').addEventListener('click', e => {
 // ---- Today ----
 function fillStatic() {
   const sel = $('aType'), v = sel.value;
-  sel.innerHTML = ACTS.map(a => `<option value="${a.id}">${esc(a.n[LI()])}</option>`).join('');
+  sel.innerHTML = ACTS.map(a => `<option value="${a.id}">${esc(L3(a.n))}</option>`).join('');
   if (v) sel.value = v;
   $('msFields').innerHTML = [['weight', t('weightKg'), '0.1'], ...GIRTH_KEYS.map(k => [k, t(k) + ', ' + t('cm'), '0.5'])]
     .map(([k, lbl, st]) => `<div><label>${esc(lbl)}</label><input id="ms_${k}" type="number" step="${st}" inputmode="decimal"></div>`).join('');
@@ -1877,7 +1894,7 @@ function renderToday() {
   $('dDone').disabled = !tt.logged;
   $('dDoneHint').textContent = !tt.logged ? '' : tt.complete ? (d.done === true ? '' : t('dayAuto')) : t('dayLow');
   renderMeals(d); renderMacros(w, tt); renderWaterSteps(d, w);
-  $('actList').innerHTML = d.acts.map((a, i) => `<div class="item"><span>${esc(actDef(a.id).n[LI()])}<em>${a.min} ${t('min')} · ${Math.round(a.k)} ${t('kcal')}</em></span><button data-da="${i}">×</button></div>`).join('');
+  $('actList').innerHTML = d.acts.map((a, i) => `<div class="item"><span>${esc(L3(actDef(a.id).n))}<em>${a.min} ${t('min')} · ${Math.round(a.k)} ${t('kcal')}</em></span><button data-da="${i}">×</button></div>`).join('');
   actPreview();
   if ($('fridgeText').value === '' && D.fridge) $('fridgeText').value = D.fridge;
   fridgeNote();
@@ -1901,7 +1918,7 @@ $('aAdd').addEventListener('click', () => {
   if (!min || min <= 0 || min > 900) return toast(t('minutes') + '?');
   if ($('aType').value === 'custom' && (!k || k <= 0)) return toast(t('tKcal'));
   syncDay(); day(curDay).acts.push({ uid: uid(), id: $('aType').value, min: Math.round(min), k: Math.round(k), at: Date.now() });
-  save(); dirty(); renderToday(); toast(t('tAdded', { n: actDef($('aType').value).n[LI()] }));
+  save(); dirty(); renderToday(); toast(t('tAdded', { n: L3(actDef($('aType').value).n) }));
 });
 
 // ---- Fridge → recipes ----
@@ -1982,7 +1999,7 @@ function localRecipes(text) {
   return LOCAL_RECIPES.filter(r => r.need.every(n => have.has(n)))
     .map(r => ({ r, score: r.need.length * 2 + r.opt.filter(o => have.has(o)).length }))
     .sort((a, b) => b.score - a.score).slice(0, 5)
-    .map(({ r }) => ({ name: r.n[LI()], kcal: r.k, time: r.m, protein: r.p, uses: [], missing: [], steps: r.s[LI()] }));
+    .map(({ r }) => ({ name: L3(r.n), kcal: r.k, time: r.m, protein: r.p, uses: [], missing: [], steps: L3(r.s) }));
 }
 function renderRecipes() {
   $('fridgeOut').innerHTML = fridgeRecipes.map((r, i) => `<div class="rec"><h3>${esc(r.name)}</h3>
@@ -2008,7 +2025,7 @@ $('fridgeBtn').addEventListener('click', async () => {
   fridgeBusy = true; $('fridgeBtn').disabled = true; note.textContent = t('fridgeThinking'); $('fridgeOut').innerHTML = '';
   const td = todayStr(), w = weightAt(td), ct = calTarget(w), tt = dayTotals(td, w);
   const left = Math.max(0, Math.round(ct.tg + tt.ex / 2 - tt.eaten));
-  const langName = { uk: 'Ukrainian', cs: 'Czech', en: 'English' }[LANG];
+  const langName = { uk: 'Ukrainian', cs: 'Czech', en: 'English', ru: 'Russian', lt: 'Lithuanian' }[LANG];
   const goal = ct.g === 'lose' ? 'lose weight' : ct.g === 'gain' ? 'build muscle' : 'maintain weight';
   const prompt = 'You are a practical home-cooking assistant. Write ALL text in ' + langName + '.\n' +
     'Ingredients the user has (their own words, may be informal):\n<<<\n' + text.slice(0, 800) + '\n>>>\n' +
@@ -2091,7 +2108,7 @@ $('sheetClose').addEventListener('click', closeSheet);
 $('sheet').addEventListener('click', e => { if (e.target.id === 'sheet') closeSheet(); });
 document.querySelectorAll('#sheetTabs button').forEach(b => b.addEventListener('click', () => { sheetTab = b.dataset.st; sheetSel = null; renderSheet(); }));
 const mealSelect = () => `<label>${t('mealW')}</label><select id="sMeal">${MEALS.map(m => `<option value="${m}"${m === sheetMeal ? ' selected' : ''}>${t(MEAL_KEY[m])}</option>`).join('')}</select>`;
-function foodRow(f) { return `<div class="res" data-fid="${f.id}"><span>${esc(f.n[LI()])}<br><em>${f.k} ${t('kcal')} ${t('per100')} · ${macroLine(f)}</em></span><b>›</b></div>`; }
+function foodRow(f) { return `<div class="res" data-fid="${f.id}"><span>${esc(L3(f.n))}<br><em>${f.k} ${t('kcal')} ${t('per100')} · ${macroLine(f)}</em></span><b>›</b></div>`; }
 function renderSheet() {
   $('sheetTitle').textContent = t(MEAL_KEY[sheetMeal]);
   document.querySelectorAll('#sheetTabs button').forEach(b => b.classList.toggle('on', b.dataset.st === sheetTab));
@@ -2099,7 +2116,7 @@ function renderSheet() {
   if (sheetTab === 'db') {
     if (sheetSel) {
       const f = fdb(sheetSel);
-      body.innerHTML = `<button class="chip" id="sBack">${t('back')}</button><h3 style="margin:10px 0 2px">${esc(f.n[LI()])}</h3><p class="muted">${f.k} ${t('kcal')} ${t('per100')} · ${macroLine(f)}</p>
+      body.innerHTML = `<button class="chip" id="sBack">${t('back')}</button><h3 style="margin:10px 0 2px">${esc(L3(f.n))}</h3><p class="muted">${f.k} ${t('kcal')} ${t('per100')} · ${macroLine(f)}</p>
         <label>${t('grams')}</label><input id="sG" type="number" inputmode="numeric" value="${f.por}">
         <div class="chips">${[0.5, 1, 1.5, 2].map(m => `<button class="chip" data-mul="${m}">${Math.round(f.por * m)} ${t('gU')}</button>`).join('')}</div>
         ${mealSelect()}<p class="calc" id="sCalc"></p><button class="btn" id="sAdd">${t('add')}</button>`;
@@ -2111,7 +2128,7 @@ function renderSheet() {
         const g = num($('sG').value); if (!g || g <= 0 || g > 3000) return toast(t('grams') + '?');
         const m = macroOf(f, g); sheetMeal = $('sMeal').value;
         D.recent = [f.id, ...(D.recent || []).filter(x => x !== f.id)].slice(0, 12);
-        addFood(f.n[LI()], m.k, { p: m.p, f: m.f, c: m.c, g, meal: sheetMeal, src: 'db', id: f.id }); closeSheet();
+        addFood(L3(f.n), m.k, { p: m.p, f: m.f, c: m.c, g, meal: sheetMeal, src: 'db', id: f.id }); closeSheet();
       });
       return;
     }
@@ -2178,7 +2195,7 @@ function bTotals() {
 }
 function renderBuilder() {
   $('bName').value = BLD.n; $('bPort').value = BLD.portions;
-  $('bIngs').innerHTML = BLD.ings.length ? BLD.ings.map((i, k) => { const f = fdb(i.id); return `<div class="ingrow"><span>${esc(f ? f.n[LI()] : i.id)}</span><input type="number" inputmode="numeric" data-ig="${k}" value="${i.g}"><em>${t('gU')}</em><button data-ix="${k}">×</button></div>`; }).join('') : '';
+  $('bIngs').innerHTML = BLD.ings.length ? BLD.ings.map((i, k) => { const f = fdb(i.id); return `<div class="ingrow"><span>${esc(f ? L3(f.n) : i.id)}</span><input type="number" inputmode="numeric" data-ig="${k}" value="${i.g}"><em>${t('gU')}</em><button data-ix="${k}">×</button></div>`; }).join('') : '';
   bTotals();
 }
 $('bName').addEventListener('input', () => BLD.n = $('bName').value);
@@ -2393,11 +2410,11 @@ function renderAch() {
   const fmt = v => v >= 10000 ? Math.round(v / 1000) + 'k' : String(Math.round(v * 10) / 10);
   $('achGrid').innerHTML = ACH_CATS.map(([c, title]) => {
     const list = ACH.filter(a => a.cat === c), n = list.filter(a => got.includes(a.id)).length;
-    return `<details class="achCat" data-c="${c}"${ACH_OPEN === c ? ' open' : ''}><summary><span>${esc(title[LI()])}</span><b>${n}/${list.length}</b></summary><div class="achgrid">` +
+    return `<details class="achCat" data-c="${c}"${ACH_OPEN === c ? ' open' : ''}><summary><span>${esc(L3(title))}</span><b>${n}/${list.length}</b></summary><div class="achgrid">` +
       list.map(a => {
         const on = got.includes(a.id), cur = Math.max(0, Math.min(a.need, +s[a.k] || 0));
         const pr = !on && a.need > 1 ? `<div class="bar"><i style="width:${Math.round(cur / a.need * 100)}%"></i></div><em>${fmt(cur)} / ${fmt(a.need)}</em>` : '';
-        return `<div class="ach${on ? ' on' : ''}"><div class="ae">${a.e}</div><b>${esc(a.n[LI()])}</b><span>${esc(a.d[LI()])}</span>${pr}</div>`;
+        return `<div class="ach${on ? ' on' : ''}"><div class="ae">${a.e}</div><b>${esc(L3(a.n))}</b><span>${esc(L3(a.d))}</span>${pr}</div>`;
       }).join('') + '</div></details>';
   }).join('');
   $('achGrid').querySelectorAll('details').forEach(el => el.addEventListener('toggle', () => { if (el.open) { ACH_OPEN = el.dataset.c; $('achGrid').querySelectorAll('details').forEach(o => { if (o !== el) o.open = false; }); } }));
@@ -2406,18 +2423,18 @@ function achCheck() {
   const s = achStats(), got = ACH.filter(a => a.ok(s)).map(a => a.id);
   D.ach = D.ach || [];
   const fresh = got.filter(id => !D.ach.includes(id));
-  if (fresh.length) { D.ach.push(...fresh); save(); const a = ACH.find(x => x.id === fresh[0]); setTimeout(() => toast(t('achNew', { n: a.e + ' ' + a.n[LI()] }) + (fresh.length > 1 ? ' · +' + (fresh.length - 1) + ' 🏅' : '')), 400); }
+  if (fresh.length) { D.ach.push(...fresh); save(); const a = ACH.find(x => x.id === fresh[0]); setTimeout(() => toast(t('achNew', { n: a.e + ' ' + L3(a.n) }) + (fresh.length > 1 ? ' · +' + (fresh.length - 1) + ' 🏅' : '')), 400); }
   return { s, got };
 }
 function checkAch() { return P() ? achCheck().got : []; }
 
 // ---- v2: guided workout with timer ----
 const RUN = { on: false, steps: [], i: 0, left: 0, paused: false, active: 0, last: 0, timer: null, ac: null, sound: true };
-const VOICE_LANG = { uk: 'uk-UA', cs: 'cs-CZ', en: 'en-US' };
+const VOICE_LANG = { uk: 'uk-UA', cs: 'cs-CZ', en: 'en-US', ru: 'ru-RU', lt: 'lt-LT' };
 function exInfo(x) {
   const male = P().sex === 'm', lv = woLevel == null ? 0 : woLevel;
-  let dose = (male ? x.m : x.f)[lv], name = x.n ? x.n[LI()] : '', v = '';
-  if (x.id === 'pushup') { v = dose[0]; name = PUSH_NAMES[v][LI()]; dose = dose[1]; }
+  let dose = (male ? x.m : x.f)[lv], name = x.n ? L3(x.n) : '', v = '';
+  if (x.id === 'pushup') { v = dose[0]; name = L3(PUSH_NAMES[v]); dose = dose[1]; }
   const label = x.u === 'sec' ? t('sec', { n: dose }) : x.u === 'leg' ? t('perLeg', { n: dose }) : t('reps', { n: dose });
   return { name, dose, label, v, timed: x.u === 'sec' };
 }
@@ -2609,7 +2626,7 @@ function levelOf(xp) {
   while (xp >= acc + need) { acc += need; L++; need += 100; }
   return { L, into: xp - acc, need };
 }
-const lvlTitle = L => { const a = LVL_TITLES[LANG]; return L <= a.length ? a[L - 1] : a[a.length - 1] + ' ' + (L - a.length + 1); };
+const lvlTitle = L => { const a = LVL_TITLES[LANG] || ((window.I18N_X || {})[LANG] || {}).LVL || LVL_TITLES.en; return L <= a.length ? a[L - 1] : a[a.length - 1] + ' ' + (L - a.length + 1); };
 
 // ---- shop ----
 const SHOP = [
@@ -2737,7 +2754,7 @@ function renderRewards() {
   const qs = questsFor(td);
   $('questList').innerHTML = qs.map(id => {
     const q = QUESTS[id], pr = questProgress(id, td), done = pr >= 1;
-    return `<div class="quest${done ? ' done' : ''}"><div class="qtop"><span>${q.e} ${esc(q.n[LI()])}</span><b>${done ? '✅' : '+10 ⭐'}</b></div><div class="bar"><i style="width:${Math.round(pr * 100)}%"></i></div></div>`;
+    return `<div class="quest${done ? ' done' : ''}"><div class="qtop"><span>${q.e} ${esc(L3(q.n))}</span><b>${done ? '✅' : '+10 ⭐'}</b></div><div class="bar"><i style="width:${Math.round(pr * 100)}%"></i></div></div>`;
   }).join('');
   // one-time toasts for freshly finished quests / level ups
   D.qDone = D.qDone || {}; const was = D.qDone[td] || [];
@@ -2745,7 +2762,7 @@ function renderRewards() {
   const fresh = now.filter(id => !was.includes(id));
   if (fresh.length) {
     D.qDone = { [td]: now }; bump('quests', fresh.length); if (now.length === 3) bump('allQuests');
-    setTimeout(() => toast(now.length === 3 && was.length < 3 ? t('allQuests') : t('questToast', { n: QUESTS[fresh[0]].n[LI()] })), 300);
+    setTimeout(() => toast(now.length === 3 && was.length < 3 ? t('allQuests') : t('questToast', { n: L3(QUESTS[fresh[0]].n) })), 300);
   }
   if ((D.lvlSeen || 1) < lv.L) { D.lvlSeen = lv.L; save(); setTimeout(() => toast(t('lvlUp', { n: lv.L, t: lvlTitle(lv.L) })), 900); }
 }
@@ -2765,7 +2782,7 @@ function renderShop() {
     if (own) btn = `<button class="btn ${on ? 'ghost' : ''}" data-eq="${i.id}">${on ? t('unequip') : t('equip')}</button>`;
     else if (locked) btn = `<button class="btn ghost" disabled>${t('lockedLvl', { n: i.lvl })}</button>`;
     else btn = `<button class="btn${ps.bal < i.price ? ' ghost' : ''}" data-buy="${i.id}">${t('buy')} · ${i.price} ⭐</button>`;
-    return `<div class="sitem${shopSel === i.id ? ' sel' : ''}${on ? ' on' : ''}" data-try="${i.id}"><div class="sic">${i.ic}</div><b>${esc(i.n[LI()])}</b>${btn}</div>`;
+    return `<div class="sitem${shopSel === i.id ? ' sel' : ''}${on ? ' on' : ''}" data-try="${i.id}"><div class="sic">${i.ic}</div><b>${esc(L3(i.n))}</b>${btn}</div>`;
   }).join('');
   if (test) $('shopGrid').insertAdjacentHTML('afterbegin', `<p class="testBanner" style="grid-column:1/-1">${t('testBanner')}</p>`);
   AV_TARGET = $('shopPrev');
@@ -2783,7 +2800,7 @@ $('shopGrid').addEventListener('click', e => {
     const it = itemById(buy.dataset.buy), ps = pointsSummary();
     if (ps.bal < it.price) { toast(t('notEnough', { n: it.price - ps.bal })); return; }
     st.owned.push(it.id); st.eq[it.slot] = it.id; save(); AV_TRY = null; shopSel = it.id;
-    toast(t('bought', { n: it.n[LI()] })); renderShop(); renderRewards(); return;
+    toast(t('bought', { n: L3(it.n) })); renderShop(); renderRewards(); return;
   }
   if (eq) {
     const it = itemById(eq.dataset.eq);
@@ -2809,7 +2826,7 @@ function coachContext() {
   ].join('\n');
 }
 function coachSystem() {
-  const lang = { uk: 'Ukrainian', cs: 'Czech', en: 'English' }[LANG];
+  const lang = { uk: 'Ukrainian', cs: 'Czech', en: 'English', ru: 'Russian', lt: 'Lithuanian' }[LANG];
   const minor = P().age < 18;
   return `You are "Coach", a friendly, practical fitness and nutrition assistant inside the app "My Twin".
 Only help with: exercise and technique, home and gym workouts, sports, running/walking, stretching, nutrition and healthy eating, meal ideas, protein/calories, hydration, sleep and recovery, motivation and habits.
@@ -2973,7 +2990,7 @@ function renderPet() {
   const it = itemById(id), pd = petData(id), mood = petMood(id), st = petStage(id), td = todayStr();
   const nextAt = [5, 15][st];
   const dogWalk = id === 'pet_dog' && (peekDay(td).steps || 0) >= 8000;
-  box.innerHTML = `<div class="petHead"><span class="petIc">${it.ic}</span><div style="flex:1"><input id="petName" value="${esc(pd.name || '')}" placeholder="${esc(it.n[LI()])}" maxlength="20">
+  box.innerHTML = `<div class="petHead"><span class="petIc">${it.ic}</span><div style="flex:1"><input id="petName" value="${esc(pd.name || '')}" placeholder="${esc(L3(it.n))}" maxlength="20">
       <div class="muted" style="margin-top:4px">${t(['stageBaby', 'stageYoung', 'stageAdult'][st])} · ${t('feedsW', { n: pd.feeds })}</div></div></div>
     <p class="petMood ${mood}">${t({ happy: 'moodHappy', ok: 'moodOk', sad: 'moodSad' }[mood])}</p>
     ${dogWalk ? `<p class="muted">${t('dogWalk')}</p>` : ''}
@@ -3541,7 +3558,7 @@ const stemW = w => w.length > 5 ? w.slice(0, w.length - 1) : w;
 // words that never identify a food on their own
 const QL_STOP = new Set(['з', 'зі', 'із', 'та', 'і', 'й', 'на', 'в', 'у', 'до', 'по', 'для', 'без', 'трохи', 'ще', 's', 'se', 'a', 'na', 'v', 've', 'do', 'bez', 'with', 'and', 'of', 'the', 'some', 'little', 'bit']);
 // an exact name or synonym wins first («картопля запечена» → baked potatoes, not «…запечена з сиром»)
-const startsName = k => FDB.find(f => f.n.some(n => fold(n) === k)) || FDB.find(f => (f.al || []).some(a => fold(a) === k)) || FDB.find(f => fold(f.n[LI()]).startsWith(k)) || FDB.find(f => f.n.some(n => fold(n).startsWith(k)));
+const startsName = k => FDB.find(f => f.n.some(n => fold(n) === k)) || FDB.find(f => (f.al || []).some(a => fold(a) === k)) || FDB.find(f => fold(L3(f.n)).startsWith(k)) || FDB.find(f => f.n.some(n => fold(n).startsWith(k)));
 function findFood(q) {
   const k = fold(q).replace(/[^\p{L}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
   if (!k) return null;
@@ -3553,7 +3570,7 @@ function findFood(q) {
   if (!words.length) return null;
   let best = null;
   for (const f of FDB) {
-    const names = f.n.map(fold), hay = names.concat((f.al || []).map(fold)).join(' | ');
+    const names = f.n.map(fold), own = fold(L3(f.n)), hay = names.concat((f.al || []).map(fold)).join(' | ');
     const toks = hay.split(/[\s|/(),]+/);
     let hits = 0, last = -1, strength = 0;
     words.forEach((w, i) => {
@@ -3561,7 +3578,7 @@ function findFood(q) {
       hits++; last = i;
       // the food's own name starting with the word counts most (масло → «Масло вершкове», not «Каша з маслом»);
       // then a whole-word match (хліб → «Хліб білий», not «Хлібці»); stem length only breaks ties
-      strength += (names[LI()].startsWith(st) ? 3 : names.some(n => n.startsWith(st)) ? 2.5 : 0) + (toks.includes(st) || toks.includes(w) ? 2 : 0) + st.length / 10;
+      strength += (own.startsWith(st) ? 3 : names.some(n => n.startsWith(st)) ? 2.5 : 0) + (toks.includes(st) || toks.includes(w) ? 2 : 0) + st.length / 10;
     });
     if (!hits) continue;
     const c = { f, hits, last, strength };
@@ -3571,7 +3588,7 @@ function findFood(q) {
 }
 // "хліб з маслом" → two foods; "вареники з картоплею" stays one dish because the whole phrase is a food name
 function splitWith(raw) {
-  const m = raw.match(/^(.*\S)\s+(?:з|зі|із|with|s|se)\s+(\S.*)$/i);
+  const m = raw.match(/^(.*\S)\s+(?:з|зі|із|с|со|with|s|se|su)\s+(\S.*)$/i);
   if (!m) return null;
   const whole = parseItem(raw).q; if (whole && startsName(whole)) return null;
   const a = parseItem(m[1]), b = parseItem(m[2]);
@@ -3623,7 +3640,7 @@ async function qlParse() {
   const text = $('qlText').value.trim();
   if (!text) return toast(t('qlEmpty'));
   LBL = null;
-  const parts = text.split(/\s*(?:,|;|\+|\n|\s+і\s+|\s+та\s+|\s+й\s+|\s+а також\s+|\s+and\s+|\s+a\s+|\s+plus\s+)\s*/i).filter(p => p && p.trim().length > 1);
+  const parts = text.split(/\s*(?:,|;|\+|\n|\s+і\s+|\s+та\s+|\s+й\s+|\s+а также\s+|\s+а також\s+|\s+и\s+|\s+ir\s+|\s+and\s+|\s+a\s+|\s+plus\s+)\s*/i).filter(p => p && p.trim().length > 1);
   QL = []; const unknown = [];
   const items = parts.flatMap(p => splitWith(p) || [p]);
   for (const raw of items.slice(0, 10)) {
@@ -3636,7 +3653,7 @@ async function qlParse() {
       const f = m.food, q = DISH_Q[f.id], dish = q != null;
       const g = gramsFor(it, f.por, f.id), qs = dish ? q.split('').filter(Boolean) : [];
       if (dish && it.qty == null && !it.unit) qs.push('s');
-      QL.push({ name: f.n[LI()], src: dish ? 'typical' : 'db', id: f.id, g: Math.round(g), por: f.por, k100: f.k, p100: f.p, f100: f.f, c100: f.c, qs, ans: {} });
+      QL.push({ name: L3(f.n), src: dish ? 'typical' : 'db', id: f.id, g: Math.round(g), por: f.por, k100: f.k, p100: f.p, f100: f.f, c100: f.c, qs, ans: {} });
     } else unknown.push(it);
   }
   if (unknown.length && SAMPLE) {
@@ -4094,11 +4111,11 @@ function renderTips() {
   const minutes = WO_MIN[woLevel], kcal = Math.round(netMet(actDef('homeworkout')) * w * minutes / 60);
   $('woMeta').textContent = t('woMeta', { n: ROUNDS[woLevel], m: minutes, k: kcal });
   $('woList').innerHTML = EXS.map(x => {
-    let dose = (male ? x.m : x.f)[woLevel], name = x.n ? x.n[li] : '';
-    if (x.id === 'pushup') { name = PUSH_NAMES[dose[0]][li]; dose = dose[1]; }
+    let dose = (male ? x.m : x.f)[woLevel], name = x.n ? L3(x.n) : '';
+    if (x.id === 'pushup') { name = L3(PUSH_NAMES[dose[0]]); dose = dose[1]; }
     const ds = x.u === 'sec' ? t('sec', { n: dose }) : x.u === 'leg' ? t('perLeg', { n: dose }) : t('reps', { n: dose });
     const av = x.id === 'pushup' ? (male ? x.m : x.f)[woLevel][0] : '';
-    return `<div class="ex"><div class="top"><canvas class="anim" data-a="${x.id}" data-v="${av}"></canvas><div class="hd"><b>${x.e} ${esc(name)}</b><span class="dose">${esc(ds)}</span></div></div><p>${esc(x.how[li])}</p><p>⬇️ ${t('easier')}: ${esc(x.easy[li])} · ⬆️ ${t('harder')}: ${esc(x.hard[li])}</p></div>`;
+    return `<div class="ex"><div class="top"><canvas class="anim" data-a="${x.id}" data-v="${av}"></canvas><div class="hd"><b>${x.e} ${esc(name)}</b><span class="dose">${esc(ds)}</span></div></div><p>${esc(L3(x.how))}</p><p>⬇️ ${t('easier')}: ${esc(L3(x.easy))} · ⬆️ ${t('harder')}: ${esc(L3(x.hard))}</p></div>`;
   }).join('');
   startAnims();
 }

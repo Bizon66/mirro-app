@@ -71,7 +71,7 @@
     for (const [id, labels] of EXTRA_STYLES[appearance]) {
       let option = [...select.options].find(item => item.value === id);
       if (!option) { option = document.createElement('option'); option.value = id; option.dataset.mirroDetailedStyle = appearance; select.append(option); }
-      option.textContent = labels[languageIndex];
+      option.textContent = typeof window.L3 === 'function' ? window.L3(labels) : labels[languageIndex];   // Mirro: ru / lt via L3
     }
     // Restore a saved direct detailed ID even if the original select did not
     // contain it when renderProfile first tried assigning its value.
@@ -231,17 +231,16 @@
     colorInput.disabled = !detailed;
     const language = document.documentElement && document.documentElement.lang || 'uk';
     const label = colorRow && colorRow.querySelector('label');
-    const text = { uk: 'Колір бороди', cs: 'Barva vousů', en: 'Beard color' }[language] || 'Колір бороди';
+    const text = typeof window.L3 === 'function' ? window.L3(['Колір бороди', 'Barva vousů', 'Beard color']) : ({ uk: 'Колір бороди', cs: 'Barva vousů', en: 'Beard color' }[language] || 'Колір бороди');
     if (label) label.textContent = text;
     colorInput.setAttribute('aria-label', text);
     if (colorHint) {
       colorHint.hidden = sex !== 'm' || detailed;
       colorHint.style.display = colorHint.hidden ? 'none' : 'block';
-      colorHint.textContent = {
-        uk: 'Для цієї зачіски або бороди працює початковий рендерер: борода має колір волосся.',
-        cs: 'Tento účes nebo vousy používají původní vykreslení: vousy mají barvu vlasů.',
-        en: 'This hairstyle or beard uses the original renderer: beard color follows hair color.',
-      }[language] || 'Для цієї зачіски або бороди працює початковий рендерер: борода має колір волосся.';
+      const hintTexts = ['Для цієї зачіски або бороди працює початковий рендерер: борода має колір волосся.',
+        'Tento účes nebo vousy používají původní vykreslení: vousy mají barvu vlasů.',
+        'This hairstyle or beard uses the original renderer: beard color follows hair color.'];
+      colorHint.textContent = typeof window.L3 === 'function' ? window.L3(hintTexts) : (hintTexts[{ uk: 0, cs: 1, en: 2 }[language]] || hintTexts[0]);
     }
     // The host registered its preview listener before this adapter. If a sex
     // change invalidates one of our extra styles, redraw the short fallback.
@@ -295,6 +294,8 @@
       window[name] = wrappers[name];
     }
     syncHairstyles(true); syncBeardColor();
+    // Mirro: relabel the added hairstyles when the interface language changes
+    if (typeof MutationObserver === 'function') new MutationObserver(() => { syncHairstyles(); syncBeardColor(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   }
 
   function canInstall() {
