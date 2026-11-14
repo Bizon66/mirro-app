@@ -26,7 +26,7 @@ module.exports = async function handler(req, res) {
 
   const text = clip(body.text, 2000), kind = ['idea', 'bug', 'other'].includes(body.kind) ? body.kind : 'other';
   if (text.length < 3) return res.status(400).json({ ok: false, error: 'short' });
-  const token = process.env.FEEDBACK_GITHUB_TOKEN;
+  const token = (process.env.FEEDBACK_GITHUB_TOKEN || '').trim();   // a pasted key can carry spaces / a line break
   if (!token) { console.error('feedback: FEEDBACK_GITHUB_TOKEN is not set'); return res.status(503).json({ ok: false, error: 'not-configured' }); }
   const repo = process.env.FEEDBACK_REPO || 'Bizon66/mirro-app';
 
