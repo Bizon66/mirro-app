@@ -379,7 +379,9 @@ const netMet = a => Math.max(0, a.met - 1);
 // one-time fix for activities saved before: gross MET → net MET
 // every record gets a stable uid: needed later to merge entries from two phones (sync in 1.2)
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-const DATA_VERSION = 3;
+const DATA_VERSION = 4;
+// men: no caps / bobble hat (the sports headband stays); see the v4 step in migrate()
+const MALE_NO_HATS = new Set(['cap_blue', 'cap_red', 'beanie']);
 function migrate() {
   let changed = false;
   if (!D.metNet && D.days) {
@@ -395,6 +397,13 @@ function migrate() {
     // v3: the gold medal left the shop — take it off; points are counted from owned items, so its price comes back
     D.shop.owned = (D.shop.owned || []).filter(id => id !== 'medal');
     if (D.shop.eq && D.shop.eq.acc === 'medal') delete D.shop.eq.acc;
+  }
+  if ((D.v || 1) < 4 && D.shop) {
+    // v4 (14.11, owner's choice): sunglasses left the shop for everyone, caps / bobble hat for men — their price comes back
+    const male = !D.profile || D.profile.sex !== 'f';
+    const gone = id => id === 'sunglasses' || (male && MALE_NO_HATS.has(id));
+    D.shop.owned = (D.shop.owned || []).filter(id => !gone(id));
+    if (D.shop.eq) for (const k of Object.keys(D.shop.eq)) if (gone(D.shop.eq[k])) delete D.shop.eq[k];
   }
   if ((D.v || 1) < DATA_VERSION) { D.v = DATA_VERSION; changed = true; }
   return changed;
@@ -1547,8 +1556,7 @@ function drawAvatar(w, tone) {
   if (EQ.acc === 'headphones') drawHeadphones(cx, headCY, headRx, headRy);
   // face
   const ey = drawFace(p, cx, headCY, headRx, headRy, hc, skin, !REDUCED && (AV_T % 4.3) < 0.14, male);
-  if (EQ.eyes === 'sunglasses') drawSunglasses(cx, ey, headRx, headRy);
-  else if (p.glasses) {
+  if (false) {   // glasses removed on the owner's request (14.11); p.glasses is kept in data only
     ctx.strokeStyle = '#222'; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(cx - headRx * 0.38, ey, headRx * 0.26, 0, Math.PI * 2); ctx.moveTo(cx + headRx * 0.64, ey); ctx.arc(cx + headRx * 0.38, ey, headRx * 0.26, 0, Math.PI * 2);
     ctx.moveTo(cx - headRx * 0.12, ey); ctx.lineTo(cx + headRx * 0.12, ey); ctx.stroke();
@@ -2609,7 +2617,6 @@ const SHOP = [
   { id: 'cap_red', slot: 'hat', price: 120, ic: '🧢', col: '#d6453a', n: ['Кепка червона', 'Kšiltovka červená', 'Red cap'] },
   { id: 'beanie', slot: 'hat', price: 180, ic: '🧶', col: '#1f9d6b', n: ['Шапка з помпоном', 'Kulich s bambulí', 'Bobble hat'] },
   { id: 'headband', slot: 'hat', price: 80, ic: '🎽', col: '#ff7a3d', n: ['Спортивна пов\'язка', 'Sportovní čelenka', 'Sweatband'] },
-  { id: 'sunglasses', slot: 'eyes', price: 160, ic: '🕶️', n: ['Сонцезахисні окуляри', 'Sluneční brýle', 'Sunglasses'] },
   { id: 'shoes_orange', slot: 'shoes', price: 140, ic: '👟', col: '#ff7a3d', n: ['Кросівки помаранчеві', 'Tenisky oranžové', 'Orange sneakers'] },
   { id: 'shoes_green', slot: 'shoes', price: 140, ic: '👟', col: '#1f9d6b', n: ['Кросівки зелені', 'Tenisky zelené', 'Green sneakers'] },
   { id: 'shoes_black', slot: 'shoes', price: 100, ic: '👟', col: '#2b2f3a', n: ['Кросівки чорні', 'Tenisky černé', 'Black sneakers'] },
@@ -2627,12 +2634,13 @@ const SHOP = [
   { id: 'pet_turtle', slot: 'pet', price: 650, lvl: 4, ic: '🐢', n: ['Черепашка', 'Želvička', 'Turtle'] },
   { id: 'pet_parrot', slot: 'pet', price: 750, lvl: 5, ic: '🦜', n: ['Папуга', 'Papoušek', 'Parrot'] }
 ];
-const SLOTS = [['hat', 'catHat'], ['eyes', 'catEyes'], ['shoes', 'catShoes'], ['acc', 'catAcc'], ['bg', 'catBg'], ['pet', 'catPet']];
+const SLOTS = [['hat', 'catHat'], ['shoes', 'catShoes'], ['acc', 'catAcc'], ['bg', 'catBg'], ['pet', 'catPet']];
 const shopState = () => (D.shop = D.shop || { owned: [], eq: {} });
 let AV_TARGET = null, AV_TRY = null;
 function equipNow() {
   const eq = Object.assign({}, shopState().eq);
   if (AV_TRY) for (const k in AV_TRY) { if (AV_TRY[k]) eq[k] = AV_TRY[k]; else delete eq[k]; }
+  if ((P() || {}).sex !== 'f' && MALE_NO_HATS.has(eq.hat)) delete eq.hat;
   return eq;
 }
 const itemById = id => SHOP.find(x => x.id === id);
@@ -2750,7 +2758,8 @@ function renderShop() {
   $('shopBal').textContent = t('balanceW', { n: ps.bal });
   const test = !!D.testMode;
   $('shopCats').innerHTML = SLOTS.map(([sl, key]) => `<button data-sc="${sl}" class="${sl === shopCat ? 'on' : ''}">${t(key)}</button>`).join('');
-  $('shopGrid').innerHTML = SHOP.filter(i => i.slot === shopCat).map(i => {
+  const male = (P() || {}).sex !== 'f';
+  $('shopGrid').innerHTML = SHOP.filter(i => i.slot === shopCat && !(male && MALE_NO_HATS.has(i.id))).map(i => {
     const own = test || st.owned.includes(i.id), on = st.eq[i.slot] === i.id, locked = i.lvl && lv.L < i.lvl;
     let btn;
     if (own) btn = `<button class="btn ${on ? 'ghost' : ''}" data-eq="${i.id}">${on ? t('unequip') : t('equip')}</button>`;
