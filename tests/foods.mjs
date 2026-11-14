@@ -34,6 +34,18 @@ const CASES = [
   ['svařené víno', ['mulled_wine']],
   ['segedínský guláš', ['szegedin']],
   ['chicken curry', ['chicken_curry']],
+  ['запечена картопля', ['potato_baked']],
+  ['картопля запечена', ['potato_baked']],
+  ['картопля в духовці', ['potato_baked']],
+  ['картопля смажена', ['potato_fried']],
+  ['риба печена', ['fish_baked']],
+  ['печена курка', ['chicken_roast']],
+  ['печені овочі', ['veg_baked']],
+  ['запечена свинина', ['pork_baked']],
+  ['печене яблуко', ['apple_baked']],
+  ['pečená ryba', ['fish_baked']],
+  ['roast pork', ['pork_baked']],
+  ['jacket potato', ['potato_baked_skin']],
 ];
 const server = await serve(0);
 const b = await chromium.launch(); const p = await b.newPage();

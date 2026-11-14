@@ -943,7 +943,56 @@ FOOD_DB.push(
   ['yogurt_bowl', 'Йогурт з гранолою й ягодами', 'Jogurt s granolou a ovocem', 'Yogurt bowl with granola', 140, 6, 4, 20, 250],
   ['smoothie_bowl', 'Смузі-боул', 'Smoothie bowl', 'Smoothie bowl', 90, 2, 2, 17, 300]
 );
+// ---- baked / oven variants (14.11): per 100 g, no extra oil unless named — [id, uk, cs, en, kcal, protein, fat, carbs, portion g]
+FOOD_DB.push(
+  ['fish_baked', 'Риба запечена (біла)', 'Pečená ryba (bílá)', 'Baked white fish', 105, 22, 2, 0, 150],
+  ['salmon_baked', 'Лосось запечений', 'Pečený losos', 'Baked salmon', 200, 22, 12, 0, 150],
+  ['mackerel_baked', 'Скумбрія запечена', 'Pečená makrela', 'Baked mackerel', 230, 21, 16, 0, 150],
+  ['trout_baked', 'Форель запечена', 'Pečený pstruh', 'Baked trout', 150, 21, 7, 0, 150],
+  ['chicken_breast_baked', 'Куряче філе запечене', 'Pečená kuřecí prsa', 'Baked chicken breast', 165, 31, 3.6, 0, 150],
+  ['chicken_thigh_baked', 'Куряче стегно запечене', 'Pečené kuřecí stehno', 'Baked chicken thigh', 230, 24, 15, 0, 150],
+  ['drumstick_baked', 'Куряча гомілка запечена', 'Pečené kuřecí paličky', 'Baked chicken drumstick', 200, 25, 11, 0, 150],
+  ['wings_baked', 'Курячі крильця запечені', 'Pečená kuřecí křidélka', 'Baked chicken wings', 250, 22, 17, 1, 150],
+  ['turkey_baked', 'Індичка запечена', 'Pečené krůtí maso', 'Roast turkey', 160, 29, 4.5, 0, 150],
+  ['duck_baked', 'Качка запечена', 'Pečená kachna', 'Roast duck', 300, 19, 25, 0, 200],
+  ['pork_baked', 'Свинина запечена', 'Pečené vepřové', 'Roast pork', 260, 25, 18, 0, 150],
+  ['beef_baked', 'Яловичина запечена', 'Pečené hovězí', 'Roast beef', 220, 28, 12, 0, 150],
+  ['meat_french', 'Мʼясо по-французьки', 'Maso zapečené se sýrem', 'Meat baked with cheese', 250, 15, 19, 5, 200],
+  ['potato_baked_skin', 'Картопля печена в мундирі', 'Pečené brambory ve slupce', 'Jacket potato', 95, 2.5, 0.1, 21, 250],
+  ['potato_baked_cheese', 'Картопля запечена з сиром', 'Brambory zapečené se sýrem', 'Potatoes baked with cheese', 170, 6, 9, 17, 250],
+  ['sweet_potato_baked', 'Батат печений', 'Pečené batáty', 'Baked sweet potato', 90, 2, 0.2, 21, 200],
+  ['veg_baked', 'Овочі запечені', 'Pečená zelenina', 'Roasted vegetables', 80, 2, 4.5, 8, 200],
+  ['zucchini_baked', 'Кабачки запечені', 'Pečená cuketa', 'Baked zucchini', 45, 1.5, 2.5, 4.5, 200],
+  ['eggplant_baked', 'Баклажан запечений', 'Pečený lilek', 'Baked eggplant', 60, 1.2, 3.5, 6, 200],
+  ['pepper_baked', 'Перець печений', 'Pečená paprika', 'Roasted pepper', 40, 1.3, 0.5, 7, 150],
+  ['pumpkin_baked', 'Гарбуз печений', 'Pečená dýně', 'Baked pumpkin', 45, 1, 0.2, 10, 200],
+  ['beet_baked', 'Буряк печений', 'Pečená červená řepa', 'Roasted beetroot', 50, 1.7, 0.2, 10, 150],
+  ['mushrooms_baked', 'Гриби запечені', 'Pečené houby', 'Baked mushrooms', 45, 4, 1.5, 3, 150],
+  ['apple_baked', 'Яблуко печене', 'Pečené jablko', 'Baked apple', 65, 0.4, 0.2, 16, 150],
+  ['egg_baked', 'Яйця запечені (у духовці)', 'Zapečená vejce', 'Baked eggs', 150, 12, 10, 1, 120]
+);
 Object.assign(FOOD_ALIAS, {
+  potato_baked: ['запечена картопля', 'картопля запечена', 'картопля в духовці', 'картопля з духовки', 'печена картопля', 'brambory z trouby', 'roast potatoes', 'oven potatoes'],
+  fish_baked: ['печена риба', 'риба печена', 'риба в духовці', 'риба з духовки', 'запечена тріска', 'запечений минтай', 'ryba z trouby', 'baked fish'],
+  salmon_baked: ['печений лосось', 'лосось у духовці', 'запечена сьомга', 'losos z trouby'],
+  chicken_breast_baked: ['запечене філе', 'філе в духовці', 'курка філе запечена', 'kuřecí prsa z trouby'],
+  chicken_roast: ['печена курка', 'курка в духовці', 'курка з духовки', 'pečené kuře', 'roast chicken'],
+  wings_baked: ['печені крильця', 'крильця в духовці'],
+  pork_baked: ['печена свинина', 'свинина в духовці', 'буженина', 'vepřová pečeně'],
+  beef_baked: ['печена яловичина', 'яловичина в духовці', 'roastbeef', 'ростбіф'],
+  meat_french: ['мясо по французьки', 'мʼясо по французьки', 'запечене мʼясо з сиром'],
+  potato_baked_skin: ['картопля в мундирі', 'картопля в мундирах', 'brambory ve slupce', 'jacket potato'],
+  potato_baked_cheese: ['картопля з сиром у духовці', 'запіканка картопляна'],
+  veg_baked: ['печені овочі', 'овочі в духовці', 'овочі гриль', 'zelenina z trouby', 'roast vegetables'],
+  zucchini_baked: ['печені кабачки', 'кабачок запечений', 'cuketa z trouby'],
+  eggplant_baked: ['печений баклажан', 'баклажани запечені'],
+  pepper_baked: ['печені перці', 'перець запечений'],
+  pumpkin_baked: ['запечений гарбуз', 'гарбуз у духовці'],
+  beet_baked: ['запечений буряк', 'буряк у духовці'],
+  mushrooms_baked: ['печені гриби', 'печериці запечені', 'гриби в духовці'],
+  apple_baked: ['печені яблука', 'запечене яблуко', 'яблуко з духовки'],
+  sweet_potato_baked: ['печений батат', 'запечений батат', 'батат у духовці'],
+  egg_baked: ['яйця в духовці', 'запечені яйця'],
   lamb: ['баранячі', 'jehně'], rabbit_meat: ['кролик мʼясо'], drumstick: ['гомілки', 'ніжки курячі', 'stehna kuřecí'],
   steak: ['стейк', 'біфштекс'], ribs: ['ребра', 'žebírka'], shashlyk: ['шашлик', 'шашлички'], grilled_chicken: ['курка гриль', 'гриль'],
   meatballs: ['тефтелі', 'фрикадельки', 'тефтельки'], chicken_kyiv: ['по-київськи', 'chicken kiev'], kholodets: ['холодець', 'студень', 'drůbeží huspenina'],
@@ -3482,7 +3531,8 @@ const stemsOf = w => { const out = [w]; for (let i = 1; i <= 3; i++) if (w.lengt
 const stemW = w => w.length > 5 ? w.slice(0, w.length - 1) : w;
 // words that never identify a food on their own
 const QL_STOP = new Set(['з', 'зі', 'із', 'та', 'і', 'й', 'на', 'в', 'у', 'до', 'по', 'для', 'без', 'трохи', 'ще', 's', 'se', 'a', 'na', 'v', 've', 'do', 'bez', 'with', 'and', 'of', 'the', 'some', 'little', 'bit']);
-const startsName = k => FDB.find(f => fold(f.n[LI()]).startsWith(k)) || FDB.find(f => f.n.some(n => fold(n).startsWith(k)));
+// an exact name or synonym wins first («картопля запечена» → baked potatoes, not «…запечена з сиром»)
+const startsName = k => FDB.find(f => f.n.some(n => fold(n) === k)) || FDB.find(f => (f.al || []).some(a => fold(a) === k)) || FDB.find(f => fold(f.n[LI()]).startsWith(k)) || FDB.find(f => f.n.some(n => fold(n).startsWith(k)));
 function findFood(q) {
   const k = fold(q).replace(/[^\p{L}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
   if (!k) return null;
