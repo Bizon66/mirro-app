@@ -28,10 +28,8 @@
 - ☐ Обрати назву і перевірити, чи вона вільна: EUIPO (tmsearch.euipo.europa.eu), ÚPV (isdv.upv.gov.cz),
   Google Play, App Store, домен.
 - ☐ Зареєструвати домен і торгову марку (ÚPV — лише Чехія, дешевше; EUIPO — уся ЄС).
-- ☐ **Замінити тимчасовий ID `com.example.dvijnyk`** на постійний, напр. `cz.<домен>.<назва>`. Його не можна
-  змінити після першого завантаження в Google Play. Де міняти: `capacitor.config.json` (`appId`),
-  `android/app/build.gradle` (`namespace`, `applicationId`), пакет `MainActivity` в
-  `android/app/src/main/java/`, Bundle Identifier в Xcode.
+- ☑ ID застосунку `app.mirro.twin` (15.11) — у `capacitor.config.json`, `android/app/build.gradle`, пакеті `MainActivity`,
+  `android/app/src/main/res/values/strings.xml` і `ios/App/App.xcodeproj/project.pbxproj`. Після першого завантаження не змінюється.
 - ☐ Замінити назву (`appName` у `capacitor.config.json`, `src/manifest.webmanifest`) та тимчасову іконку
   (`assets/icon.svg` → `node scripts/make-icons.mjs` → `npx @capacitor/assets generate`).
 

@@ -1,4 +1,4 @@
-package com.example.dvijnyk;
+package app.mirro.twin;
 
 import com.getcapacitor.BridgeActivity;
 
