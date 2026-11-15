@@ -60,6 +60,7 @@
     try { return !!core.isHatReady(id, appearance); } catch (error) { return false; }
   }
   function extendCatalog() {
+    return true;   // Mirro 15.11: the owner keeps only the headband and headphones — the six extra items are not added
     try {
       if (typeof SHOP === 'undefined' || !Array.isArray(SHOP)) return false;
       for (const item of ADDITIONS) {

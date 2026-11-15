@@ -394,9 +394,11 @@ const netMet = a => Math.max(0, a.met - 1);
 // one-time fix for activities saved before: gross MET → net MET
 // every record gets a stable uid: needed later to merge entries from two phones (sync in 1.2)
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-const DATA_VERSION = 4;
+const DATA_VERSION = 5;
 // men: no caps / bobble hat (the sports headband stays); see the v4 step in migrate()
 const MALE_NO_HATS = new Set(['cap_blue', 'cap_red', 'beanie']);
+// 15.11 (owner): of the accessories only the sports headband and headphones stay — everything else leaves the shop for everyone
+const GONE_ITEMS = new Set(['cap_blue', 'cap_red', 'beanie', 'watch', 'acc_bandana', 'acc_towel', 'acc_waistbag', 'acc_crossbody', 'acc_wristbands', 'acc_bottle']);
 function migrate() {
   let changed = false;
   if (!D.metNet && D.days) {
@@ -419,6 +421,11 @@ function migrate() {
     const gone = id => id === 'sunglasses' || (male && MALE_NO_HATS.has(id));
     D.shop.owned = (D.shop.owned || []).filter(id => !gone(id));
     if (D.shop.eq) for (const k of Object.keys(D.shop.eq)) if (gone(D.shop.eq[k])) delete D.shop.eq[k];
+  }
+  if ((D.v || 1) < 5 && D.shop) {
+    // v5: caps, bobble hat, tracker and the six extra accessories left the shop — taken off, their points come back
+    D.shop.owned = (D.shop.owned || []).filter(id => !GONE_ITEMS.has(id));
+    if (D.shop.eq) for (const k of Object.keys(D.shop.eq)) if (GONE_ITEMS.has(D.shop.eq[k])) delete D.shop.eq[k];
   }
   if ((D.v || 1) < DATA_VERSION) { D.v = DATA_VERSION; changed = true; }
   return changed;
@@ -2634,15 +2641,11 @@ const lvlTitle = L => { const a = LVL_TITLES[LANG] || ((window.I18N_X || {})[LAN
 
 // ---- shop ----
 const SHOP = [
-  { id: 'cap_blue', slot: 'hat', price: 120, ic: '🧢', col: '#2f6fe0', n: ['Кепка синя', 'Kšiltovka modrá', 'Blue cap'] },
-  { id: 'cap_red', slot: 'hat', price: 120, ic: '🧢', col: '#d6453a', n: ['Кепка червона', 'Kšiltovka červená', 'Red cap'] },
-  { id: 'beanie', slot: 'hat', price: 180, ic: '🧶', col: '#1f9d6b', n: ['Шапка з помпоном', 'Kulich s bambulí', 'Bobble hat'] },
   { id: 'headband', slot: 'hat', price: 80, ic: '🎽', col: '#ff7a3d', n: ['Спортивна пов\'язка', 'Sportovní čelenka', 'Sweatband'] },
   { id: 'shoes_orange', slot: 'shoes', price: 140, ic: '👟', col: '#ff7a3d', n: ['Кросівки помаранчеві', 'Tenisky oranžové', 'Orange sneakers'] },
   { id: 'shoes_green', slot: 'shoes', price: 140, ic: '👟', col: '#1f9d6b', n: ['Кросівки зелені', 'Tenisky zelené', 'Green sneakers'] },
   { id: 'shoes_black', slot: 'shoes', price: 100, ic: '👟', col: '#2b2f3a', n: ['Кросівки чорні', 'Tenisky černé', 'Black sneakers'] },
   { id: 'headphones', slot: 'acc', price: 240, ic: '🎧', n: ['Навушники', 'Sluchátka', 'Headphones'] },
-  { id: 'watch', slot: 'acc', price: 200, ic: '⌚', n: ['Фітнес-браслет', 'Fitness náramek', 'Fitness tracker'] },
   { id: 'bg_park', slot: 'bg', price: 240, ic: '🌳', n: ['Парк', 'Park', 'Park'] },
   { id: 'bg_gym', slot: 'bg', price: 300, ic: '🏋️', n: ['Спортзал', 'Posilovna', 'Gym'] },
   { id: 'bg_beach', slot: 'bg', price: 360, ic: '🏖️', n: ['Пляж', 'Pláž', 'Beach'] },
@@ -2662,6 +2665,7 @@ function equipNow() {
   const eq = Object.assign({}, shopState().eq);
   if (AV_TRY) for (const k in AV_TRY) { if (AV_TRY[k]) eq[k] = AV_TRY[k]; else delete eq[k]; }
   if ((P() || {}).sex !== 'f' && MALE_NO_HATS.has(eq.hat)) delete eq.hat;
+  for (const k of Object.keys(eq)) if (GONE_ITEMS.has(eq[k])) delete eq[k];
   return eq;
 }
 const itemById = id => SHOP.find(x => x.id === id);
@@ -2780,7 +2784,7 @@ function renderShop() {
   const test = !!D.testMode;
   $('shopCats').innerHTML = SLOTS.map(([sl, key]) => `<button data-sc="${sl}" class="${sl === shopCat ? 'on' : ''}">${t(key)}</button>`).join('');
   const male = (P() || {}).sex !== 'f';
-  $('shopGrid').innerHTML = SHOP.filter(i => i.slot === shopCat && !(male && MALE_NO_HATS.has(i.id))).map(i => {
+  $('shopGrid').innerHTML = SHOP.filter(i => i.slot === shopCat && !GONE_ITEMS.has(i.id) && !(male && MALE_NO_HATS.has(i.id))).map(i => {
     const own = test || st.owned.includes(i.id), on = st.eq[i.slot] === i.id, locked = i.lvl && lv.L < i.lvl;
     let btn;
     if (own) btn = `<button class="btn ${on ? 'ghost' : ''}" data-eq="${i.id}">${on ? t('unequip') : t('equip')}</button>`;
