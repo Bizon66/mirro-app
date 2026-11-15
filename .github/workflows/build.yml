@@ -27,6 +27,8 @@ jobs:
   android:
     runs-on: ubuntu-latest
     needs: web
+    permissions:
+      contents: write   # to publish the test APK as the "android-test" release
     env:
       HAS_UPLOAD_KEY: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
     steps:
@@ -43,6 +45,16 @@ jobs:
         run: ./gradlew --no-daemon assembleDebug
       - uses: actions/upload-artifact@v4
         with: { name: app-debug-apk, path: android/app/build/outputs/apk/debug/*.apk, retention-days: 14 }
+      # one fixed download link for testers: github.com/<owner>/<repo>/releases/tag/android-test → Mirro-test.apk
+      - name: Publish the test APK (release "android-test")
+        if: github.event_name == 'push'
+        env: { GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk "$RUNNER_TEMP/Mirro-test.apk"
+          gh release delete android-test --yes --cleanup-tag || true
+          gh release create android-test "$RUNNER_TEMP/Mirro-test.apk" --prerelease --target "$GITHUB_SHA" \
+            --title "Mirro — тестова версія для Android" \
+            --notes "Відкрийте на Android-телефоні й натисніть Mirro-test.apk → дозвольте встановлення → Встановити. Зібрано з коміту ${GITHUB_SHA::7}."
       # Signed bundle for Google Play — only when the upload-key secrets are set in the repository settings
       - name: Signed release bundle (AAB)
         if: env.HAS_UPLOAD_KEY == 'true'
