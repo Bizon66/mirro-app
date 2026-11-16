@@ -1,0 +1,9 @@
+{
+"compTitle": ["🧬 Состав тела (InBody / умные весы)", "🧬 Kūno sudėtis (InBody / išmaniosios svarstyklės)"],
+"compHint": ["Необязательно. Достаточно % жира или безжировой массы. Измеряйте утром натощак, до тренировки. С этими данными точнее считаются белок, калории и прогноз.", "Nebūtina. Užtenka riebalų % arba neriebalinės masės. Matuokite ryte nevalgę, prieš treniruotę. Su šiais duomenimis tiksliau skaičiuojami baltymai, kalorijos ir prognozė."],
+"compFat": ["Жир, %", "Riebalai, %"],
+"compFfm": ["Безжировая масса, кг", "Neriebalinė masė, kg"],
+"compSmm": ["Скелетные мышцы, кг", "Skeleto raumenys, kg"],
+"compFatShort": ["жира", "riebalų"],
+"compProt": ["Белок считается от безжировой массы ({m} кг, по InBody).", "Baltymai skaičiuojami pagal neriebalinę masę ({m} kg, pagal InBody)."]
+}

@@ -303,6 +303,9 @@ Object.assign(T_ADD.en, { petSayDog: 'Woof!', petSayCat: 'Purr…', petSayParrot
 Object.assign(T_ADD.uk, { testOn: '🧪 Режим тестування увімкнено: усі речі й улюбленці відкриті безкоштовно', testOff: 'Режим тестування вимкнено', testBanner: '🧪 Режим тестування: усе відкрито безкоштовно, бали не витрачаються. Вимкнути — 5 натискань на версію внизу Профілю.' });
 Object.assign(T_ADD.cs, { testOn: '🧪 Testovací režim zapnut: všechny věci a mazlíčci jsou zdarma', testOff: 'Testovací režim vypnut', testBanner: '🧪 Testovací režim: vše odemčeno zdarma, body se neutrácejí. Vypnutí — 5 klepnutí na verzi dole v Profilu.' });
 Object.assign(T_ADD.en, { testOn: '🧪 Test mode on: all items and pets are unlocked for free', testOff: 'Test mode off', testBanner: '🧪 Test mode: everything is unlocked for free, no points are spent. To turn it off, tap the version at the bottom of Profile 5 times.' });
+Object.assign(T_ADD.uk, { compTitle: '🧬 Склад тіла (InBody / розумні ваги)', compHint: 'Необовʼязково. Достатньо % жиру або нежирової маси. Міряйте зранку натщесерце, до тренування. З цими даними точніше рахуються білок, калорії й прогноз.', compFat: 'Жир, %', compFfm: 'Нежирова маса, кг', compSmm: 'Скелетні мʼязи, кг', compFatShort: 'жиру', compProt: 'Білок рахується від нежирової маси ({m} кг, за InBody).' });
+Object.assign(T_ADD.cs, { compTitle: '🧬 Složení těla (InBody / chytrá váha)', compHint: 'Nepovinné. Stačí % tuku nebo tukuprostá hmota. Měřte ráno nalačno, před tréninkem. S těmito údaji se přesněji počítá bílkovina, kalorie a prognóza.', compFat: 'Tuk, %', compFfm: 'Tukuprostá hmota, kg', compSmm: 'Kosterní svaly, kg', compFatShort: 'tuku', compProt: 'Bílkovina se počítá z tukuprosté hmoty ({m} kg, podle InBody).' });
+Object.assign(T_ADD.en, { compTitle: '🧬 Body composition (InBody / smart scale)', compHint: 'Optional. % fat or lean mass is enough. Measure in the morning, before eating and training. With these, protein, calories and the forecast are more accurate.', compFat: 'Body fat, %', compFfm: 'Lean mass, kg', compSmm: 'Skeletal muscle, kg', compFatShort: 'fat', compProt: 'Protein is based on your lean mass ({m} kg, from InBody).' });
 // feedback form (14.11): goes to the owner as a GitHub issue through api/feedback.js
 Object.assign(T_ADD.uk, { fbTitle: '💬 Відгук', fbSub: 'Що не працює, що незручно, чого бракує? Напишіть — це читає автор застосунку.', fbIdea: '💡 Ідея', fbBug: '🐞 Помилка', fbOther: '💬 Інше', fbPh: 'Ваш відгук…', fbTech: 'Додати технічні дані (версія, мова, екран) — допомагає знайти помилку', fbSend: 'Надіслати', fbSending: 'Надсилаю…', fbSent: 'Дякуємо! Відгук надіслано 💙', fbShort: 'Напишіть хоча б кілька слів', fbErr: 'Не вдалося надіслати. Перевірте інтернет і спробуйте пізніше.', fbPrivacy: '🔒 Надсилається лише цей текст. Вага, їжа й заміри не надсилаються.' });
 Object.assign(T_ADD.cs, { fbTitle: '💬 Zpětná vazba', fbSub: 'Co nefunguje, co je nepohodlné, co chybí? Napište — čte to autor aplikace.', fbIdea: '💡 Nápad', fbBug: '🐞 Chyba', fbOther: '💬 Jiné', fbPh: 'Vaše zpráva…', fbTech: 'Přidat technické údaje (verze, jazyk, obrazovka) — pomáhá najít chybu', fbSend: 'Odeslat', fbSending: 'Odesílám…', fbSent: 'Děkujeme! Zpráva odeslána 💙', fbShort: 'Napište aspoň pár slov', fbErr: 'Nepodařilo se odeslat. Zkontrolujte internet a zkuste to později.', fbPrivacy: '🔒 Odesílá se jen tento text. Váha, jídlo a míry se neodesílají.' });
@@ -1068,7 +1071,12 @@ const macroOf = (f, g) => ({ k: f.k * g / 100, p: f.p * g / 100, f: f.f * g / 10
 const MEALS = ['breakfast', 'lunch', 'dinner', 'snack'];
 const MEAL_KEY = { breakfast: 'mBreakfast', lunch: 'mLunch', dinner: 'mDinner', snack: 'mSnack' };
 function defaultMeal() { const h = new Date().getHours(); return h < 11 ? 'breakfast' : h < 16 ? 'lunch' : h < 21 ? 'dinner' : 'snack'; }
-function protTarget(w, g) { return Math.round(Math.min(w, 27 * Math.pow(P().height / 100, 2)) * (g === 'keep' ? 1.2 : g === 'gain' ? 1.8 : 1.6) / 5) * 5; }
+function protTarget(w, g) {
+  const ffm = (P().age || 30) >= 18 ? leanMass(w) : null;
+  // measured lean mass: 2.0 g/kg when losing or gaining, 1.6 when keeping; never under 1 g per kg of weight, at most 220 g
+  if (ffm) return Math.round(clamp(ffm * (g === 'keep' ? 1.6 : 2.0), w, 220) / 5) * 5;
+  return Math.round(Math.min(w, 27 * Math.pow(P().height / 100, 2)) * (g === 'keep' ? 1.2 : g === 'gain' ? 1.8 : 1.6) / 5) * 5;
+}
 function macroTargets(w) {
   const ct = calTarget(w), p = protTarget(w, ct.g), f = Math.round(ct.tg * 0.28 / 9);
   return { k: ct.tg, p, f, c: Math.max(0, Math.round((ct.tg - p * 4 - f * 9) / 4)) };
@@ -1080,15 +1088,38 @@ function dishTotals(ings) {
 }
 
 // ================= model =================
-const bmr = w => { const p = P(); return 10 * w + 6.25 * p.height - 5 * p.age + (p.sex === 'm' ? 5 : -161); };
+const bmr = w => {
+  const p = P(), mifflin = 10 * w + 6.25 * p.height - 5 * p.age + (p.sex === 'm' ? 5 : -161);
+  const ffm = leanMass(w);
+  // with a measured lean mass: halfway to Katch-McArdle (370 + 21.6 × lean kg), so the norm does not jump; calib() keeps correcting
+  return ffm ? (mifflin + 370 + 21.6 * ffm) / 2 : mifflin;
+};
 // ---- v12: dynamic energy model ----
 // energy per kg of weight change depends on body fat (Forbes / Hall): leaner people lose more lean tissue per kg
 const RHO_F = 9440, RHO_L = 1816;
+// body composition from InBody / smart scales (16.11): the latest measurement with % fat or lean mass, if any
+let COMP_C = null;   // cache: the model calls this inside long loops
+function compRef() {
+  const key = (D.meas || []).length + '|' + (D.savedAt || 0) + '|' + ((P() || {}).height || 0);
+  if (COMP_C && COMP_C.key === key) return COMP_C.val;
+  COMP_C = { key, val: compRef0() }; return COMP_C.val;
+}
+function compRef0() {
+  const ms = (D.meas || []).filter(m => m.fatPct || m.ffm).sort((a, b) => a.date < b.date ? -1 : 1);
+  const m = ms[ms.length - 1]; if (!m) return null;
+  const w0 = m.weight || weightAt(m.date); if (!w0) return null;
+  const f0 = m.fatPct ? w0 * m.fatPct / 100 : w0 - m.ffm;
+  return f0 > 0 && f0 < w0 ? { w0, f0, date: m.date } : null;
+}
 function fatMass(w) {
+  const c = compRef();
+  // measured: move from the measurement along Forbes's curve (share of fat in a kg of change = F / (F + 10.4))
+  if (c) return clamp(c.f0 + (w - c.w0) * c.f0 / (c.f0 + 10.4), w * 0.03, w * 0.7);
   const p = P(), bmi = w / Math.pow(p.height / 100, 2);
   const bf = clamp(1.2 * bmi + 0.23 * (p.age || 30) - 10.8 * (p.sex === 'm' ? 1 : 0) - 5.4, 6, 60);   // Deurenberg
   return w * bf / 100;
 }
+const leanMass = w => compRef() ? w - fatMass(w) : null;   // only when measured
 function rhoAt(w) { const pL = 10.4 / (10.4 + fatMass(w)); return pL * RHO_L + (1 - pL) * RHO_F; }
 // self-correction from real weigh-ins: extra (or missing) kcal/day versus the formula
 let CAL = null;
@@ -1878,8 +1909,11 @@ function fillStatic() {
   sel.innerHTML = ACTS.map(a => `<option value="${a.id}">${esc(L3(a.n))}</option>`).join('');
   if (v) sel.value = v;
   $('msFields').innerHTML = [['weight', t('weightKg'), '0.1'], ...GIRTH_KEYS.map(k => [k, t(k) + ', ' + t('cm'), '0.5'])]
-    .map(([k, lbl, st]) => `<div><label>${esc(lbl)}</label><input id="ms_${k}" type="number" step="${st}" inputmode="decimal"></div>`).join('');
+    .map(([k, lbl, st]) => `<div><label>${esc(lbl)}</label><input id="ms_${k}" type="number" step="${st}" inputmode="decimal"></div>`).join('') +
+    `<div style="grid-column:1/-1"><h3 style="margin:10px 0 2px">${esc(t('compTitle'))}</h3><p class="muted">${esc(t('compHint'))}</p></div>` +
+    COMP_KEYS.map(([k, lbl]) => `<div><label>${esc(t(lbl))}</label><input id="ms_${k}" type="number" step="0.1" inputmode="decimal"></div>`).join('');
 }
+const COMP_KEYS = [['fatPct', 'compFat'], ['ffm', 'compFfm'], ['smm', 'compSmm']];
 $('dDone').addEventListener('change', e => { day(curDay).done = e.target.checked; save(); dirty(); renderToday(); });
 $('dayPrev').addEventListener('click', () => { curDay = addDays(curDay, -1); renderToday(); });
 $('dayNext').addEventListener('click', () => { if (curDay < todayStr()) curDay = addDays(curDay, 1); renderToday(); });
@@ -4039,8 +4073,8 @@ function renderMeasure() {
   $('msDate').max = todayStr();
   const ms = D.meas.slice().sort((a, b) => a.date < b.date ? 1 : -1);
   if (!ms.length) { $('msHist').innerHTML = `<p class="muted">${t('noMeas')}</p>`; return; }
-  const cols = ['weight', ...GIRTH_KEYS];
-  $('msHist').innerHTML = `<div style="overflow-x:auto"><table><tr><th>${t('date')}</th>${cols.map(c => `<th>${c === 'weight' ? t('kg') : esc(t(c))}</th>`).join('')}<th></th></tr>` +
+  const cols = ['weight', ...GIRTH_KEYS, ...(ms.some(m => m.fatPct) ? ['fatPct'] : [])];
+  $('msHist').innerHTML = `<div style="overflow-x:auto"><table><tr><th>${t('date')}</th>${cols.map(c => `<th>${c === 'weight' ? t('kg') : c === 'fatPct' ? '% ' + esc(t('compFatShort')) : esc(t(c))}</th>`).join('')}<th></th></tr>` +
     ms.map(m => `<tr><td>${fmtDate(m.date)}</td>${cols.map(c => `<td>${m[c] ? r1(m[c]) : '·'}</td>`).join('')}<td><button data-dm="${m.date}" style="border:0;background:none;font-size:16px;color:#6b7078">×</button></td></tr>`).join('') + '</table></div>';
 }
 $('msHist').addEventListener('click', e => { const b = e.target.closest('[data-dm]'); if (!b) return; D.meas = D.meas.filter(m => m.date !== b.dataset.dm); save(); dirty(); renderMeasure(); });
@@ -4052,12 +4086,21 @@ $('msSave').addEventListener('click', () => {
     const ok = k === 'weight' ? v >= 30 && v <= 300 : v >= 20 && v <= 250;
     if (v != null && ok) { rec[k] = v; any = true; }
   });
+  // InBody / smart scale: % fat 3–70, lean mass and skeletal muscle 15–200 kg; the missing one of % fat / lean mass is worked out from the weight
+  COMP_KEYS.forEach(([k]) => {
+    const v = num($('ms_' + k).value);
+    const ok = k === 'fatPct' ? v >= 3 && v <= 70 : v >= 15 && v <= 200;
+    if (v != null && ok) { rec[k] = v; any = true; }
+  });
+  { const wq = rec.weight || (D.meas.find(m => m.date === date) || {}).weight;
+    if (wq && rec.fatPct && !rec.ffm) rec.ffm = Math.round(wq * (1 - rec.fatPct / 100) * 10) / 10;
+    else if (wq && rec.ffm && !rec.fatPct && rec.ffm < wq) rec.fatPct = Math.round((1 - rec.ffm / wq) * 1000) / 10; }
   if (!any) return toast(t('tOne'));
   const old = D.meas.find(m => m.date === date);
   if (old) Object.assign(old, rec); else D.meas.push(rec);
   save(); dirty();
-  ['weight', ...GIRTH_KEYS].forEach(k => $('ms_' + k).value = '');
-  renderMeasure(); toast(t('tMeas'));
+  ['weight', ...GIRTH_KEYS, ...COMP_KEYS.map(c => c[0])].forEach(k => $('ms_' + k).value = '');
+  CAL = null; renderMeasure(); toast(t('tMeas'));
 });
 
 // ---- Progress ----
@@ -4100,11 +4143,11 @@ function renderTips() {
   $('calBar').style.width = clamp(tt.eaten / allowed * 100, 0, 100) + '%';
   $('calBar').style.background = tt.eaten > allowed ? 'var(--bad)' : 'var(--good)';
   $('calToday').textContent = t('todayVs', { e: Math.round(tt.eaten), t: Math.round(allowed) });
-  const refW = Math.min(w, 27 * Math.pow(p.height / 100, 2));
-  const prot = Math.round(refW * (ct.g === 'keep' ? 1.2 : ct.g === 'gain' ? 1.8 : 1.6) / 5) * 5;
+  const prot = protTarget(w, ct.g);   // the same norm as on the Today card
   const lines = [t('calBase', { k: Math.round(ct.base) }), ct.low ? t('calLow') : t(ct.g === 'lose' ? 'calLose' : ct.g === 'gain' ? 'calGain' : 'calKeep')];
   if (ct.hit) lines.push(t('calFloorHit', { f: calFloor() }));
   lines.push(t('protein', { g: prot }), t('exDays'));
+  { const lm = leanMass(w); if (lm && (P().age || 30) >= 18) lines.push(t('compProt', { m: r1(lm) })); }
   if (ct.g === 'lose') lines.push(t('calFloor', { f: calFloor() }));
   $('calLines').innerHTML = lines.map(l => `<li>${esc(l)}</li>`).join('');
   // week
