@@ -1,16 +1,422 @@
 {
-"Збийте 3 яйця з ложкою молока, посоліть.": [["Взбейте 3 яйца с ложкой молока, посолите.", "Вылейте на разогретую сковороду с каплей масла.", "Готовьте под крышкой 4–5 мин, по желанию добавьте сыр или помидор."], ["Išplakite 3 kiaušinius su šaukštu pieno, pasūdykite.", "Supilkite į įkaitintą keptuvę su lašu aliejaus.", "Kepkite uždengę 4–5 min, pagal skonį įdėkite sūrio ar pomidoro."]],
-"Наріжте 3 картоплини соломкою, цибулю півкільцями.": [["Нарежьте 3 картофелины соломкой, лук полукольцами.", "Жарьте картошку на масле 15 мин, переворачивайте.", "Добавьте лук, посолите и жарьте ещё 5 мин."], ["Supjaustykite 3 bulves šiaudeliais, svogūną pusžiedžiais.", "Kepkite bulves aliejuje 15 min, vartykite.", "Įdėkite svogūną, pasūdykite ir kepkite dar 5 min."]],
-"Зваріть очищену картоплю в підсоленій воді 20 хв.": [["Сварите очищенную картошку в подсоленной воде 20 мин.", "Сосиски проварите или обжарьте 5 мин.", "Подавайте с огурцом или луком."], ["Išvirkite nuluptas bulves pasūdytame vandenyje 20 min.", "Dešreles išvirkite arba apkepkite 5 min.", "Patiekite su agurku arba svogūnu."]],
-"Зваріть рис (1 частина рису на 2 води) 15–18 хв.": [["Сварите рис (1 часть риса на 2 воды) 15–18 мин.", "Нарежьте курицу кусочками, обжарьте 8–10 мин с луком и морковью.", "Посолите, поперчите, подавайте вместе."], ["Išvirkite ryžius (1 dalis ryžių 2 dalims vandens) 15–18 min.", "Supjaustykite vištieną gabalėliais, apkepkite 8–10 min su svogūnu ir morkomis.", "Pasūdykite, pipirinkite, patiekite kartu."]],
-"Зваріть 100 г макаронів за інструкцією.": [["Сварите 100 г макарон по инструкции.", "Нарезанный помидор потушите 3 мин на сковороде.", "Смешайте с макаронами, посыпьте тёртым сыром."], ["Išvirkite 100 g makaronų pagal instrukciją.", "Supjaustytą pomidorą troškinkite 3 min keptuvėje.", "Sumaišykite su makaronais, apibarstykite tarkuotu sūriu."]],
-"Залийте 60 г вівсянки 200 мл молока або води.": [["Залейте 60 г овсянки 200 мл молока или воды.", "Варите 5 мин, помешивая.", "Добавьте нарезанный банан."], ["Užpilkite 60 g avižinių dribsnių 200 ml pieno arba vandens.", "Virkite 5 min maišydami.", "Įdėkite supjaustytą bananą."]],
-"Зваріть гречку (1:2 з водою) 15 хв.": [["Сварите гречку (1:2 с водой) 15 мин.", "Обжарьте грибы или курицу с луком 8 мин.", "Смешайте, посолите."], ["Išvirkite grikius (1:2 su vandeniu) 15 min.", "Apkepkite grybus ar vištieną su svogūnu 8 min.", "Sumaišykite, pasūdykite."]],
-"Тонко наріжте капусту, натріть моркву.": [["Тонко нашинкуйте капусту, натрите морковь.", "Посолите и немного помните руками.", "Заправьте ложкой масла и каплей уксуса."], ["Plonai supjaustykite kopūstą, sutarkuokite morką.", "Pasūdykite ir šiek tiek paminkykite rankomis.", "Pagardinkite šaukštu aliejaus ir lašu acto."]],
-"Покладіть на 2 скибки хліба помідор і сир.": [["Положите на 2 куска хлеба помидор и сыр.", "Запекайте в духовке или на сковороде под крышкой 5 мин.", "Ешьте тёплыми."], ["Ant 2 riekių duonos uždėkite pomidorą ir sūrį.", "Kepkite orkaitėje arba uždengtoje keptuvėje 5 min.", "Valgykite šiltus."]],
-"Змішайте 250 г кисломолочного сиру, яйце й 2 ложки борошна.": [["Смешайте 250 г творога, яйцо и 2 ложки муки.", "Сформируйте небольшие лепёшки.", "Обжарьте на небольшом количестве масла по 3 мин с каждой стороны."], ["Sumaišykite 250 g varškės, kiaušinį ir 2 šaukštus miltų.", "Suformuokite nedidelius paplotėlius.", "Kepkite nedideliame kiekyje aliejaus po 3 min iš kiekvienos pusės."]],
-"Наріжте картоплю, моркву й цибулю кубиками.": [["Нарежьте картошку, морковь и лук кубиками.", "Залейте 1,5 л воды, варите 20 мин.", "Посолите, добавьте специи или зелень."], ["Supjaustykite bulves, morkas ir svogūną kubeliais.", "Užpilkite 1,5 l vandens, virkite 20 min.", "Pasūdykite, įdėkite prieskonių ar žalumynų."]],
-"Обсмажте або зваріть 150 г курки, наріжте.": [["Обжарьте или сварите 150 г курицы, нарежьте.", "Нарежьте овощи, что есть: помидор, огурец, капусту.", "Смешайте, заправьте маслом или йогуртом."], ["Apkepkite arba išvirkite 150 g vištienos, supjaustykite.", "Supjaustykite turimas daržoves: pomidorą, agurką, kopūstą.", "Sumaišykite, pagardinkite aliejumi ar jogurtu."]],
-"Обсмажте нарізану картоплю 15 хв.": [["Обжарьте нарезанную картошку 15 мин.", "Залейте 2–3 взбитыми яйцами.", "Готовьте под крышкой 4 мин."], ["Apkepkite supjaustytas bulves 15 min.", "Užpilkite 2–3 išplaktais kiaušiniais.", "Kepkite uždengę 4 min."]],
-"Зваріть рис.": [["Сварите рис.", "Обжарьте морковь, лук и перец 5 мин.", "Добавьте рис (и яйцо, если есть), перемешайте 2 мин."], ["Išvirkite ryžius.", "Apkepkite morkas, svogūną ir papriką 5 min.", "Įdėkite ryžius (ir kiaušinį, jei turite), maišykite 2 min."]]
+"Збийте 3 яйця з ложкою молока, посоліть.": [
+[
+"Взбейте 3 яйца с ложкой молока, посолите.",
+"Вылейте на разогретую сковороду с каплей масла.",
+"Готовьте под крышкой 4–5 мин, по желанию добавьте сыр или помидор."
+],
+[
+"Išplakite 3 kiaušinius su šaukštu pieno, pasūdykite.",
+"Supilkite į įkaitintą keptuvę su lašu aliejaus.",
+"Kepkite uždengę 4–5 min, pagal skonį įdėkite sūrio ar pomidoro."
+]
+],
+"Наріжте 3 картоплини соломкою, цибулю півкільцями.": [
+[
+"Нарежьте 3 картофелины соломкой, лук полукольцами.",
+"Жарьте картошку на масле 15 мин, переворачивайте.",
+"Добавьте лук, посолите и жарьте ещё 5 мин."
+],
+[
+"Supjaustykite 3 bulves šiaudeliais, svogūną pusžiedžiais.",
+"Kepkite bulves aliejuje 15 min, vartykite.",
+"Įdėkite svogūną, pasūdykite ir kepkite dar 5 min."
+]
+],
+"Зваріть очищену картоплю в підсоленій воді 20 хв.": [
+[
+"Сварите очищенную картошку в подсоленной воде 20 мин.",
+"Сосиски проварите или обжарьте 5 мин.",
+"Подавайте с огурцом или луком."
+],
+[
+"Išvirkite nuluptas bulves pasūdytame vandenyje 20 min.",
+"Dešreles išvirkite arba apkepkite 5 min.",
+"Patiekite su agurku arba svogūnu."
+]
+],
+"Зваріть рис (1 частина рису на 2 води) 15–18 хв.": [
+[
+"Сварите рис (1 часть риса на 2 воды) 15–18 мин.",
+"Нарежьте курицу кусочками, обжарьте 8–10 мин с луком и морковью.",
+"Посолите, поперчите, подавайте вместе."
+],
+[
+"Išvirkite ryžius (1 dalis ryžių 2 dalims vandens) 15–18 min.",
+"Supjaustykite vištieną gabalėliais, apkepkite 8–10 min su svogūnu ir morkomis.",
+"Pasūdykite, pipirinkite, patiekite kartu."
+]
+],
+"Зваріть 100 г макаронів за інструкцією.": [
+[
+"Сварите 100 г макарон по инструкции.",
+"Нарезанный помидор потушите 3 мин на сковороде.",
+"Смешайте с макаронами, посыпьте тёртым сыром."
+],
+[
+"Išvirkite 100 g makaronų pagal instrukciją.",
+"Supjaustytą pomidorą troškinkite 3 min keptuvėje.",
+"Sumaišykite su makaronais, apibarstykite tarkuotu sūriu."
+]
+],
+"Залийте 60 г вівсянки 200 мл молока або води.": [
+[
+"Залейте 60 г овсянки 200 мл молока или воды.",
+"Варите 5 мин, помешивая.",
+"Добавьте нарезанный банан."
+],
+[
+"Užpilkite 60 g avižinių dribsnių 200 ml pieno arba vandens.",
+"Virkite 5 min maišydami.",
+"Įdėkite supjaustytą bananą."
+]
+],
+"Зваріть гречку (1:2 з водою) 15 хв.": [
+[
+"Сварите гречку (1:2 с водой) 15 мин.",
+"Обжарьте грибы или курицу с луком 8 мин.",
+"Смешайте, посолите."
+],
+[
+"Išvirkite grikius (1:2 su vandeniu) 15 min.",
+"Apkepkite grybus ar vištieną su svogūnu 8 min.",
+"Sumaišykite, pasūdykite."
+]
+],
+"Тонко наріжте капусту, натріть моркву.": [
+[
+"Тонко нашинкуйте капусту, натрите морковь.",
+"Посолите и немного помните руками.",
+"Заправьте ложкой масла и каплей уксуса."
+],
+[
+"Plonai supjaustykite kopūstą, sutarkuokite morką.",
+"Pasūdykite ir šiek tiek paminkykite rankomis.",
+"Pagardinkite šaukštu aliejaus ir lašu acto."
+]
+],
+"Покладіть на 2 скибки хліба помідор і сир.": [
+[
+"Положите на 2 куска хлеба помидор и сыр.",
+"Запекайте в духовке или на сковороде под крышкой 5 мин.",
+"Ешьте тёплыми."
+],
+[
+"Ant 2 riekių duonos uždėkite pomidorą ir sūrį.",
+"Kepkite orkaitėje arba uždengtoje keptuvėje 5 min.",
+"Valgykite šiltus."
+]
+],
+"Змішайте 250 г кисломолочного сиру, яйце й 2 ложки борошна.": [
+[
+"Смешайте 250 г творога, яйцо и 2 ложки муки.",
+"Сформируйте небольшие лепёшки.",
+"Обжарьте на небольшом количестве масла по 3 мин с каждой стороны."
+],
+[
+"Sumaišykite 250 g varškės, kiaušinį ir 2 šaukštus miltų.",
+"Suformuokite nedidelius paplotėlius.",
+"Kepkite nedideliame kiekyje aliejaus po 3 min iš kiekvienos pusės."
+]
+],
+"Наріжте картоплю, моркву й цибулю кубиками.": [
+[
+"Нарежьте картошку, морковь и лук кубиками.",
+"Залейте 1,5 л воды, варите 20 мин.",
+"Посолите, добавьте специи или зелень."
+],
+[
+"Supjaustykite bulves, morkas ir svogūną kubeliais.",
+"Užpilkite 1,5 l vandens, virkite 20 min.",
+"Pasūdykite, įdėkite prieskonių ar žalumynų."
+]
+],
+"Обсмажте або зваріть 150 г курки, наріжте.": [
+[
+"Обжарьте или сварите 150 г курицы, нарежьте.",
+"Нарежьте овощи, что есть: помидор, огурец, капусту.",
+"Смешайте, заправьте маслом или йогуртом."
+],
+[
+"Apkepkite arba išvirkite 150 g vištienos, supjaustykite.",
+"Supjaustykite turimas daržoves: pomidorą, agurką, kopūstą.",
+"Sumaišykite, pagardinkite aliejumi ar jogurtu."
+]
+],
+"Обсмажте нарізану картоплю 15 хв.": [
+[
+"Обжарьте нарезанную картошку 15 мин.",
+"Залейте 2–3 взбитыми яйцами.",
+"Готовьте под крышкой 4 мин."
+],
+[
+"Apkepkite supjaustytas bulves 15 min.",
+"Užpilkite 2–3 išplaktais kiaušiniais.",
+"Kepkite uždengę 4 min."
+]
+],
+"Зваріть рис.": [
+[
+"Сварите рис.",
+"Обжарьте морковь, лук и перец 5 мин.",
+"Добавьте рис (и яйцо, если есть), перемешайте 2 мин."
+],
+[
+"Išvirkite ryžius.",
+"Apkepkite morkas, svogūną ir papriką 5 min.",
+"Įdėkite ryžius (ir kiaušinį, jei turite), maišykite 2 min."
+]
+],
+"Наріжте помідор кружальцями, цибулю дрібно.": [
+[
+"Нарежьте помидор кружочками, лук мелко.",
+"Обжарьте их 2–3 мин на капле масла.",
+"Разбейте сверху 2–3 яйца, посолите и жарьте под крышкой 4 мин."
+],
+[
+"Supjaustykite pomidorą griežinėliais, svogūną smulkiai.",
+"Apkepkite 2–3 min ant lašo aliejaus.",
+"Įmuškite 2–3 kiaušinius, pasūdykite ir kepkite uždengę 4 min."
+]
+],
+"Змішайте 2 яйця, 300 мл молока, 150 г борошна й дрібку солі.": [
+[
+"Смешайте 2 яйца, 300 мл молока, 150 г муки и щепотку соли.",
+"Жарьте тонкие блины на разогретой сковороде по 1 мин с каждой стороны.",
+"Подавайте с творогом, бананом или вареньем."
+],
+[
+"Sumaišykite 2 kiaušinius, 300 ml pieno, 150 g miltų ir žiupsnelį druskos.",
+"Kepkite plonus blynus įkaitintoje keptuvėje po 1 min iš kiekvienos pusės.",
+"Patiekite su varške, bananu arba uogiene."
+]
+],
+"Змішайте 300 г фаршу з тертою цибулею, яйцем, сіллю й перцем.": [
+[
+"Смешайте 300 г фарша с тёртым луком, яйцом, солью и перцем.",
+"Сформируйте котлеты и жарьте по 5–6 мин с каждой стороны.",
+"Сварите картошку 20 мин и разомните с ложкой молока или масла."
+],
+[
+"Sumaišykite 300 g faršo su tarkuotu svogūnu, kiaušiniu, druska ir pipirais.",
+"Suformuokite kotletus ir kepkite po 5–6 min iš kiekvienos pusės.",
+"Išvirkite bulves 20 min ir sutrinkite su šaukštu pieno ar sviesto."
+]
+],
+"Зваріть 100 г макаронів.": [
+[
+"Сварите 100 г макарон.",
+"Обжарьте 200 г фарша с луком 10 мин, по желанию добавьте помидор.",
+"Смешайте с макаронами, посолите и поперчите."
+],
+[
+"Išvirkite 100 g makaronų.",
+"Apkepkite 200 g faršo su svogūnu 10 min, pagal skonį įdėkite pomidorą.",
+"Sumaišykite su makaronais, pasūdykite ir pipirinkite."
+]
+],
+"Наріжте 300 г мʼяса кубиками, обсмажте 5 хв.": [
+[
+"Нарежьте 300 г мяса кубиками, обжарьте 5 мин.",
+"Добавьте лук, морковь или перец и стакан воды.",
+"Тушите под крышкой 40 мин, в конце посолите."
+],
+[
+"Supjaustykite 300 g mėsos kubeliais, apkepkite 5 min.",
+"Įdėkite svogūną, morką ar papriką ir stiklinę vandens.",
+"Troškinkite uždengę 40 min, pabaigoje pasūdykite."
+]
+],
+"Наріжте картоплю тонкими скибочками, викладіть у форму, посоліть.": [
+[
+"Нарежьте картошку тонкими ломтиками, выложите в форму, посолите.",
+"Сверху положите 200 г рыбы и кольца лука, сбрызните маслом.",
+"Запекайте 35 мин при 200 °C."
+],
+[
+"Supjaustykite bulves plonais griežinėliais, sudėkite į formą, pasūdykite.",
+"Ant viršaus dėkite 200 g žuvies ir svogūnų žiedų, apšlakstykite aliejumi.",
+"Kepkite 35 min 200 °C."
+]
+],
+"Нашаткуйте капусту, натріть моркву, наріжте цибулю.": [
+[
+"Нашинкуйте капусту, натрите морковь, нарежьте лук.",
+"Тушите овощи с небольшим количеством воды и масла 25 мин.",
+"Добавьте нарезанную колбасу, посолите и тушите ещё 5 мин."
+],
+[
+"Supjaustykite kopūstą, sutarkuokite morką, supjaustykite svogūną.",
+"Troškinkite daržoves su trupučiu vandens ir aliejaus 25 min.",
+"Įdėkite supjaustytą dešrą, pasūdykite ir troškinkite dar 5 min."
+]
+],
+"Наріжте кабачок та інші овочі, що є, кубиками.": [
+[
+"Нарежьте кабачок и другие овощи, что есть, кубиками.",
+"Обжарьте лук и морковь 3 мин, добавьте остальные овощи и немного воды.",
+"Тушите 25 мин, посолите и добавьте зелень."
+],
+[
+"Supjaustykite cukiniją ir kitas turimas daržoves kubeliais.",
+"Apkepkite svogūną ir morką 3 min, sudėkite likusias daržoves ir truputį vandens.",
+"Troškinkite 25 min, pasūdykite ir įdėkite žalumynų."
+]
+],
+"Обсмажте цибулю й моркву 3 хв у каструлі.": [
+[
+"Обжарьте лук и морковь 3 мин в кастрюле.",
+"Добавьте стакан чечевицы или банку фасоли, картошку и 1,2 л воды.",
+"Варите 25 мин, посолите, по желанию добавьте помидор."
+],
+[
+"Puode apkepkite svogūną ir morką 3 min.",
+"Įdėkite puodelį lęšių ar skardinę pupelių, bulvių ir 1,2 l vandens.",
+"Virkite 25 min, pasūdykite, pagal skonį įdėkite pomidorą."
+]
+],
+"Наріжте 250 г курки, обсмажте 8 хв з цибулею.": [
+[
+"Нарежьте 250 г курицы, обжарьте 8 мин с луком.",
+"Добавьте 3 ложки сметаны, чеснок и немного воды.",
+"Тушите 10 мин, посолите и поперчите."
+],
+[
+"Supjaustykite 250 g vištienos, apkepkite 8 min su svogūnu.",
+"Įdėkite 3 šaukštus grietinės, česnako ir truputį vandens.",
+"Troškinkite 10 min, pasūdykite ir pipirinkite."
+]
+],
+"Зваріть 2 л води (з мʼясом, якщо є), додайте нарізану картоплю.": [
+[
+"Вскипятите 2 л воды (с мясом, если есть), добавьте нарезанную картошку.",
+"Обжарьте тёртую свёклу, морковь и лук с помидором 10 мин.",
+"Добавьте зажарку и нашинкованную капусту, варите 15 мин, посолите."
+],
+[
+"Užvirinkite 2 l vandens (su mėsa, jei turite), įdėkite supjaustytas bulves.",
+"Apkepkite tarkuotus burokėlius, morką ir svogūną su pomidoru 10 min.",
+"Sudėkite kepinį ir supjaustytus kopūstus, virkite 15 min, pasūdykite."
+]
+],
+"Виріжте серцевину з 2 яблук.": [
+[
+"Вырежьте сердцевину из 2 яблок.",
+"Наполните творогом, по желанию с каплей мёда.",
+"Запекайте 20 мин при 180 °C."
+],
+[
+"Išpjaukite 2 obuolių šerdis.",
+"Pripildykite varške, pagal skonį su lašu medaus.",
+"Kepkite 20 min 180 °C."
+]
+],
+"Змішайте 40 г вівсянки, 2 яйця й 2 ложки молока.": [
+[
+"Смешайте 40 г овсянки, 2 яйца и 2 ложки молока.",
+"Вылейте на разогретую сковороду с каплей масла.",
+"Жарьте по 2 мин с каждой стороны, сверху положите банан или творог."
+],
+[
+"Sumaišykite 40 g avižinių dribsnių, 2 kiaušinius ir 2 šaukštus pieno.",
+"Supilkite į įkaitintą keptuvę su lašu aliejaus.",
+"Kepkite po 2 min iš kiekvienos pusės, ant viršaus – bananas ar varškė."
+]
+],
+"Зваріть 2 яйця 9 хв, остудіть і наріжте.": [
+[
+"Сварите 2 яйца 9 мин, остудите и нарежьте.",
+"Нарежьте огурец и помидор, добавьте кукурузу, если есть.",
+"Смешайте с тунцом, заправьте ложкой масла или йогурта."
+],
+[
+"Išvirkite 2 kiaušinius 9 min, atvėsinkite ir supjaustykite.",
+"Supjaustykite agurką ir pomidorą, įdėkite kukurūzų, jei turite.",
+"Sumaišykite su tunu, pagardinkite šaukštu aliejaus ar jogurto."
+]
+],
+"Змішайте 300 г фаршу з 2 ложками сирого рису й цибулею, сформуйте кульки.": [
+[
+"Смешайте 300 г фарша с 2 ложками сырого риса и луком, сформируйте шарики.",
+"Обжарьте морковь и лук, добавьте помидор и стакан воды.",
+"Положите тефтели в соус и тушите 30 мин; отдельно сварите рис."
+],
+[
+"Sumaišykite 300 g faršo su 2 šaukštais žalių ryžių ir svogūnu, suformuokite rutuliukus.",
+"Apkepkite morką ir svogūną, įdėkite pomidorą ir stiklinę vandens.",
+"Sudėkite kotletukus į padažą ir troškinkite 30 min; atskirai išvirkite ryžius."
+]
+],
+"Покладіть у миску 200 г йогурту.": [
+[
+"Положите в миску 200 г йогурта.",
+"Добавьте 40 г овсянки и нарезанный банан или яблоко.",
+"Перемешайте и оставьте на 5 мин, чтобы овсянка набухла."
+],
+[
+"Į dubenį įdėkite 200 g jogurto.",
+"Įberkite 40 g avižinių dribsnių ir supjaustytą bananą ar obuolį.",
+"Išmaišykite ir palikite 5 min, kad dribsniai išbrinktų."
+]
+],
+"Натріть 4 картоплини й цибулю, відтисніть сік.": [
+[
+"Натрите 4 картофелины и лук, отожмите сок.",
+"Добавьте яйцо, ложку муки и соль, перемешайте.",
+"Жарьте небольшие оладьи по 3–4 мин с каждой стороны; подавайте со сметаной."
+],
+[
+"Sutarkuokite 4 bulves ir svogūną, nuspauskite sultis.",
+"Įmuškite kiaušinį, įberkite šaukštą miltų ir druskos, išmaišykite.",
+"Kepkite mažus blynelius po 3–4 min iš kiekvienos pusės; patiekite su grietine."
+]
+],
+"Натріть кабачок, посоліть і відтисніть через 5 хв.": [
+[
+"Натрите кабачок, посолите и отожмите через 5 мин.",
+"Добавьте яйцо, 2 ложки муки и чеснок.",
+"Жарьте оладьи по 3 мин с каждой стороны на небольшом количестве масла."
+],
+[
+"Sutarkuokite cukiniją, pasūdykite ir po 5 min nuspauskite.",
+"Įmuškite kiaušinį, įberkite 2 šaukštus miltų ir česnako.",
+"Kepkite blynelius po 3 min iš kiekvienos pusės ant nedidelio kiekio aliejaus."
+]
+],
+"Зваріть 300 г курки в 1,5 л води 25 хв.": [
+[
+"Сварите 300 г курицы в 1,5 л воды 25 мин.",
+"Добавьте морковь, лук и картошку, варите 10 мин.",
+"Добавьте горсть лапши, варите 5 мин, посолите."
+],
+[
+"Išvirkite 300 g vištienos 1,5 l vandens 25 min.",
+"Įdėkite morką, svogūną ir bulves, virkite 10 min.",
+"Įberkite saują makaronų, virkite 5 min, pasūdykite."
+]
+],
+"Прогрійте жменю шпинату на пательні 1 хв.": [
+[
+"Прогрейте горсть шпината на сковороде 1 мин.",
+"Залейте 3 взбитыми яйцами, посолите.",
+"Готовьте под крышкой 4 мин, посыпьте сыром."
+],
+[
+"Pašildykite saują špinatų keptuvėje 1 min.",
+"Užpilkite 3 išplaktais kiaušiniais, pasūdykite.",
+"Kepkite uždengę 4 min, apibarstykite sūriu."
+]
+],
+"Зваріть 100 г макаронів до готовності.": [
+[
+"Сварите 100 г макарон.",
+"Прогрейте банку тунца с помидором и чесноком 3 мин.",
+"Смешайте с макаронами, посыпьте сыром."
+],
+[
+"Išvirkite 100 g makaronų.",
+"Pašildykite skardinę tuno su pomidoru ir česnaku 3 min.",
+"Sumaišykite su makaronais, apibarstykite sūriu."
+]
+]
 }
