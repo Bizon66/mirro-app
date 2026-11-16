@@ -46,6 +46,11 @@ const CASES = [
   ['pečená ryba', ['fish_baked']],
   ['roast pork', ['pork_baked']],
   ['jacket potato', ['potato_baked_skin']],
+  ['тестовини пепероні', ['ph_pasta_pepperoni']],
+  ['těstoviny pepperoni', ['ph_pasta_pepperoni']],
+  ['соус бешамель 50 г', ['bechamel']],
+  ['пепероні 35 г', ['pepperoni']],
+  ['пене 220 г', ['pasta']],
 ];
 // Russian and Lithuanian interfaces: their own words
 const CASES_X = [

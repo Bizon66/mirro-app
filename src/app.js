@@ -1009,9 +1009,28 @@ FOOD_DB.push(
   ['saltibarsciai', 'Холодний борщ (литовський)', 'Studená řepná polévka', 'Cold beet soup (šaltibarščiai)', 60, 3, 3, 5, 300],
   ['kugelis', 'Кугеліс (картопляна бабка)', 'Kugelis (bramborový nákyp)', 'Kugelis (potato pudding)', 190, 5, 10, 20, 250],
   ['kibinai', 'Кібінай (пиріжок з мʼясом)', 'Kibinai (taštička s masem)', 'Kibinai (meat pastry)', 300, 11, 16, 28, 150],
-  ['sakotis', 'Шакотіс (торт-дерево)', 'Šakotis (stromový koláč)', 'Šakotis (tree cake)', 430, 7, 25, 45, 80]
+  ['sakotis', 'Шакотіс (торт-дерево)', 'Šakotis (stromový koláč)', 'Šakotis (tree cake)', 430, 7, 25, 45, 80],
+  // sauces and toppings for pasta / pizza dishes (16.11)
+  ['pepperoni', 'Пепероні (салямі)', 'Salám Pepperoni', 'Pepperoni', 500, 22, 44, 2, 35],
+  ['bechamel', 'Соус бешамель', 'Bešamel', 'Béchamel sauce', 150, 4, 10, 11, 50],
+  ['napoletana', 'Соус наполетана', 'Omáčka Napoletana', 'Napoletana sauce', 60, 1.5, 3, 7, 70],
+  ['cream_sauce', 'Вершковий соус', 'Smetanová omáčka', 'Cream sauce', 180, 2, 17, 5, 60],
+  ['bolognese_sauce', 'Соус болоньєзе', 'Boloňská omáčka', 'Bolognese sauce', 110, 7, 6, 6, 120],
+  ['garlic_sauce', 'Часниковий соус', 'Česneková omáčka', 'Garlic sauce', 450, 1, 48, 5, 30],
+  ['chili_sauce', 'Соус чилі солодкий', 'Sladká chilli omáčka', 'Sweet chili sauce', 200, 0.5, 0.5, 48, 20],
+  ['tartar_sauce', 'Соус тартар', 'Tatarská omáčka', 'Tartar sauce', 480, 1, 50, 6, 30],
+  ['caesar_dressing', 'Соус Цезар', 'Dresink Caesar', 'Caesar dressing', 450, 2, 47, 4, 30],
+  ['salsa', 'Сальса', 'Salsa', 'Salsa', 35, 1.5, 0.2, 7, 50],
+  // Pizza Hut CZ «Těstoviny Pepperoni»: penne, Napoletana, béchamel, pepperoni, mozzarella (min. 416 g) — estimate from the ingredients
+  ['ph_pasta_pepperoni', 'Тестовини Пепероні (Pizza Hut)', 'Těstoviny Pepperoni (Pizza Hut)', 'Pepperoni pasta bake (Pizza Hut)', 183, 7.6, 8.1, 19.8, 420]
 );
 Object.assign(FOOD_ALIAS, {
+  pasta: ['пене', 'penne'],
+  pepperoni: ['пепероні', 'пеппероні', 'pepperoni', 'pepperony', 'пепперони'],
+  bechamel: ['бешамель', 'béchamel', 'bešamel', 'бешамел'],
+  napoletana: ['наполетана', 'napoletana', 'неаполітанський соус'],
+  bolognese_sauce: ['болоньєзе соус', 'boloňská', 'bolognese'],
+  ph_pasta_pepperoni: ['паста пепероні', 'тестовини пепероні', 'těstoviny pepperoni', 'pepperoni pasta', 'пене пепероні'],
   potato_baked: ['запечена картопля', 'картопля запечена', 'картопля в духовці', 'картопля з духовки', 'печена картопля', 'brambory z trouby', 'roast potatoes', 'oven potatoes'],
   fish_baked: ['печена риба', 'риба печена', 'риба в духовці', 'риба з духовки', 'запечена тріска', 'запечений минтай', 'ryba z trouby', 'baked fish'],
   salmon_baked: ['печений лосось', 'лосось у духовці', 'запечена сьомга', 'losos z trouby'],
