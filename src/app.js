@@ -439,7 +439,9 @@ function save() {
   try { json = JSON.stringify(D); } catch (e) {}
   if (json && window.AppStore) AppStore.mirror(json);
   try { localStorage.setItem(KEY, json); } catch (e) { if (!window.AppStore && typeof toast === 'function') toast({ uk: '⚠️ Не вдалося зберегти — браузер блокує сховище', cs: '⚠️ Nepodařilo se uložit — prohlížeč blokuje úložiště', en: "⚠️ Couldn't save — the browser is blocking storage", ru: '⚠️ Не удалось сохранить — браузер блокирует хранилище', lt: '⚠️ Nepavyko išsaugoti — naršyklė blokuoja saugyklą' }[LANG] || "⚠️ Couldn't save"); } }
-LANG = D.lang || (/^(cs|sk)/i.test(navigator.language || '') ? 'cs' : /^uk/i.test(navigator.language || '') ? 'uk' : /^(ru|be)/i.test(navigator.language || '') ? 'ru' : /^lt/i.test(navigator.language || '') ? 'lt' : 'en');
+LANG = D.lang || (/^(cs|sk)/i.test(navigator.language || '') ? 'cs' : /^uk/i.test(navigator.language || '') ? 'uk' : /^(ru|be)/i.test(navigator.language || '') ? 'ru' : 'en');
+// 16.11 (owner): Lithuanian is hidden for now (its texts stay in i18n-extra.js, so it can come back); a saved 'lt' becomes English
+if (LANG === 'lt') { LANG = 'en'; D.lang = 'en'; }
 const P = () => D.profile;
 const day = s => (D.days[s] = D.days[s] || { foods: [], acts: [] });
 const peekDay = s => D.days[s] || { foods: [], acts: [] };
