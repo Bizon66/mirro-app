@@ -306,6 +306,9 @@ Object.assign(T_ADD.en, { testOn: '🧪 Test mode on: all items and pets are unl
 Object.assign(T_ADD.uk, { compTitle: '🧬 Склад тіла (InBody / розумні ваги)', compHint: 'Необовʼязково. Достатньо % жиру або нежирової маси. Міряйте зранку натщесерце, до тренування. З цими даними точніше рахуються білок, калорії й прогноз.', compFat: 'Жир, %', compFfm: 'Нежирова маса, кг', compSmm: 'Скелетні мʼязи, кг', compFatShort: 'жиру', compProt: 'Білок рахується від нежирової маси ({m} кг, за InBody).' });
 Object.assign(T_ADD.cs, { compTitle: '🧬 Složení těla (InBody / chytrá váha)', compHint: 'Nepovinné. Stačí % tuku nebo tukuprostá hmota. Měřte ráno nalačno, před tréninkem. S těmito údaji se přesněji počítá bílkovina, kalorie a prognóza.', compFat: 'Tuk, %', compFfm: 'Tukuprostá hmota, kg', compSmm: 'Kosterní svaly, kg', compFatShort: 'tuku', compProt: 'Bílkovina se počítá z tukuprosté hmoty ({m} kg, podle InBody).' });
 Object.assign(T_ADD.en, { compTitle: '🧬 Body composition (InBody / smart scale)', compHint: 'Optional. % fat or lean mass is enough. Measure in the morning, before eating and training. With these, protein, calories and the forecast are more accurate.', compFat: 'Body fat, %', compFfm: 'Lean mass, kg', compSmm: 'Skeletal muscle, kg', compFatShort: 'fat', compProt: 'Protein is based on your lean mass ({m} kg, from InBody).' });
+Object.assign(T_ADD.uk, { exAdd: '＋ Вправа', exNamePh: 'Вправа, напр. Жим лежачи', exSetsPh: 'Підходи: 10×60, 8×65', exLast: 'Минулого разу ({d}): {s}', exTon: 'Тоннаж: {k} кг', exPR: '🏆 Новий рекорд: {n}', exAutoMin: '≈ {m} хв за підходами', exNone: 'Тут зʼявляться ваші вправи. Записуйте їх у «Сьогодні» → «Що робили» → Силове тренування.', exTimes: 'разів: {n}', exTitle: '🏋️ Мої вправи', exRepTitle: '🏋️ Вправи по днях', woIntL: 'Інтенсивність', intLight: 'Легко', intMid: 'Середньо', intHard: 'Важко', secU: 'с', exHelp: 'Підходи пишіть через кому: 10×60 — 10 разів по 60 кг, 3×10×60 — три такі підходи, 12 — без ваги, 45с — на час. Якщо не вказати хвилини, вони порахуються з підходів.' });
+Object.assign(T_ADD.cs, { exAdd: '＋ Cvik', exNamePh: 'Cvik, např. Bench press', exSetsPh: 'Série: 10×60, 8×65', exLast: 'Minule ({d}): {s}', exTon: 'Objem: {k} kg', exPR: '🏆 Nový rekord: {n}', exAutoMin: '≈ {m} min podle sérií', exNone: 'Tady se objeví vaše cviky. Zapisujte je v „Dnes“ → „Co jste dělali“ → Posilovna.', exTimes: 'krát: {n}', exTitle: '🏋️ Moje cviky', exRepTitle: '🏋️ Cviky po dnech', woIntL: 'Intenzita', intLight: 'Lehce', intMid: 'Středně', intHard: 'Těžce', secU: 's', exHelp: 'Série pište s čárkou: 10×60 — 10 opakování s 60 kg, 3×10×60 — tři takové série, 12 — bez váhy, 45s — na čas. Když nezadáte minuty, spočítají se ze sérií.' });
+Object.assign(T_ADD.en, { exAdd: '＋ Exercise', exNamePh: 'Exercise, e.g. Bench press', exSetsPh: 'Sets: 10×60, 8×65', exLast: 'Last time ({d}): {s}', exTon: 'Volume: {k} kg', exPR: '🏆 New record: {n}', exAutoMin: '≈ {m} min from the sets', exNone: 'Your exercises will appear here. Log them in Today → What you did → Strength training.', exTimes: 'times: {n}', exTitle: '🏋️ My exercises', exRepTitle: '🏋️ Exercises by day', woIntL: 'Intensity', intLight: 'Easy', intMid: 'Moderate', intHard: 'Hard', secU: 's', exHelp: 'Write sets with commas: 10×60 — 10 reps with 60 kg, 3×10×60 — three such sets, 12 — no weight, 45s — timed. Leave minutes empty and they are counted from the sets.' });
 // feedback form (14.11): goes to the owner as a GitHub issue through api/feedback.js
 Object.assign(T_ADD.uk, { fbTitle: '💬 Відгук', fbSub: 'Що не працює, що незручно, чого бракує? Напишіть — це читає автор застосунку.', fbIdea: '💡 Ідея', fbBug: '🐞 Помилка', fbOther: '💬 Інше', fbPh: 'Ваш відгук…', fbTech: 'Додати технічні дані (версія, мова, екран) — допомагає знайти помилку', fbSend: 'Надіслати', fbSending: 'Надсилаю…', fbSent: 'Дякуємо! Відгук надіслано 💙', fbShort: 'Напишіть хоча б кілька слів', fbErr: 'Не вдалося надіслати. Перевірте інтернет і спробуйте пізніше.', fbPrivacy: '🔒 Надсилається лише цей текст. Вага, їжа й заміри не надсилаються.' });
 Object.assign(T_ADD.cs, { fbTitle: '💬 Zpětná vazba', fbSub: 'Co nefunguje, co je nepohodlné, co chybí? Napište — čte to autor aplikace.', fbIdea: '💡 Nápad', fbBug: '🐞 Chyba', fbOther: '💬 Jiné', fbPh: 'Vaše zpráva…', fbTech: 'Přidat technické údaje (verze, jazyk, obrazovka) — pomáhá najít chybu', fbSend: 'Odeslat', fbSending: 'Odesílám…', fbSent: 'Děkujeme! Zpráva odeslána 💙', fbShort: 'Napište aspoň pár slov', fbErr: 'Nepodařilo se odeslat. Zkontrolujte internet a zkuste to později.', fbPrivacy: '🔒 Odesílá se jen tento text. Váha, jídlo a míry se neodesílají.' });
@@ -1960,31 +1963,185 @@ function renderToday() {
   $('dDone').disabled = !tt.logged;
   $('dDoneHint').textContent = !tt.logged ? '' : tt.complete ? (d.done === true ? '' : t('dayAuto')) : t('dayLow');
   renderMeals(d); renderMacros(w, tt); renderWaterSteps(d, w);
-  $('actList').innerHTML = d.acts.map((a, i) => `<div class="item"><span>${esc(L3(actDef(a.id).n))}<em>${a.min} ${t('min')} · ${Math.round(a.k)} ${t('kcal')}</em></span><button data-da="${i}">×</button></div>`).join('');
-  actPreview();
+  $('actList').innerHTML = d.acts.map((a, i) => `<div class="item"><span>${esc(L3(actDef(a.id).n))}<em>${a.min} ${t('min')} · ${Math.round(a.k)} ${t('kcal')}</em>${exListHtml(a)}</span><button data-da="${i}">×</button></div>`).join('');
+  renderExBox(); actPreview();
   if ($('fridgeText').value === '' && D.fridge) $('fridgeText').value = D.fridge;
   fridgeNote();
   renderRewards();
 }
 $('actList').addEventListener('click', e => { const b = e.target.closest('[data-da]'); if (!b) return; day(curDay).acts.splice(+b.dataset.da, 1); save(); dirty(); renderToday(); });
+
+// ================= exercise log for strength / home workouts (18.11) =================
+// an activity of type gym / homeworkout may carry int (MET by intensity) and ex: [{ id?, n?, eq, sets: [{ r, w?, s? }] }]
+// (id = a library exercise or 'h_<home exercise>', n = own name; r = reps, w = kg, s = seconds). Old records have neither.
+const EX_LIB = [
+  ['bench', 'Жим лежачи', 'Bench press', 'Bench press', 'barbell'], ['incline_bench', 'Жим на похилій лаві', 'Šikmý bench press', 'Incline bench press', 'barbell'],
+  ['db_press', 'Жим гантелей лежачи', 'Tlak s jednoručkami vleže', 'Dumbbell bench press', 'dumbbells'], ['flyes', 'Розведення гантелей', 'Rozpažování s jednoručkami', 'Dumbbell flyes', 'dumbbells'],
+  ['dips', 'Віджимання на брусах', 'Kliky na bradlech', 'Dips', 'body'], ['pushups', 'Віджимання', 'Kliky', 'Push-ups', 'body'],
+  ['squat', 'Присідання зі штангою', 'Dřep s činkou', 'Barbell squat', 'barbell'], ['front_squat', 'Фронтальні присідання', 'Přední dřep', 'Front squat', 'barbell'],
+  ['leg_press', 'Жим ногами', 'Leg press', 'Leg press', 'machine'], ['lunges', 'Випади', 'Výpady', 'Lunges', 'dumbbells'],
+  ['leg_ext', 'Розгинання ніг', 'Předkopávání', 'Leg extension', 'machine'], ['leg_curl', 'Згинання ніг', 'Zakopávání', 'Leg curl', 'machine'],
+  ['calf', 'Підйоми на носки', 'Výpony na lýtka', 'Calf raises', 'machine'], ['hip_thrust', 'Сідничний місток зі штангою', 'Hip thrust', 'Hip thrust', 'barbell'],
+  ['deadlift', 'Станова тяга', 'Mrtvý tah', 'Deadlift', 'barbell'], ['rdl', 'Румунська тяга', 'Rumunský mrtvý tah', 'Romanian deadlift', 'barbell'],
+  ['pullups', 'Підтягування', 'Shyby', 'Pull-ups', 'body'], ['lat_pull', 'Тяга верхнього блока', 'Stahování horní kladky', 'Lat pulldown', 'cable'],
+  ['row', 'Тяга штанги в нахилі', 'Přítahy činky v předklonu', 'Barbell row', 'barbell'], ['db_row', 'Тяга гантелі однією рукою', 'Přítah jednoručky', 'One-arm dumbbell row', 'dumbbells'],
+  ['cable_row', 'Тяга нижнього блока', 'Přítahy spodní kladky', 'Seated cable row', 'cable'], ['hyper', 'Гіперекстензія', 'Hyperextenze', 'Back extension', 'body'],
+  ['ohp', 'Жим стоячи', 'Tlak nad hlavu', 'Overhead press', 'barbell'], ['db_shoulder', 'Жим гантелей сидячи', 'Tlak s jednoručkami vsedě', 'Seated dumbbell press', 'dumbbells'],
+  ['lat_raise', 'Махи гантелями в сторони', 'Upažování s jednoručkami', 'Lateral raises', 'dumbbells'], ['face_pull', 'Тяга до обличчя', 'Face pull', 'Face pull', 'cable'],
+  ['shrugs', 'Шраги', 'Krčení ramen', 'Shrugs', 'dumbbells'], ['curl', 'Підйом на біцепс', 'Bicepsový zdvih', 'Biceps curl', 'dumbbells'],
+  ['hammer', 'Молотки', 'Kladivové zdvihy', 'Hammer curls', 'dumbbells'], ['triceps_push', 'Розгинання на трицепс на блоці', 'Stahování kladky na triceps', 'Triceps pushdown', 'cable'],
+  ['french', 'Французький жим', 'Francouzský tlak', 'Skull crushers', 'barbell'], ['plank', 'Планка', 'Prkno', 'Plank', 'body'],
+  ['crunches', 'Скручування', 'Zkracovačky', 'Crunches', 'body'], ['leg_raise', 'Підйоми ніг у висі', 'Zvedání nohou ve visu', 'Hanging leg raises', 'body'],
+  ['kb_swing', 'Махи гирею', 'Švihy s kettlebellem', 'Kettlebell swing', 'kettlebell'], ['goblet', 'Гоблет-присідання', 'Goblet dřep', 'Goblet squat', 'kettlebell'],
+  ['farmer', 'Прогулянка фермера', 'Farmářská chůze', 'Farmer walk', 'dumbbells'], ['burpees', 'Берпі', 'Angličáky', 'Burpees', 'body']
+].map(([id, uk, cs, en, eq]) => ({ id, n: [uk, cs, en], eq }));
+const EQUIP = [['barbell', 'Штанга', 'Činka', 'Barbell'], ['dumbbells', 'Гантелі', 'Jednoručky', 'Dumbbells'], ['machine', 'Тренажер', 'Stroj', 'Machine'],
+  ['cable', 'Блок / кросовер', 'Kladka', 'Cable'], ['kettlebell', 'Гиря', 'Kettlebell', 'Kettlebell'], ['band', 'Резинка', 'Odporová guma', 'Band'], ['body', 'Власна вага', 'Vlastní váha', 'Bodyweight']];
+const WO_INT = { light: 3.5, mid: 5, hard: 6 };   // MET; net = MET − 1 as everywhere in the model
+const exLib = id => EX_LIB.find(x => x.id === id);
+const eqName = id => { const e = EQUIP.find(x => x[0] === id); return e ? L3(e.slice(1)) : ''; };
+function exName(e) {
+  if (e.id && exLib(e.id)) return L3(exLib(e.id).n);
+  if (e.id && e.id.startsWith('h_')) { const x = EXS.find(y => 'h_' + y.id === e.id); if (x) return x.id === 'pushup' ? L3(PUSH_NAMES.full) : L3(x.n); }
+  return e.n || '?';
+}
+const exKey = e => e.id || 'c:' + fold(e.n || '');
+// a typed name → a library exercise (in any language, incl. ru / lt) or null
+function exMatch(name) {
+  const k = fold(String(name || '').trim()); if (!k) return null;
+  return EX_LIB.find(x => x.n.concat(['ru', 'lt'].map(l => ((window.I18N_X || {})[l] || { N: {} }).N[x.n[0]]).filter(Boolean)).some(n => fold(n) === k)) || null;
+}
+// "10×60, 8×65, 6x70" · "3×10×60" (3 sets) · "12" (reps only) · "45с" / "45s" (seconds)
+function parseSets(str) {
+  const out = [];
+  String(str || '').replace(/[хХ*]/g, 'x').replace(/×/g, 'x').split(/[,;\n]+|\s{2,}/).map(s => s.trim()).filter(Boolean).forEach(part => {
+    const sec = part.match(/^(\d+)\s*(с|s|sek|сек)\b/i); if (sec) { out.push({ s: +sec[1] }); return; }
+    const n = part.split(/\s*x\s*/i).map(v => parseFloat(v.replace(',', '.'))).filter(v => isFinite(v) && v > 0);
+    if (n.length === 3) { for (let i = 0; i < Math.min(20, Math.round(n[0])); i++) out.push({ r: Math.round(n[1]), w: n[2] }); }
+    else if (n.length === 2) out.push({ r: Math.round(n[0]), w: n[1] });
+    else if (n.length === 1) out.push({ r: Math.round(n[0]) });
+  });
+  return out.filter(s => (s.r && s.r <= 200) || s.s).slice(0, 40);
+}
+const kgTxt = v => String(Math.round(v * 10) / 10);   // 60, 62.5 — no trailing .0
+const setTxt = s => s.s ? s.s + ' ' + t('secU') : s.w ? `${s.r}×${kgTxt(s.w)}` : String(s.r);
+function setsTxt(sets) {   // 10×60, 10×60, 10×60 → 3×10×60
+  const out = []; let i = 0;
+  while (i < sets.length) { let j = i; while (j + 1 < sets.length && setTxt(sets[j + 1]) === setTxt(sets[i])) j++; out.push((j > i ? (j - i + 1) + '×' : '') + setTxt(sets[i])); i = j + 1; }
+  return out.join(', ');
+}
+const tonnage = sets => sets.reduce((a, s) => a + (s.r || 0) * (s.w || 0), 0);
+// every logged session of one exercise, newest first: [{ date, sets, eq }]
+function exHistory(key, before) {
+  const out = [];
+  for (const d of Object.keys(D.days).sort().reverse()) {
+    if (before && d >= before) continue;
+    (D.days[d].acts || []).forEach(a => (a.ex || []).forEach(e => { if (exKey(e) === key && e.sets && e.sets.length) out.push({ date: d, sets: e.sets, eq: e.eq }); }));
+  }
+  return out;
+}
+const bestW = sets => Math.max(0, ...sets.map(s => s.w || 0));
+let EXR = [], WO_I = 'mid';   // the exercises being written, chosen intensity
+function exRowsHtml() {
+  return EXR.map((e, i) => {
+    const m = exMatch(e.n), key = m ? m.id : 'c:' + fold(e.n || ''), last = e.n ? exHistory(key, curDay)[0] : null;
+    const hint = last ? t('exLast', { d: fmtDate(last.date), s: setsTxt(last.sets) }) : '';
+    return `<div class="exRow" data-ei="${i}"><div class="exTop"><input class="exN" list="exLib" value="${esc(e.n)}" placeholder="${esc(t('exNamePh'))}" autocomplete="off">` +
+      `<button class="exDel" data-ex-del="${i}" aria-label="×">×</button></div>` +
+      `<div class="row"><div><select class="exEq">${EQUIP.map(q => `<option value="${q[0]}"${q[0] === (e.eq || (m && m.eq) || 'barbell') ? ' selected' : ''}>${esc(L3(q.slice(1)))}</option>`).join('')}</select></div>` +
+      `<div><input class="exS" value="${esc(e.sets)}" placeholder="${esc(t('exSetsPh'))}" inputmode="text" autocomplete="off"></div></div>` +
+      (hint ? `<p class="muted exHint">${esc(hint)}</p>` : '') + `</div>`;
+  }).join('');
+}
+function renderExBox() {
+  const id = $('aType').value, on = id === 'gym' || id === 'homeworkout';
+  $('woBox').hidden = !on; if (!on) return;
+  document.querySelectorAll('#woInt button').forEach(b => b.classList.toggle('on', b.dataset.int === WO_I));
+  $('exRows').innerHTML = exRowsHtml();
+  $('exLib').innerHTML = EX_LIB.map(x => `<option value="${esc(L3(x.n))}">`).join('');
+}
+const exSetCount = () => EXR.reduce((a, e) => a + parseSets(e.sets).length, 0);
+$('woInt').addEventListener('click', e => { const b = e.target.closest('[data-int]'); if (!b) return; WO_I = b.dataset.int; renderExBox(); actPreview(); });
+$('exAdd').addEventListener('click', () => { EXR.push({ n: '', eq: '', sets: '' }); renderExBox(); const r = $('exRows').lastElementChild; if (r) r.querySelector('.exN').focus(); });
+$('exRows').addEventListener('click', e => { const b = e.target.closest('[data-ex-del]'); if (!b) return; EXR.splice(+b.dataset.exDel, 1); renderExBox(); actPreview(); });
+$('exRows').addEventListener('change', e => {
+  const row = e.target.closest('[data-ei]'); if (!row) return; const x = EXR[+row.dataset.ei];
+  x.n = row.querySelector('.exN').value; x.eq = row.querySelector('.exEq').value; x.sets = row.querySelector('.exS').value;
+  if (e.target.classList.contains('exN')) { const m = exMatch(x.n); if (m) x.eq = m.eq; setTimeout(renderExBox, 0); }   // after the blur, not inside it
+  actPreview();
+});
+$('exRows').addEventListener('input', e => {
+  const row = e.target.closest('[data-ei]'); if (!row || !e.target.classList.contains('exS')) return;
+  EXR[+row.dataset.ei].sets = e.target.value; actPreview();
+});
+$('aType').addEventListener('change', renderExBox);
+// minutes: as typed, else ≈ 2.5 min per set (work + rest)
+const woMinutes = () => num($('aMin').value) || Math.round(exSetCount() * 2.5);
+function exFromRows() {
+  return EXR.map(e => {
+    const m = exMatch(e.n), sets = parseSets(e.sets);
+    if (!String(e.n || '').trim() || !sets.length) return null;
+    return Object.assign(m ? { id: m.id } : { n: String(e.n).trim().slice(0, 60) }, { eq: e.eq || (m && m.eq) || 'body', sets });
+  }).filter(Boolean);
+}
+function exRecords(ex) {   // new best weight (or reps on bodyweight) against everything logged before today
+  const out = [];
+  ex.forEach(e => {
+    const hist = exHistory(exKey(e), curDay); if (!hist.length) return;
+    const was = Math.max(...hist.map(h => bestW(h.sets))), now = bestW(e.sets);
+    if (now > 0 && now > was) out.push(exName(e) + ' ' + kgTxt(now) + ' ' + t('kg'));
+    else if (!now && !was) { const wr = Math.max(...hist.map(h => Math.max(0, ...h.sets.map(s => s.r || 0)))), nr = Math.max(0, ...e.sets.map(s => s.r || 0)); if (nr > wr) out.push(exName(e) + ' × ' + nr); }
+  });
+  return out;
+}
+function exListHtml(a) {
+  if (!a.ex || !a.ex.length) return '';
+  return `<div class="exList">${a.ex.map(e => `<div>• <b>${esc(exName(e))}</b>${e.eq ? ' · ' + esc(eqName(e.eq)) : ''}: ${esc(setsTxt(e.sets))}</div>`).join('')}` +
+    (a.ex.some(e => tonnage(e.sets)) ? `<div class="muted">${t('exTon', { k: Math.round(a.ex.reduce((s, e) => s + tonnage(e.sets), 0)) })}</div>` : '') + `</div>`;
+}
+// Progress tab: each exercise done in the last 90 days, newest first, best set and the trend
+function renderExProgress() {
+  const box = $('exProg'); if (!box) return;
+  const seen = new Map(), td = todayStr();
+  for (const d of Object.keys(D.days).sort().reverse()) {
+    if (diffDays(d, td) > 90) break;
+    (D.days[d].acts || []).forEach(a => (a.ex || []).forEach(e => { if (!seen.has(exKey(e))) seen.set(exKey(e), e); }));
+  }
+  if (!seen.size) { box.innerHTML = `<p class="muted">${t('exNone')}</p>`; return; }
+  box.innerHTML = [...seen.entries()].slice(0, 15).map(([key, e]) => {
+    const h = exHistory(key), cur = h[0], prev = h[1], bw = bestW(cur.sets), pw = prev ? bestW(prev.sets) : 0;
+    const best = Math.max(...h.map(x => bestW(x.sets)));
+    const arrow = !prev ? '' : bw > pw ? ' <span style="color:var(--good)">▲</span>' : bw < pw ? ' <span style="color:var(--bad)">▼</span>' : ' ＝';
+    return `<div class="item"><span><b>${esc(exName(e))}</b>${arrow}<em>${fmtDate(cur.date)}: ${esc(setsTxt(cur.sets))}${best ? ' · 🏆 ' + kgTxt(best) + ' ' + t('kg') : ''} · ${t('exTimes', { n: h.length })}</em></span></div>`;
+  }).join('');
+}
 function actKcal() {
-  const a = actDef($('aType').value), min = num($('aMin').value) || 0;
+  const a = actDef($('aType').value), gymish = a.id === 'gym' || a.id === 'homeworkout';
+  const min = gymish ? woMinutes() : num($('aMin').value) || 0;
   if (a.id === 'custom') return num($('aKcal').value) || 0;
-  return netMet(a) * weightAt(curDay) * min / 60;
+  return (gymish ? Math.max(0, WO_INT[WO_I] - 1) : netMet(a)) * weightAt(curDay) * min / 60;
 }
 function actPreview() {
   if (!P()) return;
   const custom = $('aType').value === 'custom';
   $('aKcalBox').style.display = custom ? 'block' : 'none';
-  $('aPreview').textContent = custom ? '' : t('approx', { k: Math.round(actKcal()) });
+  const id = $('aType').value, auto = (id === 'gym' || id === 'homeworkout') && !num($('aMin').value) && exSetCount();
+  $('aPreview').textContent = custom ? '' : t('approx', { k: Math.round(actKcal()) }) + (auto ? ' · ' + t('exAutoMin', { m: woMinutes() }) : '');
 }
 ['aType', 'aMin', 'aKcal'].forEach(id => $(id).addEventListener('input', actPreview));
 $('aAdd').addEventListener('click', () => {
-  const min = num($('aMin').value), k = actKcal();
+  const id = $('aType').value, gymish = id === 'gym' || id === 'homeworkout';
+  const min = gymish ? woMinutes() : num($('aMin').value), k = actKcal();
   if (!min || min <= 0 || min > 900) return toast(t('minutes') + '?');
-  if ($('aType').value === 'custom' && (!k || k <= 0)) return toast(t('tKcal'));
-  syncDay(); day(curDay).acts.push({ uid: uid(), id: $('aType').value, min: Math.round(min), k: Math.round(k), at: Date.now() });
-  save(); dirty(); renderToday(); toast(t('tAdded', { n: L3(actDef($('aType').value).n) }));
+  if (id === 'custom' && (!k || k <= 0)) return toast(t('tKcal'));
+  syncDay();
+  const rec = { uid: uid(), id, min: Math.round(min), k: Math.round(k), at: Date.now() };
+  const ex = gymish ? exFromRows() : [], prs = ex.length ? exRecords(ex) : [];
+  if (gymish) rec.int = WO_I;
+  if (ex.length) rec.ex = ex;
+  day(curDay).acts.push(rec); EXR = [];
+  save(); dirty(); renderToday();
+  toast(prs.length ? t('exPR', { n: prs.join(', ') }) : t('tAdded', { n: L3(actDef(id).n) }));
 });
 
 // ---- Fridge → recipes ----
@@ -2605,6 +2762,11 @@ function speak(txt) {
   if (!RUN.sound) return;
   try { if (!window.speechSynthesis) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(txt); u.lang = VOICE_LANG[LANG]; u.rate = 1; speechSynthesis.speak(u); } catch (e) {}
 }
+// the home routine as exercise-log entries: every exercise × rounds of the chosen level (bodyweight)
+function homeEx() {
+  const R = ROUNDS[woLevel == null ? 0 : woLevel];
+  return EXS.map(x => { const i = exInfo(x); return { id: 'h_' + x.id, eq: 'body', sets: Array.from({ length: R }, () => i.timed ? { s: i.dose } : { r: i.dose }) }; });
+}
 function buildRun() {
   const lv = woLevel == null ? 0 : woLevel, R = ROUNDS[lv], st = [];
   st.push({ kind: 'ready', sec: 8, ex: EXS[0], r: 1, k: 0 });
@@ -2679,7 +2841,7 @@ function finishRun(completed) {
   const mins = Math.round(RUN.active / 60);
   if (mins >= 3) {
     const td = todayStr(), w = weightAt(td);
-    day(td).acts.push({ id: 'homeworkout', at: Date.now(), min: mins, k: Math.round(netMet(actDef('homeworkout')) * w * mins / 60) });
+    day(td).acts.push({ id: 'homeworkout', at: Date.now(), min: mins, ex: homeEx(), k: Math.round(netMet(actDef('homeworkout')) * w * mins / 60) });
     save(); dirty();
     if (completed) speak(t('sayDone'));
     toast(t('woFinished', { m: mins }));
@@ -4052,7 +4214,7 @@ function buildReport(days, withFood) {
     const d = peekDay(s); if (!d.foods.length && !d.acts.length && !d.steps && !d.water) continue;
     const tt = dayTotals(s, weightAt(s));
     const r = { e: Math.round(tt.eaten), p: Math.round(tt.p), f: Math.round(tt.f), c: Math.round(tt.c), ex: Math.round(tt.ex), st: d.steps || 0, wa: d.water || 0,
-      ok: tt.complete ? 1 : 0, acts: d.acts.map(a => [a.id, a.min || 0, Math.round(a.k || 0)]) };
+      ok: tt.complete ? 1 : 0, acts: d.acts.map(a => a.ex && a.ex.length ? [a.id, a.min || 0, Math.round(a.k || 0), a.ex] : [a.id, a.min || 0, Math.round(a.k || 0)]) };
     if (withFood) r.foods = d.foods.map(f => [f.n, Math.round(f.k), f.meal || 'snack', f.g || 0]);
     out.days[s] = r;
   }
@@ -4157,6 +4319,7 @@ function openClient(cid) {
     <h3 class="clH">${t('repLast14')}</h3>
     <div class="clTable"><table><tr><th>${t('thDay')}</th><th>${t('thEat')}</th><th>${t('prot')[0]}</th><th>👣</th><th>💪</th><th>✓</th></tr>
       ${last.map(([d, x]) => `<tr><td>${fmtDay(d)}</td><td>${x.e || '·'}</td><td>${x.p || '·'}</td><td>${x.st ? (x.st / 1000).toFixed(1) + 'k' : '·'}</td><td>${x.acts.reduce((a, q) => a + q[1], 0) || '·'}</td><td>${x.ok ? '✓' : (x.e ? '½' : '·')}</td></tr>`).join('')}</table></div>
+    ${s.ds.some(([, x]) => x.acts.some(q => q[3])) ? `<details class="how" style="margin-top:10px"><summary>${t('exRepTitle')}</summary>${s.ds.slice().reverse().filter(([, x]) => x.acts.some(q => q[3])).map(([d, x]) => `<p class="clFoodDay"><b>${fmtDay(d)}</b></p>${x.acts.filter(q => q[3]).map(q => exListHtml({ ex: q[3] })).join('')}`).join('')}</details>` : ''}
     ${s.ds.some(([, x]) => x.foods && x.foods.length) ? `<details class="how" style="margin-top:10px"><summary>${t('repFoods')}</summary>${s.ds.slice().reverse().filter(([, x]) => x.foods && x.foods.length).map(([d, x]) => `<p class="clFoodDay"><b>${fmtDay(d)}</b> · ${x.e} ${t('kcal')}</p><ul class="clFoods">${x.foods.map(f => `<li>${esc(f[0])}${f[3] ? ` <em>${f[3]} ${t('gU')}</em>` : ''} — ${f[1]} ${t('kcal')}</li>`).join('')}</ul>`).join('')}</details>` : ''}
     <h3 class="clH">${t('repNote')}</h3>
     <textarea id="clNote" placeholder="${esc(t('repNotePh'))}">${esc(c.note || '')}</textarea>
@@ -4218,6 +4381,7 @@ $('msSave').addEventListener('click', () => {
 
 // ---- Progress ----
 function renderProgress() {
+  renderExProgress();
   const c = $('chart'); const [w, h] = sizeCanvas(c); const x = c.getContext('2d');
   x.clearRect(0, 0, w, h);
   const a = ser();
@@ -4285,7 +4449,7 @@ function renderTips() {
 }
 $('woLog').addEventListener('click', () => {
   const td = todayStr(), w = weightAt(td), minutes = WO_MIN[woLevel == null ? 0 : woLevel];
-  day(td).acts.push({ id: 'homeworkout', at: Date.now(), min: minutes, k: Math.round(netMet(actDef('homeworkout')) * w * minutes / 60) });
+  day(td).acts.push({ id: 'homeworkout', at: Date.now(), min: minutes, ex: homeEx(), k: Math.round(netMet(actDef('homeworkout')) * w * minutes / 60) });
   save(); dirty(); toast(t('woLogged')); renderTips();
 });
 

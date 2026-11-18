@@ -1,0 +1,70 @@
+{
+"exAdd": [
+"＋ Упражнение",
+"＋ Pratimas"
+],
+"exNamePh": [
+"Упражнение, напр. Жим лёжа",
+"Pratimas, pvz. Štangos spaudimas gulint"
+],
+"exSetsPh": [
+"Подходы: 10×60, 8×65",
+"Serijos: 10×60, 8×65"
+],
+"exLast": [
+"В прошлый раз ({d}): {s}",
+"Praėjusį kartą ({d}): {s}"
+],
+"exTon": [
+"Тоннаж: {k} кг",
+"Tonažas: {k} kg"
+],
+"exPR": [
+"🏆 Новый рекорд: {n}",
+"🏆 Naujas rekordas: {n}"
+],
+"exAutoMin": [
+"≈ {m} мин по подходам",
+"≈ {m} min pagal serijas"
+],
+"exNone": [
+"Здесь появятся ваши упражнения. Записывайте их в «Сегодня» → «Что делали» → Силовая тренировка.",
+"Čia atsiras jūsų pratimai. Rašykite juos skiltyje „Šiandien“ → „Ką veikėte“ → Jėgos treniruotė."
+],
+"exTimes": [
+"раз: {n}",
+"kartų: {n}"
+],
+"exTitle": [
+"🏋️ Мои упражнения",
+"🏋️ Mano pratimai"
+],
+"exRepTitle": [
+"🏋️ Упражнения по дням",
+"🏋️ Pratimai pagal dienas"
+],
+"woIntL": [
+"Интенсивность",
+"Intensyvumas"
+],
+"intLight": [
+"Легко",
+"Lengvai"
+],
+"intMid": [
+"Средне",
+"Vidutiniškai"
+],
+"intHard": [
+"Тяжело",
+"Sunkiai"
+],
+"secU": [
+"с",
+"s"
+],
+"exHelp": [
+"Подходы пишите через запятую: 10×60 — 10 раз по 60 кг, 3×10×60 — три таких подхода, 12 — без веса, 45с — на время. Если не указать минуты, они посчитаются по подходам.",
+"Serijas rašykite per kablelį: 10×60 — 10 kartų su 60 kg, 3×10×60 — trys tokios serijos, 12 — be svorio, 45s — laikui. Jei nenurodysite minučių, jos bus apskaičiuotos pagal serijas."
+]
+}

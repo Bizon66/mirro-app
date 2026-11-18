@@ -99,6 +99,13 @@
         <div><label data-i="minutes"></label><input id="aMin" type="number" inputmode="numeric" value="60"></div>
         <div id="aKcalBox" style="display:none"><label data-i="kcal"></label><input id="aKcal" type="number" inputmode="numeric"></div>
       </div>
+      <div id="woBox" hidden>
+        <label data-i="woIntL"></label>
+        <div class="seg" id="woInt"><button data-int="light" data-i="intLight"></button><button data-int="mid" class="on" data-i="intMid"></button><button data-int="hard" data-i="intHard"></button></div>
+        <div id="exRows"></div><datalist id="exLib"></datalist>
+        <button class="btn ghost" id="exAdd" data-i="exAdd" style="margin-top:8px"></button>
+        <p class="muted" data-i="exHelp" style="margin-top:6px"></p>
+      </div>
       <p class="muted" id="aPreview" style="margin-top:6px"></p>
       <button class="btn" id="aAdd" data-i="addAct"></button>
       <div id="actList" style="margin-top:8px"></div>
@@ -124,6 +131,7 @@
       <canvas id="chart"></canvas>
       <p class="muted" style="margin-top:6px" data-i="chartNote"></p>
     </div>
+    <div class="card"><h2 data-i="exTitle"></h2><div id="exProg"></div></div>
     <div class="card"><h2 data-i="achTitle"></h2><p class="muted" id="achCount"></p><div class="achgrid" id="achGrid"></div></div>
     <div class="card"><h2 data-i="last7"></h2><div id="weekTable"></div></div>
     <div class="card" id="shareBox"><h2 data-i="shareTitle"></h2><p class="muted" data-i="shareSub"></p>

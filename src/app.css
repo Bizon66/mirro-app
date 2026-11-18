@@ -327,3 +327,10 @@
   /* app version at the bottom of Profile; 5 quick taps toggle the hidden test mode */
   .appVer { text-align: center; font-size: 12px; margin: 14px 0 4px; user-select: none; -webkit-user-select: none; }
   .testBanner { background: #FFF4C4; color: #1B2A4A; border-radius: 12px; padding: 8px 10px; font-size: 13px; font-weight: 700; margin: 8px 0; }
+
+/* exercise log (18.11) */
+.exRow{border:1px solid var(--line);border-radius:14px;padding:8px;margin-top:8px}
+.exTop{display:flex;gap:6px;align-items:center}.exTop .exN{flex:1}
+.exDel{border:0;background:none;font-size:20px;color:var(--mute,#6b7078);padding:0 6px}
+.exHint{margin:4px 2px 0;font-size:13px}
+.exList{margin-top:4px;font-size:13px;line-height:1.45;font-weight:400}.exList b{font-weight:700}
