@@ -103,7 +103,25 @@
     };
     window.AppNative = {
       onBack: function (fn) { if (App) App.addListener('backButton', function () { fn(); }); },
-      exit: function () { if (App) App.exitApp(); }
+      exit: function () { if (App) App.exitApp(); },
+      onResume: function (fn) { if (App) App.addListener('resume', function () { fn(); }); },
+      // local reminders (18.11, water): ids 100–199 belong to the water reminder; everything is scheduled on the phone, no server
+      notifyAllowed: function (ask) {
+        var LN = plug('LocalNotifications'); if (!LN) return Promise.resolve(false);
+        return (ask ? LN.requestPermissions() : LN.checkPermissions()).then(function (r) { return r && r.display === 'granted'; }).catch(function () { return false; });
+      },
+      setReminders: function (list) {
+        var LN = plug('LocalNotifications'); if (!LN) return Promise.resolve(false);
+        return LN.getPending().then(function (p) {
+          var old = ((p && p.notifications) || []).filter(function (n) { return n.id >= 100 && n.id < 200; }).map(function (n) { return { id: n.id }; });
+          return old.length ? LN.cancel({ notifications: old }) : null;
+        }).catch(function () {}).then(function () {
+          if (!list.length) return true;
+          return LN.schedule({ notifications: list.map(function (n) {
+            return { id: n.id, title: n.title, body: n.body, schedule: { at: new Date(n.at), allowWhileIdle: true } };
+          }) }).then(function () { return true; });
+        }).catch(function () { return false; });
+      }
     };
     if (App) App.addListener('pause', function () { flush(); });
   }

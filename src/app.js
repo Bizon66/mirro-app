@@ -157,7 +157,7 @@ const T_ADD = {
     dishSaved: 'Страву збережено 👨‍🍳', needName: 'Вкажіть назву', needIng: 'Додайте хоча б один інгредієнт', delW: 'Видалити', editW: 'Змінити', builderTitle: '🍲 Своя страва',
     manualName: 'Назва', optMacros: 'Білки / жири / вуглеводи, г (необов\'язково)', dbNote: 'Значення приблизні, на 100 г готового продукту (крім позначених «сухий»). Напої — на 100 мл.',
     nothingFound: 'Нічого не знайдено. Спробуйте інше слово або додайте вручну.',
-    water: '💧 Вода', waterN: '{n} із 8 склянок (по 250 мл)', waterL: '{l} л із 2 л', waterMlPh: 'Своя кількість, мл', waterMinus: '− склянка', lUnit: 'л', steps: '👣 Кроки', stepsPh: 'Кроків за день', stepsKcal: '≈ {k} ккал додатково', saveSteps: 'Зберегти', stepsSaved: 'Кроки збережено 👣',
+    water: '💧 Вода', waterN: '{n} із 8 склянок (по 250 мл)', waterL: '{l} л із 2 л', waterMlPh: 'Своя кількість, мл', waterMinus: '− склянка', lUnit: 'л', wrOn: '🔔 Нагадувати пити воду', wrEvery: 'Кожні', wrFrom: 'Від', wrTo: 'До', wrH: 'год', wrTitle: '💧 Час випити води', wrBody: 'Склянка води — і ви ближче до 2 л за день', wrBodyN: 'Сьогодні випито {l} л із 2 л', wrNoteApp: 'Нагадування приходять, навіть коли застосунок закритий. Коли вип’єте 2 л — на сьогодні більше не нагадуємо.', wrNoteWeb: 'У браузері нагадування з’являються лише тоді, коли Mirro відкритий. Щоб вони приходили завжди — встановіть застосунок на телефон.', wrDenied: 'Дозвольте сповіщення для Mirro в налаштуваннях телефону', wrOnToast: 'Нагадування увімкнено 🔔', steps: '👣 Кроки', stepsPh: 'Кроків за день', stepsKcal: '≈ {k} ккал додатково', saveSteps: 'Зберегти', stepsSaved: 'Кроки збережено 👣',
     goalTitle: '🎯 Моя мета', targetW: 'Цільова вага, кг', setGoal: 'Зберегти', goalLeft: 'Залишилось: {v} кг', goalDone: '🎉 Мету досягнуто!',
     goalEta: 'Якщо як останні дні — приблизно {d} (через {n} дн.).', goalNoEta: 'Запишіть кілька днів їжі — і я порахую, коли ви досягнете мети.',
     goalWrongWay: 'Зараз ви рухаєтесь від мети — подивіться калорії у «Порадах».', goalNone: 'Вкажіть цільову вагу, щоб бачити прогрес.', goalSaved: 'Мету збережено 🎯',
@@ -176,7 +176,7 @@ const T_ADD = {
     dishSaved: 'Jídlo uloženo 👨‍🍳', needName: 'Zadejte název', needIng: 'Přidejte aspoň jednu surovinu', delW: 'Smazat', editW: 'Upravit', builderTitle: '🍲 Vlastní jídlo',
     manualName: 'Název', optMacros: 'Bílkoviny / tuky / sacharidy, g (nepovinné)', dbNote: 'Hodnoty jsou přibližné, na 100 g hotové potraviny (kromě označených „suché"). Nápoje na 100 ml.',
     nothingFound: 'Nic nenalezeno. Zkuste jiné slovo nebo přidejte ručně.',
-    water: '💧 Voda', waterN: '{n} z 8 sklenic (po 250 ml)', waterL: '{l} l z 2 l', waterMlPh: 'Vlastní množství, ml', waterMinus: '− sklenice', lUnit: 'l', steps: '👣 Kroky', stepsPh: 'Kroků za den', stepsKcal: '≈ {k} kcal navíc', saveSteps: 'Uložit', stepsSaved: 'Kroky uloženy 👣',
+    water: '💧 Voda', waterN: '{n} z 8 sklenic (po 250 ml)', waterL: '{l} l z 2 l', waterMlPh: 'Vlastní množství, ml', waterMinus: '− sklenice', lUnit: 'l', wrOn: '🔔 Připomínat pití vody', wrEvery: 'Každé', wrFrom: 'Od', wrTo: 'Do', wrH: 'h', wrTitle: '💧 Čas se napít', wrBody: 'Sklenice vody a jste blíž ke 2 l za den', wrBodyN: 'Dnes vypito {l} l z 2 l', wrNoteApp: 'Připomínky přijdou, i když je aplikace zavřená. Po 2 l už dnes nepřipomínáme.', wrNoteWeb: 'V prohlížeči se připomínky zobrazí jen při otevřeném Mirro. Aby chodily vždy, nainstalujte si aplikaci do telefonu.', wrDenied: 'Povolte oznámení pro Mirro v nastavení telefonu', wrOnToast: 'Připomínky zapnuty 🔔', steps: '👣 Kroky', stepsPh: 'Kroků za den', stepsKcal: '≈ {k} kcal navíc', saveSteps: 'Uložit', stepsSaved: 'Kroky uloženy 👣',
     goalTitle: '🎯 Můj cíl', targetW: 'Cílová váha, kg', setGoal: 'Uložit', goalLeft: 'Zbývá: {v} kg', goalDone: '🎉 Cíl splněn!',
     goalEta: 'Pokud jako poslední dny — zhruba {d} (za {n} dní).', goalNoEta: 'Zapište pár dní jídla a spočítám, kdy cíle dosáhnete.',
     goalWrongWay: 'Teď se od cíle vzdalujete — podívejte se na kalorie v „Radách".', goalNone: 'Zadejte cílovou váhu, ať vidíte pokrok.', goalSaved: 'Cíl uložen 🎯',
@@ -195,7 +195,7 @@ const T_ADD = {
     dishSaved: 'Dish saved 👨‍🍳', needName: 'Enter a name', needIng: 'Add at least one ingredient', delW: 'Delete', editW: 'Edit', builderTitle: '🍲 My own dish',
     manualName: 'Name', optMacros: 'Protein / fat / carbs, g (optional)', dbNote: 'Values are approximate, per 100 g of ready food (except items marked "dry"). Drinks per 100 ml.',
     nothingFound: 'Nothing found. Try another word or add it manually.',
-    water: '💧 Water', waterN: '{n} of 8 glasses (250 ml)', waterL: '{l} l of 2 l', waterMlPh: 'Own amount, ml', waterMinus: '− glass', lUnit: 'l', steps: '👣 Steps', stepsPh: 'Steps today', stepsKcal: '≈ {k} kcal extra', saveSteps: 'Save', stepsSaved: 'Steps saved 👣',
+    water: '💧 Water', waterN: '{n} of 8 glasses (250 ml)', waterL: '{l} l of 2 l', waterMlPh: 'Own amount, ml', waterMinus: '− glass', lUnit: 'l', wrOn: '🔔 Remind me to drink water', wrEvery: 'Every', wrFrom: 'From', wrTo: 'To', wrH: 'h', wrTitle: '💧 Time for some water', wrBody: 'One glass brings you closer to 2 l today', wrBodyN: 'Today: {l} l of 2 l', wrNoteApp: 'Reminders arrive even when the app is closed. Once you reach 2 l, there are no more today.', wrNoteWeb: 'In a browser, reminders only show while Mirro is open. Install the app on your phone to get them anytime.', wrDenied: 'Allow notifications for Mirro in the phone settings', wrOnToast: 'Reminders on 🔔', steps: '👣 Steps', stepsPh: 'Steps today', stepsKcal: '≈ {k} kcal extra', saveSteps: 'Save', stepsSaved: 'Steps saved 👣',
     goalTitle: '🎯 My goal', targetW: 'Target weight, kg', setGoal: 'Save', goalLeft: 'To go: {v} kg', goalDone: '🎉 Goal reached!',
     goalEta: 'At your recent pace — around {d} (in {n} days).', goalNoEta: "Log a few days of food and I'll estimate when you'll get there.",
     goalWrongWay: "Right now you're moving away from the goal — check calories in Tips.", goalNone: 'Set a target weight to see your progress.', goalSaved: 'Goal saved 🎯',
@@ -2406,7 +2406,7 @@ function renderWaterSteps(d, w) {
     return `<button class="glass${c}" data-gl="${i}">${c ? '💧' : ''}</button>`; }).join('');
   $('waterN').textContent = t('waterL', { l: litres(n * 0.25) }) + (n >= 8 ? ' ✓' : '');
   document.querySelectorAll('#waterQuick [data-ml]').forEach(b => { const ml = +b.dataset.ml; b.textContent = (ml > 0 ? '+' : '−') + litres(Math.abs(ml) / 1000) + ' ' + t('lUnit'); });
-  $('waterMinus').disabled = !n;
+  $('waterMinus').disabled = !n; renderWaterRem();
   if (document.activeElement !== $('stepsIn')) $('stepsIn').value = d.steps || '';
   $('stepsK').textContent = d.steps ? t('stepsKcal', { k: Math.round(d.steps * w * 0.0003) }) : '';
 }
@@ -2414,11 +2414,11 @@ const litres = l => { const v = String(Math.round(l * 100) / 100); return LANG =
 const WATER_MAX = 40;   // 10 l a day is plenty; protects against typos
 function addWater(ml) {
   syncDay(); const dd = day(curDay);
-  dd.water = Math.round(clamp((dd.water || 0) + ml / 250, 0, WATER_MAX) * 100) / 100; dd.wAt = Date.now(); save(); renderToday();
+  dd.water = Math.round(clamp((dd.water || 0) + ml / 250, 0, WATER_MAX) * 100) / 100; dd.wAt = Date.now(); save(); renderToday(); wrSync();
 }
 $('waterRow').addEventListener('click', e => {
   const b = e.target.closest('[data-gl]'); if (!b) return;
-  syncDay(); const i = +b.dataset.gl, dd = day(curDay); dd.water = (dd.water || 0) === i + 1 ? i : i + 1; dd.wAt = Date.now(); save(); renderToday();
+  syncDay(); const i = +b.dataset.gl, dd = day(curDay); dd.water = (dd.water || 0) === i + 1 ? i : i + 1; dd.wAt = Date.now(); save(); renderToday(); wrSync();
 });
 $('waterQuick').addEventListener('click', e => {
   const b = e.target.closest('[data-ml]'); if (b) addWater(+b.dataset.ml);
@@ -2428,6 +2428,65 @@ $('waterAdd').addEventListener('click', () => {
   addWater(v); $('waterMl').value = '';
 });
 $('waterMl').addEventListener('keydown', e => { if (e.key === 'Enter') $('waterAdd').click(); });
+
+// ---- water reminders (18.11). D.waterRem = { on, every (h), from, to } (optional; absent = off, no migration).
+// Phone app: real local notifications, scheduled on the phone for ~3 days ahead and redone on every water change / app start.
+// Browser: no background reminders without a push server, so only a gentle toast while the app is open.
+const WR_DEF = { on: false, every: 2, from: 9, to: 21 };
+const wrCfg = () => Object.assign({}, WR_DEF, D.waterRem || {});
+const isNative = () => !!(window.AppNative && AppNative.setReminders && window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform());
+function wrSlots(c, fromMs, days) {   // reminder times from fromMs, inside [from, to] hours, every c.every hours
+  const out = [], step = c.every * 3600e3, base = new Date(fromMs); base.setHours(0, 0, 0, 0);
+  for (let k = 0; k < days; k++) {
+    const d0 = new Date(base); d0.setDate(d0.getDate() + k);
+    for (let h = c.from; h <= c.to + 1e-9; h += c.every) {
+      const at = new Date(d0); at.setHours(Math.floor(h), Math.round((h % 1) * 60), 0, 0);
+      if (at.getTime() > fromMs) out.push(at.getTime());
+    }
+  }
+  return out;
+}
+function wrPlan() {   // list for the phone; today: only while under 2 l and not right after a drink
+  const c = wrCfg(); if (!c.on) return [];
+  const now = Date.now(), td = peekDay(todayStr()), w = td.water || 0, step = c.every * 3600e3;
+  const tomorrow = new Date(); tomorrow.setHours(24, 0, 0, 0);
+  const list = [];
+  wrSlots(c, now, 3).forEach(at => {
+    if (at < tomorrow.getTime() && (w >= 8 || (td.wAt && at - td.wAt < step * 0.75))) return;
+    const body = at < tomorrow.getTime() ? t('wrBodyN', { l: litres(w * 0.25) }) : t('wrBody');
+    list.push({ id: 100 + list.length, at, title: t('wrTitle'), body });
+  });
+  return list.slice(0, 60);   // iOS keeps at most 64 pending
+}
+let wrTm = 0;
+function wrSync() { clearTimeout(wrTm); wrTm = setTimeout(() => { if (isNative()) AppNative.setReminders(wrPlan()); }, 400); }
+function wrNudge() {   // browser / open app: a toast if it is time
+  const c = wrCfg(); if (!c.on || document.hidden) return;
+  const now = new Date(), h = now.getHours() + now.getMinutes() / 60; if (h < c.from || h > c.to + 0.5) return;
+  const td = peekDay(todayStr()); if ((td.water || 0) >= 8) return;
+  const last = Math.max(td.wAt || 0, wrNudge.at || 0, wrNudge.start); if (now - last < c.every * 3600e3) return;
+  wrNudge.at = now.getTime(); toast(t('wrTitle') + ' · ' + t('wrBodyN', { l: litres((td.water || 0) * 0.25) }));
+}
+wrNudge.start = Date.now() - 3600e3 * 24;   // first check right after opening
+function renderWaterRem() {
+  const c = wrCfg(), hrs = Array.from({ length: 24 }, (_, i) => i);
+  $('wrOn').checked = c.on; $('wrOpts').hidden = !c.on;
+  $('wrEvery').innerHTML = [1, 1.5, 2, 3].map(v => `<option value="${v}"${v === c.every ? ' selected' : ''}>${litres(v)} ${t('wrH')}</option>`).join('');
+  $('wrFrom').innerHTML = hrs.filter(h => h >= 5 && h <= 14).map(h => `<option value="${h}"${h === c.from ? ' selected' : ''}>${h}:00</option>`).join('');
+  $('wrTo').innerHTML = hrs.filter(h => h >= 15).map(h => `<option value="${h}"${h === c.to ? ' selected' : ''}>${h}:00</option>`).join('');
+  $('wrNote').hidden = !c.on; $('wrNote').textContent = c.on ? t(isNative() ? 'wrNoteApp' : 'wrNoteWeb') : '';
+}
+function wrSave(patch) { D.waterRem = Object.assign(wrCfg(), patch); save(); renderWaterRem(); wrSync(); }
+$('wrOn').addEventListener('change', async e => {
+  const on = e.target.checked;
+  if (on && isNative() && !(await AppNative.notifyAllowed(true))) { e.target.checked = false; toast(t('wrDenied')); return; }
+  wrSave({ on }); if (on) toast(t('wrOnToast'));
+});
+['wrEvery', 'wrFrom', 'wrTo'].forEach(id => $(id).addEventListener('change', e => wrSave({ [{ wrEvery: 'every', wrFrom: 'from', wrTo: 'to' }[id]]: +e.target.value })));
+setInterval(wrNudge, 5 * 60e3);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(wrNudge, 1500); wrSync(); } });
+if (window.AppNative && AppNative.onResume) AppNative.onResume(wrSync);
+wrSync(); setTimeout(wrNudge, 4000);
 $('stepsSave').addEventListener('click', () => {
   syncDay(); const v = num($('stepsIn').value); const dd = day(curDay);
   dd.steps = v && v > 0 && v < 100000 ? Math.round(v) : 0; dd.sAt = Date.now(); save(); dirty(); renderToday(); toast(t('stepsSaved'));
