@@ -89,6 +89,23 @@
       <div class="row"><div><input id="stepsIn" type="number" inputmode="numeric" data-ph="stepsPh"></div><div class="narrow"><button class="btn" id="stepsSave" style="margin-top:0" data-i="saveSteps"></button></div></div>
       <p class="muted" id="stepsK" style="margin-top:4px"></p>
     </div>
+    <div class="card" id="vitCard">
+      <h2 data-i="vitTitle"></h2>
+      <div id="vitList"></div>
+      <p class="muted" id="vitStreak"></p>
+      <div id="vitForm" class="vitForm" hidden>
+        <input id="vitName" maxlength="60" data-ph="vitNamePh">
+        <input id="vitNote" maxlength="80" data-ph="vitNotePh" style="margin-top:6px">
+        <div class="mlab" style="margin-top:8px"><span data-i="vitTimes"></span></div>
+        <div id="vitTimes" class="vitTimes"></div>
+        <button class="chip" id="vitTimeAdd" data-i="vitTimeAdd"></button>
+        <label class="lblSave"><input type="checkbox" id="vitRem" checked> <span data-i="vitRem"></span></label>
+        <div class="row"><div><button class="btn" id="vitSave" data-i="vitSave"></button></div><div class="narrow"><button class="btn ghost" id="vitCancel" data-i="vitCancel"></button></div></div>
+        <button class="btn danger" id="vitDel" data-i="vitDel" hidden></button>
+      </div>
+      <button class="btn ghost" id="vitNew" data-i="vitNew"></button>
+      <p class="muted" data-i="vitHint" style="margin-top:6px;font-size:12px"></p>
+    </div>
     <div class="card">
       <h2 data-i="fridgeTitle"></h2>
       <div class="qlIn"><textarea id="fridgeText" data-ph="fridgePh" style="height:70px;font-size:15px"></textarea><span id="fridgeMicSlot"></span></div>

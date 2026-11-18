@@ -105,15 +105,17 @@
       onBack: function (fn) { if (App) App.addListener('backButton', function () { fn(); }); },
       exit: function () { if (App) App.exitApp(); },
       onResume: function (fn) { if (App) App.addListener('resume', function () { fn(); }); },
-      // local reminders (18.11, water): ids 100–199 belong to the water reminder; everything is scheduled on the phone, no server
+      // local reminders (18.11): ids 100–199 water, 200–299 vitamins; everything is scheduled on the phone, no server
       notifyAllowed: function (ask) {
         var LN = plug('LocalNotifications'); if (!LN) return Promise.resolve(false);
         return (ask ? LN.requestPermissions() : LN.checkPermissions()).then(function (r) { return r && r.display === 'granted'; }).catch(function () { return false; });
       },
-      setReminders: function (list) {
+      // base 100 = water, 200 = vitamins (each group owns ids base … base+99)
+      setReminders: function (list, base) {
         var LN = plug('LocalNotifications'); if (!LN) return Promise.resolve(false);
+        base = base || 100;
         return LN.getPending().then(function (p) {
-          var old = ((p && p.notifications) || []).filter(function (n) { return n.id >= 100 && n.id < 200; }).map(function (n) { return { id: n.id }; });
+          var old = ((p && p.notifications) || []).filter(function (n) { return n.id >= base && n.id < base + 100; }).map(function (n) { return { id: n.id }; });
           return old.length ? LN.cancel({ notifications: old }) : null;
         }).catch(function () {}).then(function () {
           if (!list.length) return true;

@@ -157,7 +157,7 @@ const T_ADD = {
     dishSaved: 'Страву збережено 👨‍🍳', needName: 'Вкажіть назву', needIng: 'Додайте хоча б один інгредієнт', delW: 'Видалити', editW: 'Змінити', builderTitle: '🍲 Своя страва',
     manualName: 'Назва', optMacros: 'Білки / жири / вуглеводи, г (необов\'язково)', dbNote: 'Значення приблизні, на 100 г готового продукту (крім позначених «сухий»). Напої — на 100 мл.',
     nothingFound: 'Нічого не знайдено. Спробуйте інше слово або додайте вручну.',
-    water: '💧 Вода', waterN: '{n} із 8 склянок (по 250 мл)', waterL: '{l} л із 2 л', waterMlPh: 'Своя кількість, мл', waterMinus: '− склянка', lUnit: 'л', wrOn: '🔔 Нагадувати пити воду', wrEvery: 'Кожні', wrFrom: 'Від', wrTo: 'До', wrH: 'год', wrTitle: '💧 Час випити води', wrBody: 'Склянка води — і ви ближче до 2 л за день', wrBodyN: 'Сьогодні випито {l} л із 2 л', wrNoteApp: 'Нагадування приходять, навіть коли застосунок закритий. Коли вип’єте 2 л — на сьогодні більше не нагадуємо.', wrNoteWeb: 'У браузері нагадування з’являються лише тоді, коли Mirro відкритий. Щоб вони приходили завжди — встановіть застосунок на телефон.', wrDenied: 'Дозвольте сповіщення для Mirro в налаштуваннях телефону', wrOnToast: 'Нагадування увімкнено 🔔', steps: '👣 Кроки', stepsPh: 'Кроків за день', stepsKcal: '≈ {k} ккал додатково', saveSteps: 'Зберегти', stepsSaved: 'Кроки збережено 👣',
+    water: '💧 Вода', waterN: '{n} із 8 склянок (по 250 мл)', waterL: '{l} л із 2 л', waterMlPh: 'Своя кількість, мл', waterMinus: '− склянка', lUnit: 'л', wrOn: '🔔 Нагадувати пити воду', wrEvery: 'Кожні', wrFrom: 'Від', wrTo: 'До', wrH: 'год', wrTitle: '💧 Час випити води', wrBody: 'Склянка води — і ви ближче до 2 л за день', wrBodyN: 'Сьогодні випито {l} л із 2 л', wrNoteApp: 'Нагадування приходять, навіть коли застосунок закритий. Коли вип’єте 2 л — на сьогодні більше не нагадуємо.', wrNoteWeb: 'У браузері нагадування з’являються лише тоді, коли Mirro відкритий. Щоб вони приходили завжди — встановіть застосунок на телефон.', wrDenied: 'Дозвольте сповіщення для Mirro в налаштуваннях телефону', wrOnToast: 'Нагадування увімкнено 🔔', vitTitle: '💊 Вітаміни', vitNew: '+ Додати вітамін', vitNamePh: 'Назва, напр. Вітамін D 2000 МО', vitNotePh: 'Примітка (необовʼязково), напр. після їжі', vitTimes: 'Коли нагадувати', vitTimeAdd: '+ Ще час', vitRem: '🔔 Нагадувати', vitSave: 'Зберегти', vitCancel: 'Скасувати', vitDel: 'Видалити вітамін', vitDelQ: 'Видалити «{n}»?', vitTaken: 'Прийняв', vitStreak: '🔥 {n} дн. поспіль без пропусків', vitAdded: 'Вітамін додано 💊', vitSaved: 'Збережено', vitAllDone: 'Усі вітаміни на сьогодні прийнято ✅', vitNotifTitle: '💊 Час прийняти', vitHint: 'Записуйте те, що вам порадив лікар. Mirro не радить вітаміни й дози.', steps: '👣 Кроки', stepsPh: 'Кроків за день', stepsKcal: '≈ {k} ккал додатково', saveSteps: 'Зберегти', stepsSaved: 'Кроки збережено 👣',
     goalTitle: '🎯 Моя мета', targetW: 'Цільова вага, кг', setGoal: 'Зберегти', goalLeft: 'Залишилось: {v} кг', goalDone: '🎉 Мету досягнуто!',
     goalEta: 'Якщо як останні дні — приблизно {d} (через {n} дн.).', goalNoEta: 'Запишіть кілька днів їжі — і я порахую, коли ви досягнете мети.',
     goalWrongWay: 'Зараз ви рухаєтесь від мети — подивіться калорії у «Порадах».', goalNone: 'Вкажіть цільову вагу, щоб бачити прогрес.', goalSaved: 'Мету збережено 🎯',
@@ -176,7 +176,7 @@ const T_ADD = {
     dishSaved: 'Jídlo uloženo 👨‍🍳', needName: 'Zadejte název', needIng: 'Přidejte aspoň jednu surovinu', delW: 'Smazat', editW: 'Upravit', builderTitle: '🍲 Vlastní jídlo',
     manualName: 'Název', optMacros: 'Bílkoviny / tuky / sacharidy, g (nepovinné)', dbNote: 'Hodnoty jsou přibližné, na 100 g hotové potraviny (kromě označených „suché"). Nápoje na 100 ml.',
     nothingFound: 'Nic nenalezeno. Zkuste jiné slovo nebo přidejte ručně.',
-    water: '💧 Voda', waterN: '{n} z 8 sklenic (po 250 ml)', waterL: '{l} l z 2 l', waterMlPh: 'Vlastní množství, ml', waterMinus: '− sklenice', lUnit: 'l', wrOn: '🔔 Připomínat pití vody', wrEvery: 'Každé', wrFrom: 'Od', wrTo: 'Do', wrH: 'h', wrTitle: '💧 Čas se napít', wrBody: 'Sklenice vody a jste blíž ke 2 l za den', wrBodyN: 'Dnes vypito {l} l z 2 l', wrNoteApp: 'Připomínky přijdou, i když je aplikace zavřená. Po 2 l už dnes nepřipomínáme.', wrNoteWeb: 'V prohlížeči se připomínky zobrazí jen při otevřeném Mirro. Aby chodily vždy, nainstalujte si aplikaci do telefonu.', wrDenied: 'Povolte oznámení pro Mirro v nastavení telefonu', wrOnToast: 'Připomínky zapnuty 🔔', steps: '👣 Kroky', stepsPh: 'Kroků za den', stepsKcal: '≈ {k} kcal navíc', saveSteps: 'Uložit', stepsSaved: 'Kroky uloženy 👣',
+    water: '💧 Voda', waterN: '{n} z 8 sklenic (po 250 ml)', waterL: '{l} l z 2 l', waterMlPh: 'Vlastní množství, ml', waterMinus: '− sklenice', lUnit: 'l', wrOn: '🔔 Připomínat pití vody', wrEvery: 'Každé', wrFrom: 'Od', wrTo: 'Do', wrH: 'h', wrTitle: '💧 Čas se napít', wrBody: 'Sklenice vody a jste blíž ke 2 l za den', wrBodyN: 'Dnes vypito {l} l z 2 l', wrNoteApp: 'Připomínky přijdou, i když je aplikace zavřená. Po 2 l už dnes nepřipomínáme.', wrNoteWeb: 'V prohlížeči se připomínky zobrazí jen při otevřeném Mirro. Aby chodily vždy, nainstalujte si aplikaci do telefonu.', wrDenied: 'Povolte oznámení pro Mirro v nastavení telefonu', wrOnToast: 'Připomínky zapnuty 🔔', vitTitle: '💊 Vitamíny', vitNew: '+ Přidat vitamín', vitNamePh: 'Název, např. Vitamín D 2000 IU', vitNotePh: 'Poznámka (nepovinné), např. po jídle', vitTimes: 'Kdy připomínat', vitTimeAdd: '+ Další čas', vitRem: '🔔 Připomínat', vitSave: 'Uložit', vitCancel: 'Zrušit', vitDel: 'Smazat vitamín', vitDelQ: 'Smazat „{n}“?', vitTaken: 'Vzato', vitStreak: '🔥 {n} dní v řadě bez vynechání', vitAdded: 'Vitamín přidán 💊', vitSaved: 'Uloženo', vitAllDone: 'Všechny dnešní vitamíny vzaty ✅', vitNotifTitle: '💊 Čas vzít si', vitHint: 'Zapisujte, co vám doporučil lékař. Mirro vitamíny ani dávky nedoporučuje.', steps: '👣 Kroky', stepsPh: 'Kroků za den', stepsKcal: '≈ {k} kcal navíc', saveSteps: 'Uložit', stepsSaved: 'Kroky uloženy 👣',
     goalTitle: '🎯 Můj cíl', targetW: 'Cílová váha, kg', setGoal: 'Uložit', goalLeft: 'Zbývá: {v} kg', goalDone: '🎉 Cíl splněn!',
     goalEta: 'Pokud jako poslední dny — zhruba {d} (za {n} dní).', goalNoEta: 'Zapište pár dní jídla a spočítám, kdy cíle dosáhnete.',
     goalWrongWay: 'Teď se od cíle vzdalujete — podívejte se na kalorie v „Radách".', goalNone: 'Zadejte cílovou váhu, ať vidíte pokrok.', goalSaved: 'Cíl uložen 🎯',
@@ -195,7 +195,7 @@ const T_ADD = {
     dishSaved: 'Dish saved 👨‍🍳', needName: 'Enter a name', needIng: 'Add at least one ingredient', delW: 'Delete', editW: 'Edit', builderTitle: '🍲 My own dish',
     manualName: 'Name', optMacros: 'Protein / fat / carbs, g (optional)', dbNote: 'Values are approximate, per 100 g of ready food (except items marked "dry"). Drinks per 100 ml.',
     nothingFound: 'Nothing found. Try another word or add it manually.',
-    water: '💧 Water', waterN: '{n} of 8 glasses (250 ml)', waterL: '{l} l of 2 l', waterMlPh: 'Own amount, ml', waterMinus: '− glass', lUnit: 'l', wrOn: '🔔 Remind me to drink water', wrEvery: 'Every', wrFrom: 'From', wrTo: 'To', wrH: 'h', wrTitle: '💧 Time for some water', wrBody: 'One glass brings you closer to 2 l today', wrBodyN: 'Today: {l} l of 2 l', wrNoteApp: 'Reminders arrive even when the app is closed. Once you reach 2 l, there are no more today.', wrNoteWeb: 'In a browser, reminders only show while Mirro is open. Install the app on your phone to get them anytime.', wrDenied: 'Allow notifications for Mirro in the phone settings', wrOnToast: 'Reminders on 🔔', steps: '👣 Steps', stepsPh: 'Steps today', stepsKcal: '≈ {k} kcal extra', saveSteps: 'Save', stepsSaved: 'Steps saved 👣',
+    water: '💧 Water', waterN: '{n} of 8 glasses (250 ml)', waterL: '{l} l of 2 l', waterMlPh: 'Own amount, ml', waterMinus: '− glass', lUnit: 'l', wrOn: '🔔 Remind me to drink water', wrEvery: 'Every', wrFrom: 'From', wrTo: 'To', wrH: 'h', wrTitle: '💧 Time for some water', wrBody: 'One glass brings you closer to 2 l today', wrBodyN: 'Today: {l} l of 2 l', wrNoteApp: 'Reminders arrive even when the app is closed. Once you reach 2 l, there are no more today.', wrNoteWeb: 'In a browser, reminders only show while Mirro is open. Install the app on your phone to get them anytime.', wrDenied: 'Allow notifications for Mirro in the phone settings', wrOnToast: 'Reminders on 🔔', vitTitle: '💊 Vitamins', vitNew: '+ Add a vitamin', vitNamePh: 'Name, e.g. Vitamin D 2000 IU', vitNotePh: 'Note (optional), e.g. after a meal', vitTimes: 'When to remind', vitTimeAdd: '+ Another time', vitRem: '🔔 Remind me', vitSave: 'Save', vitCancel: 'Cancel', vitDel: 'Delete vitamin', vitDelQ: 'Delete “{n}”?', vitTaken: 'Taken', vitStreak: '🔥 {n} days in a row, none missed', vitAdded: 'Vitamin added 💊', vitSaved: 'Saved', vitAllDone: 'All of today’s vitamins taken ✅', vitNotifTitle: '💊 Time to take', vitHint: 'Log what your doctor advised. Mirro does not recommend vitamins or doses.', steps: '👣 Steps', stepsPh: 'Steps today', stepsKcal: '≈ {k} kcal extra', saveSteps: 'Save', stepsSaved: 'Steps saved 👣',
     goalTitle: '🎯 My goal', targetW: 'Target weight, kg', setGoal: 'Save', goalLeft: 'To go: {v} kg', goalDone: '🎉 Goal reached!',
     goalEta: 'At your recent pace — around {d} (in {n} days).', goalNoEta: "Log a few days of food and I'll estimate when you'll get there.",
     goalWrongWay: "Right now you're moving away from the goal — check calories in Tips.", goalNone: 'Set a target weight to see your progress.', goalSaved: 'Goal saved 🎯',
@@ -1962,7 +1962,7 @@ function renderToday() {
   $('dDone').checked = d.done === true || (d.done !== false && tt.complete);
   $('dDone').disabled = !tt.logged;
   $('dDoneHint').textContent = !tt.logged ? '' : tt.complete ? (d.done === true ? '' : t('dayAuto')) : t('dayLow');
-  renderMeals(d); renderMacros(w, tt); renderWaterSteps(d, w);
+  renderMeals(d); renderMacros(w, tt); renderWaterSteps(d, w); renderVit(d);
   $('actList').innerHTML = d.acts.map((a, i) => `<div class="item"><span>${esc(L3(actDef(a.id).n))}<em>${a.min} ${t('min')} · ${Math.round(a.k)} ${t('kcal')}</em>${exListHtml(a)}</span><button data-da="${i}">×</button></div>`).join('');
   renderExBox(); actPreview();
   if ($('fridgeText').value === '' && D.fridge) $('fridgeText').value = D.fridge;
@@ -2456,7 +2456,7 @@ function wrPlan() {   // list for the phone; today: only while under 2 l and not
     const body = at < tomorrow.getTime() ? t('wrBodyN', { l: litres(w * 0.25) }) : t('wrBody');
     list.push({ id: 100 + list.length, at, title: t('wrTitle'), body });
   });
-  return list.slice(0, 60);   // iOS keeps at most 64 pending
+  return list.slice(0, 39);   // iOS keeps at most 64 pending (with up to 24 for vitamins)
 }
 let wrTm = 0;
 function wrSync() { clearTimeout(wrTm); wrTm = setTimeout(() => { if (isNative()) AppNative.setReminders(wrPlan()); }, 400); }
@@ -2487,6 +2487,100 @@ setInterval(wrNudge, 5 * 60e3);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(wrNudge, 1500); wrSync(); } });
 if (window.AppNative && AppNative.onResume) AppNative.onResume(wrSync);
 wrSync(); setTimeout(wrNudge, 4000);
+
+// ---- vitamins (18.11): the person's own list + reminders. Nothing is advised: no doses, no suggestions.
+// D.vits = [{ id, name, note, times: ['09:00', …], rem, since }]; a day keeps doses taken in day.vit = { id: ['09:00', …] }.
+// Optional fields, no migration. Phone: local notifications (ids 200–299), one per time for all vitamins due then.
+const vitList = () => D.vits || (D.vits = []);
+const vitTaken = (d, v, tm) => !!(d.vit && d.vit[v.id] && d.vit[v.id].includes(tm));
+const timeMs = (dayStr, tm) => { const [h, m] = tm.split(':').map(Number); const x = new Date(dayStr + 'T12:00'); x.setHours(h, m, 0, 0); return x.getTime(); };
+function vitDayFull(s) {
+  const need = vitList().filter(v => v.since <= s && v.times.length); if (!need.length) return null;
+  const d = peekDay(s); return need.every(v => v.times.every(tm => vitTaken(d, v, tm)));
+}
+function vitStreak() {
+  let n = 0, s = todayStr();
+  if (!vitDayFull(s)) s = addDays(s, -1);
+  for (let k = 0; k < 400; k++) { if (vitDayFull(s) !== true) break; n++; s = addDays(s, -1); }
+  return n;
+}
+let vitEditId = null, vitDraftTimes = [];
+function renderVit(d) {
+  const L = vitList();
+  $('vitList').innerHTML = L.map(v => `<div class="vitItem"><div class="vitHead"><b>💊 ${esc(v.name)}</b>${v.rem ? '' : '<span class="muted" title="">🔕</span>'}<button class="vitEdit" data-ve="${v.id}" aria-label="✏️">✏️</button></div>
+    ${v.note ? `<div class="muted vitNoteT">${esc(v.note)}</div>` : ''}
+    <div class="vitDoses">${v.times.map(tm => { const on = vitTaken(d, v, tm); return `<button class="chip${on ? ' on' : ''}" data-vd="${v.id}" data-tm="${tm}">${on ? '✓ ' : ''}${tm}</button>`; }).join('') || `<button class="chip${vitTaken(d, v, '-') ? ' on' : ''}" data-vd="${v.id}" data-tm="-">${vitTaken(d, v, '-') ? '✓ ' : ''}${t('vitTaken')}</button>`}</div></div>`).join('');
+  const st = vitStreak(); $('vitStreak').textContent = st >= 2 ? t('vitStreak', { n: st }) : '';
+  $('vitStreak').hidden = !$('vitStreak').textContent;
+  $('vitNew').hidden = !$('vitForm').hidden;
+}
+function vitOpen(id) {
+  const v = vitList().find(x => x.id === id);
+  vitEditId = v ? v.id : null; vitDraftTimes = v ? v.times.slice() : ['09:00'];
+  $('vitName').value = v ? v.name : ''; $('vitNote').value = v ? v.note || '' : ''; $('vitRem').checked = v ? v.rem !== false : true;
+  $('vitDel').hidden = !v; $('vitForm').hidden = false; $('vitNew').hidden = true; vitTimesRender(); $('vitName').focus();
+}
+function vitClose() { $('vitForm').hidden = true; vitEditId = null; renderVit(peekDay(curDay)); }
+function vitTimesRender() {
+  $('vitTimes').innerHTML = vitDraftTimes.map((tm, i) => `<span><input type="time" value="${tm}" data-vt="${i}"><button data-vx="${i}" aria-label="✕">✕</button></span>`).join('');
+  $('vitTimeAdd').hidden = vitDraftTimes.length >= 6;
+}
+$('vitNew').addEventListener('click', () => vitOpen(null));
+$('vitCancel').addEventListener('click', vitClose);
+$('vitTimeAdd').addEventListener('click', () => { vitDraftTimes.push(vitDraftTimes.length ? '21:00' : '09:00'); vitTimesRender(); });
+$('vitTimes').addEventListener('input', e => { const i = e.target.dataset.vt; if (i != null && e.target.value) vitDraftTimes[+i] = e.target.value; });
+$('vitTimes').addEventListener('click', e => { const b = e.target.closest('[data-vx]'); if (b) { vitDraftTimes.splice(+b.dataset.vx, 1); vitTimesRender(); } });
+$('vitSave').addEventListener('click', async () => {
+  const name = $('vitName').value.trim().slice(0, 60); if (!name) { $('vitName').focus(); return; }
+  const times = [...new Set(vitDraftTimes.filter(tm => /^\d\d:\d\d$/.test(tm)))].sort();
+  let rem = $('vitRem').checked;
+  if (rem && times.length && isNative() && !(await AppNative.notifyAllowed(true))) { rem = false; toast(t('wrDenied')); }
+  const L = vitList(), old = L.find(v => v.id === vitEditId);
+  const rec = { id: old ? old.id : uid(), name, note: $('vitNote').value.trim().slice(0, 80), times, rem, since: old ? old.since : todayStr() };
+  if (old) L[L.indexOf(old)] = rec; else L.push(rec);
+  save(); vitClose(); vitSync(); toast(old ? t('vitSaved') : t('vitAdded'));
+});
+$('vitDel').addEventListener('click', () => {
+  const v = vitList().find(x => x.id === vitEditId); if (!v || !confirm(t('vitDelQ', { n: v.name }))) return;
+  D.vits = vitList().filter(x => x !== v); save(); vitClose(); vitSync();
+});
+$('vitList').addEventListener('click', e => {
+  const ed = e.target.closest('[data-ve]'); if (ed) { vitOpen(ed.dataset.ve); return; }
+  const b = e.target.closest('[data-vd]'); if (!b) return;
+  syncDay(); const dd = day(curDay), id = b.dataset.vd, tm = b.dataset.tm;
+  dd.vit = dd.vit || {}; const a = dd.vit[id] = dd.vit[id] || [];
+  if (a.includes(tm)) a.splice(a.indexOf(tm), 1); else a.push(tm);
+  if (!a.length) delete dd.vit[id];
+  save(); renderVit(dd); vitSync();
+  if (a.includes(tm) && vitDayFull(curDay) && curDay === todayStr()) toast(t('vitAllDone'));
+});
+function vitPlan() {
+  const now = Date.now(), td = todayStr(), byAt = new Map();
+  for (let k = 0; k < 3; k++) {
+    const s = addDays(td, k), d = peekDay(s);
+    vitList().filter(v => v.rem !== false).forEach(v => v.times.forEach(tm => {
+      const at = timeMs(s, tm); if (at <= now || (k === 0 && vitTaken(d, v, tm))) return;
+      (byAt.get(at) || byAt.set(at, []).get(at)).push(v.name + (v.note ? ' (' + v.note + ')' : ''));
+    }));
+  }
+  return [...byAt.keys()].sort((a, b) => a - b).slice(0, 24).map((at, i) => ({ id: 200 + i, at, title: t('vitNotifTitle'), body: byAt.get(at).join(', ') }));
+}
+let vitTm = 0;
+function vitSync() { clearTimeout(vitTm); vitTm = setTimeout(() => { if (isNative()) AppNative.setReminders(vitPlan(), 200); }, 400); }
+const vitNudged = new Set();
+function vitNudge() {   // browser / open app: a toast for a dose that is due (up to 3 h late) and not ticked
+  if (document.hidden) return;
+  const now = Date.now(), s = todayStr(), d = peekDay(s), due = [];
+  vitList().filter(v => v.rem !== false).forEach(v => v.times.forEach(tm => {
+    const at = timeMs(s, tm), key = s + v.id + tm;
+    if (at <= now && now - at < 3 * 3600e3 && !vitTaken(d, v, tm) && !vitNudged.has(key)) { vitNudged.add(key); due.push(v.name); }
+  }));
+  if (due.length) toast(t('vitNotifTitle') + ': ' + due.join(', '));
+}
+setInterval(vitNudge, 60e3);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(vitNudge, 2500); vitSync(); } });
+if (window.AppNative && AppNative.onResume) AppNative.onResume(vitSync);
+vitSync(); setTimeout(vitNudge, 6000);
 $('stepsSave').addEventListener('click', () => {
   syncDay(); const v = num($('stepsIn').value); const dd = day(curDay);
   dd.steps = v && v > 0 && v < 100000 ? Math.round(v) : 0; dd.sAt = Date.now(); save(); dirty(); renderToday(); toast(t('stepsSaved'));
