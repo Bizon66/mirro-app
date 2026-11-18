@@ -157,7 +157,7 @@ const T_ADD = {
     dishSaved: 'Страву збережено 👨‍🍳', needName: 'Вкажіть назву', needIng: 'Додайте хоча б один інгредієнт', delW: 'Видалити', editW: 'Змінити', builderTitle: '🍲 Своя страва',
     manualName: 'Назва', optMacros: 'Білки / жири / вуглеводи, г (необов\'язково)', dbNote: 'Значення приблизні, на 100 г готового продукту (крім позначених «сухий»). Напої — на 100 мл.',
     nothingFound: 'Нічого не знайдено. Спробуйте інше слово або додайте вручну.',
-    water: '💧 Вода', waterN: '{n} із 8 склянок (по 250 мл)', steps: '👣 Кроки', stepsPh: 'Кроків за день', stepsKcal: '≈ {k} ккал додатково', saveSteps: 'Зберегти', stepsSaved: 'Кроки збережено 👣',
+    water: '💧 Вода', waterN: '{n} із 8 склянок (по 250 мл)', waterL: '{l} л із 2 л', waterMlPh: 'Своя кількість, мл', waterMinus: '− склянка', lUnit: 'л', steps: '👣 Кроки', stepsPh: 'Кроків за день', stepsKcal: '≈ {k} ккал додатково', saveSteps: 'Зберегти', stepsSaved: 'Кроки збережено 👣',
     goalTitle: '🎯 Моя мета', targetW: 'Цільова вага, кг', setGoal: 'Зберегти', goalLeft: 'Залишилось: {v} кг', goalDone: '🎉 Мету досягнуто!',
     goalEta: 'Якщо як останні дні — приблизно {d} (через {n} дн.).', goalNoEta: 'Запишіть кілька днів їжі — і я порахую, коли ви досягнете мети.',
     goalWrongWay: 'Зараз ви рухаєтесь від мети — подивіться калорії у «Порадах».', goalNone: 'Вкажіть цільову вагу, щоб бачити прогрес.', goalSaved: 'Мету збережено 🎯',
@@ -176,7 +176,7 @@ const T_ADD = {
     dishSaved: 'Jídlo uloženo 👨‍🍳', needName: 'Zadejte název', needIng: 'Přidejte aspoň jednu surovinu', delW: 'Smazat', editW: 'Upravit', builderTitle: '🍲 Vlastní jídlo',
     manualName: 'Název', optMacros: 'Bílkoviny / tuky / sacharidy, g (nepovinné)', dbNote: 'Hodnoty jsou přibližné, na 100 g hotové potraviny (kromě označených „suché"). Nápoje na 100 ml.',
     nothingFound: 'Nic nenalezeno. Zkuste jiné slovo nebo přidejte ručně.',
-    water: '💧 Voda', waterN: '{n} z 8 sklenic (po 250 ml)', steps: '👣 Kroky', stepsPh: 'Kroků za den', stepsKcal: '≈ {k} kcal navíc', saveSteps: 'Uložit', stepsSaved: 'Kroky uloženy 👣',
+    water: '💧 Voda', waterN: '{n} z 8 sklenic (po 250 ml)', waterL: '{l} l z 2 l', waterMlPh: 'Vlastní množství, ml', waterMinus: '− sklenice', lUnit: 'l', steps: '👣 Kroky', stepsPh: 'Kroků za den', stepsKcal: '≈ {k} kcal navíc', saveSteps: 'Uložit', stepsSaved: 'Kroky uloženy 👣',
     goalTitle: '🎯 Můj cíl', targetW: 'Cílová váha, kg', setGoal: 'Uložit', goalLeft: 'Zbývá: {v} kg', goalDone: '🎉 Cíl splněn!',
     goalEta: 'Pokud jako poslední dny — zhruba {d} (za {n} dní).', goalNoEta: 'Zapište pár dní jídla a spočítám, kdy cíle dosáhnete.',
     goalWrongWay: 'Teď se od cíle vzdalujete — podívejte se na kalorie v „Radách".', goalNone: 'Zadejte cílovou váhu, ať vidíte pokrok.', goalSaved: 'Cíl uložen 🎯',
@@ -195,7 +195,7 @@ const T_ADD = {
     dishSaved: 'Dish saved 👨‍🍳', needName: 'Enter a name', needIng: 'Add at least one ingredient', delW: 'Delete', editW: 'Edit', builderTitle: '🍲 My own dish',
     manualName: 'Name', optMacros: 'Protein / fat / carbs, g (optional)', dbNote: 'Values are approximate, per 100 g of ready food (except items marked "dry"). Drinks per 100 ml.',
     nothingFound: 'Nothing found. Try another word or add it manually.',
-    water: '💧 Water', waterN: '{n} of 8 glasses (250 ml)', steps: '👣 Steps', stepsPh: 'Steps today', stepsKcal: '≈ {k} kcal extra', saveSteps: 'Save', stepsSaved: 'Steps saved 👣',
+    water: '💧 Water', waterN: '{n} of 8 glasses (250 ml)', waterL: '{l} l of 2 l', waterMlPh: 'Own amount, ml', waterMinus: '− glass', lUnit: 'l', steps: '👣 Steps', stepsPh: 'Steps today', stepsKcal: '≈ {k} kcal extra', saveSteps: 'Save', stepsSaved: 'Steps saved 👣',
     goalTitle: '🎯 My goal', targetW: 'Target weight, kg', setGoal: 'Save', goalLeft: 'To go: {v} kg', goalDone: '🎉 Goal reached!',
     goalEta: 'At your recent pace — around {d} (in {n} days).', goalNoEta: "Log a few days of food and I'll estimate when you'll get there.",
     goalWrongWay: "Right now you're moving away from the goal — check calories in Tips.", goalNone: 'Set a target weight to see your progress.', goalSaved: 'Goal saved 🎯',
@@ -2400,16 +2400,34 @@ $('meals').addEventListener('click', e => {
 
 // water + steps
 function renderWaterSteps(d, w) {
+  // d.water stays counted in 250 ml glasses (achievements, quests, reports), but can now be fractional (18.11: litres + bottles)
   const n = d.water || 0;
-  $('waterRow').innerHTML = Array.from({ length: 8 }, (_, i) => `<button class="glass${i < n ? ' on' : ''}" data-gl="${i}">${i < n ? '💧' : ''}</button>`).join('');
-  $('waterN').textContent = t('waterN', { n });
+  $('waterRow').innerHTML = Array.from({ length: 8 }, (_, i) => { const c = i + 1 <= n ? ' on' : i < n ? ' half' : '';
+    return `<button class="glass${c}" data-gl="${i}">${c ? '💧' : ''}</button>`; }).join('');
+  $('waterN').textContent = t('waterL', { l: litres(n * 0.25) }) + (n >= 8 ? ' ✓' : '');
+  document.querySelectorAll('#waterQuick [data-ml]').forEach(b => { const ml = +b.dataset.ml; b.textContent = (ml > 0 ? '+' : '−') + litres(Math.abs(ml) / 1000) + ' ' + t('lUnit'); });
+  $('waterMinus').disabled = !n;
   if (document.activeElement !== $('stepsIn')) $('stepsIn').value = d.steps || '';
   $('stepsK').textContent = d.steps ? t('stepsKcal', { k: Math.round(d.steps * w * 0.0003) }) : '';
+}
+const litres = l => { const v = String(Math.round(l * 100) / 100); return LANG === 'en' ? v : v.replace('.', ','); };
+const WATER_MAX = 40;   // 10 l a day is plenty; protects against typos
+function addWater(ml) {
+  syncDay(); const dd = day(curDay);
+  dd.water = Math.round(clamp((dd.water || 0) + ml / 250, 0, WATER_MAX) * 100) / 100; dd.wAt = Date.now(); save(); renderToday();
 }
 $('waterRow').addEventListener('click', e => {
   const b = e.target.closest('[data-gl]'); if (!b) return;
   syncDay(); const i = +b.dataset.gl, dd = day(curDay); dd.water = (dd.water || 0) === i + 1 ? i : i + 1; dd.wAt = Date.now(); save(); renderToday();
 });
+$('waterQuick').addEventListener('click', e => {
+  const b = e.target.closest('[data-ml]'); if (b) addWater(+b.dataset.ml);
+});
+$('waterAdd').addEventListener('click', () => {
+  const v = num($('waterMl').value); if (!v || v <= 0 || v > 5000) { $('waterMl').focus(); return; }
+  addWater(v); $('waterMl').value = '';
+});
+$('waterMl').addEventListener('keydown', e => { if (e.key === 'Enter') $('waterAdd').click(); });
 $('stepsSave').addEventListener('click', () => {
   syncDay(); const v = num($('stepsIn').value); const dd = day(curDay);
   dd.steps = v && v > 0 && v < 100000 ? Math.round(v) : 0; dd.sAt = Date.now(); save(); dirty(); renderToday(); toast(t('stepsSaved'));
@@ -2919,7 +2937,7 @@ function dayPoints(s) {
   const meals = new Set(d.foods.map(f => f.meal || 'snack'));
   p += 3 * meals.size;
   if (['breakfast', 'lunch', 'dinner'].every(m => meals.has(m))) p += 5;
-  p += Math.min(8, d.water || 0);
+  p += Math.min(8, Math.floor(d.water || 0));
   if ((d.steps || 0) >= 10000) p += 10; else if ((d.steps || 0) >= 5000) p += 5;
   if (d.acts.some(x => x.id === 'homeworkout' || x.id === 'gym')) p += 20;
   else if (d.acts.some(x => x.min >= 30)) p += 10;

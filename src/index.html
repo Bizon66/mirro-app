@@ -79,7 +79,9 @@
       <p class="muted" id="lblTip" style="display:none;margin-top:8px"></p><div id="qlOut"></div></div>
     <div class="card"><h2 data-i="whatAte"></h2><div id="meals"></div></div>
     <div class="card">
-      <h2 data-i="water"></h2><div class="glasses" id="waterRow"></div><p class="muted" id="waterN" style="margin-top:4px"></p>
+      <h2 data-i="water"></h2><div class="glasses" id="waterRow"></div><p class="waterN" id="waterN"></p>
+      <div class="waterQuick" id="waterQuick"><button class="chip" data-ml="500"></button><button class="chip" data-ml="1000"></button><button class="chip" data-ml="1500"></button><button class="chip" data-ml="2000"></button><button class="chip" id="waterMinus" data-ml="-250"></button></div>
+      <div class="row"><div><input id="waterMl" type="number" inputmode="numeric" data-ph="waterMlPh"></div><div class="narrow"><button class="btn" id="waterAdd" style="margin-top:0">+ 💧</button></div></div>
       <h2 data-i="steps" style="margin-top:14px"></h2>
       <div class="row"><div><input id="stepsIn" type="number" inputmode="numeric" data-ph="stepsPh"></div><div class="narrow"><button class="btn" id="stepsSave" style="margin-top:0" data-i="saveSteps"></button></div></div>
       <p class="muted" id="stepsK" style="margin-top:4px"></p>
