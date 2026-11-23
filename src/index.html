@@ -77,7 +77,10 @@
       <div class="qlIn"><textarea id="qlText" data-ph="qlPh" rows="2"></textarea><span id="qlMicSlot"></span></div>
       <div class="grid2 qlBtns"><button class="btn" id="qlGo" data-i="qlGo"></button><label class="btn ghost fileBtn" id="lblBtn" for="lblFile"><span data-i="lblBtn"></span><input type="file" id="lblFile" accept="image/*"></label></div>
       <p class="muted" id="lblTip" style="display:none;margin-top:8px"></p><div id="qlOut"></div></div>
-    <div class="card"><h2 data-i="whatAte"></h2><div id="meals"></div></div>
+    <div class="card"><h2 data-i="whatAte"></h2><div id="meals"></div>
+      <label class="lblSave wrOn"><input type="checkbox" id="mrOn"> <span data-i="mrOn"></span></label>
+      <div class="wrOpts" id="mrOpts" hidden><label><span data-i="mBreakfast"></span><select id="mrB"></select></label><label><span data-i="mLunch"></span><select id="mrL"></select></label><label><span data-i="mDinner"></span><select id="mrD"></select></label></div>
+      <p class="muted" id="mrNote" hidden></p></div>
     <div class="card">
       <h2 data-i="water"></h2><div class="glasses" id="waterRow"></div><p class="waterN" id="waterN"></p>
       <div class="waterQuick" id="waterQuick"><button class="chip" data-ml="500"></button><button class="chip" data-ml="1000"></button><button class="chip" data-ml="1500"></button><button class="chip" data-ml="2000"></button><button class="chip" id="waterMinus" data-ml="-250"></button></div>
