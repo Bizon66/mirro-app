@@ -76,7 +76,10 @@
   .glass { width: 34px; height: 42px; border: 2px solid #9cc3f0; border-radius: 4px 4px 10px 10px; background: #fff; font-size: 16px; padding: 0; }
   .glass.on { background: #d6e9fb; border-color: #4a9be8; }
   .glass.half { background: linear-gradient(to top, #d6e9fb 50%, #fff 50%); border-color: #4a9be8; }
-  .waterN { margin-top: 6px; font-weight: 800; font-size: 15px; }
+  .waterN { margin-top: 6px; font-weight: 800; font-size: 15px; flex: 1; }
+  .wGoalRow { display: flex; align-items: flex-end; gap: 8px; }
+  .wGoal { font-size: 11px; font-weight: 700; text-align: right; }
+  .wGoal select { display: block; margin-top: 2px; padding: 4px 8px; width: auto; min-width: 84px; }
   .waterQuick { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
   .waterQuick .chip { padding: 6px 10px; font-weight: 800; }
   .waterQuick .chip:disabled { opacity: .4; }
@@ -96,6 +99,7 @@
   .vitTimes input { width: 110px; }
   .vitTimes button { background: none; border: 0; font-size: 16px; padding: 4px; }
   .wrOpts { display: flex; gap: 8px; margin-top: 6px; }
+  .wrOpts[hidden] { display: none; }
   .wrOpts label { flex: 1; font-size: 12px; font-weight: 700; min-width: 0; }
   .wrOpts select, .wrOpts input { width: 100%; margin-top: 2px; }
   .sheet { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 8; display: flex; align-items: flex-end; }
